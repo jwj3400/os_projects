@@ -92,6 +92,7 @@ sys_uptime(void)
 }
 
 
+/*
 extern struct pt ptable;
 int 
 sys_getnice(void)
@@ -133,5 +134,5 @@ sys_ps(void)
 	a = 1;
 	return a;
 }
-
+*/
 
