@@ -1,0 +1,30 @@
+From f043ac66be4b7523b4c99d2becf288368f1d3a73 Mon Sep 17 00:00:00 2001
+From: James Houghton <jhoughton@virginia.edu>
+Date: Tue, 21 Jan 2020 21:48:16 -0500
+Subject: [PATCH] Remove BYTE directives from kernel linker script
+
+---
+ kernel.ld | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/kernel.ld b/kernel.ld
+index e24c8601ab..4e12e14958 100644
+--- a/kernel.ld
++++ b/kernel.ld
+@@ -26,16 +26,12 @@ SECTIONS
+ 		PROVIDE(__STAB_BEGIN__ = .);
+ 		*(.stab);
+ 		PROVIDE(__STAB_END__ = .);
+-		BYTE(0)		/* Force the linker to allocate space
+-				   for this section */
+ 	}
+ 
+ 	.stabstr : {
+ 		PROVIDE(__STABSTR_BEGIN__ = .);
+ 		*(.stabstr);
+ 		PROVIDE(__STABSTR_END__ = .);
+-		BYTE(0)		/* Force the linker to allocate space
+-				   for this section */
+ 	}
+ 
+ 	/* Adjust the address for the data segment to the next page */
