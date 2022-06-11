@@ -8,7 +8,7 @@
 #include "spinlock.h"
 
 //original code
-struct ptable {
+struct {
   struct spinlock lock;
   struct proc proc[NPROC];
 } ptable;
