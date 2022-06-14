@@ -92,46 +92,28 @@ sys_uptime(void)
 }
 
 
-extern struct pt ptable;
-int 
-sys_getnice(void)
-{
- int pid;
- if(argint(0,&pid) < 0)
-	 return -1;
- struct proc* p;
- for(p = ptable.proc; p < &ptable.proc[NPROC];p++){
- 	if(p->pid == pid)
-	   return p->priority;		
- }
- return -1;
-}
-
-int
-sys_setnice(void)
-{
-	int pid, new_priority;
-	argint(0,&pid);
-	argint(1,&new_priority);
-
-	if(new_priority < 0 || new_priority > 40)
+int sys_getnice(void){
+	int pid;
+	if(argint(0,&pid) < 0)
 		return -1;
-	struct proc* p;
-	for(p = ptable.proc; p < &ptable.proc[NPROC];p++){
- 		if(p->pid == pid)
-	    p->priority = new_priority;
-		return 1;		
- 	}
-	return -1;
+	return getnice(pid);
+}
+
+int sys_setnice(void){
+	int pid, new_priority;
+	if(argint(0,&pid) < 0)
+		return -1;
+	if(argint(1,&new_priority))
+		return -1;
+	return setnice(pid, new_priority);
 }
 
 
-int
-sys_ps(void)
-{
-	int a;
-	a = 1;
-	return a;
+int sys_ps(void){
+	int pid;
+	if( argint(0,&pid) < 0)
+		return -1;
+	ps(pid);	
+	return 0;
 }
-
 

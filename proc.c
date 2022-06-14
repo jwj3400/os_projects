@@ -7,12 +7,13 @@
 #include "proc.h"
 #include "spinlock.h"
 
-struct pt {
+struct pt{
   struct spinlock lock;
   struct proc proc[NPROC];
 };
 
 struct pt ptable;
+
 
 
 static struct proc *initproc;
@@ -536,4 +537,50 @@ procdump(void)
     }
     cprintf("\n");
   }
+}
+
+
+int getnice(int pid){
+	struct proc* p;
+	acquire(&ptable.lock);
+	for( p = ptable.proc; p < &ptable.proc[NPROC]; p++ ){
+		if( p->pid == pid ){
+			return p->priority;
+		}
+	}
+	release(&ptable.lock);
+	return -1;
+}
+
+int setnice(int pid, int new_priority){
+	struct proc* p;
+//	acquire(&ptable.lock);
+	if( new_priority < 0 || new_priority > 40)
+			return -1;
+	for( p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+		if( p->pid == pid ){
+			p->priority = new_priority;
+			return 1;
+		}
+	}
+//	release(&ptable.lock);
+	return -1;
+}
+
+char stateStr[6][10] = {"UNUSED", "EMBRYO", "SLEEPING", "RUNNABLE", "RUNNING", "ZOMBIE"};  
+void ps(int pid){
+	struct proc* p;
+	cprintf("check\n");
+	if( pid == 0 ){
+		cprintf("name	pid	  state   priority\n");
+		for( p = ptable.proc; p < &ptable.proc[NPROC]; p++ ){
+			if( p->state == 2 || p->state == 3 || p->state == 4 )
+				cprintf("%s	 %d	 %s	 %d\n",p->name, p->pid, stateStr[p->state], p->priority);
+		}
+	}
+	else{
+		p = myproc();
+		cprintf("name	pid	  state   priority");
+		cprintf("%s	 %d	 %s	 %d\n",p->name, p->pid, stateStr[p->state], p->priority);
+	}
 }
