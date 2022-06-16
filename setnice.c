@@ -3,7 +3,7 @@
 #include "user.h"
 #include "fcntl.h"
 
-int main(){
-	setnice(1,15);
+int main(int argc, char* argv[]){
+	setnice(atoi(argv[1]), atoi(argv[2]));
 	exit();
 }

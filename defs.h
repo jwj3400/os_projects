@@ -123,6 +123,11 @@ void            yield(void);
 int 			getnice(int);
 int 			setnice(int,int);
 void			ps(int);
+void 			set_time_slice();
+int 			get_total_weight();
+void 			cal_vruntime(struct proc*);
+
+
 // swtch.S
 void            swtch(struct context**, struct context*);
 

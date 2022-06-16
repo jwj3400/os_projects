@@ -185,6 +185,8 @@ UPROGS=\
 	_swaptest\
 	_ps\
 	_setnice\
+	_dpro\
+	_testcfs\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)

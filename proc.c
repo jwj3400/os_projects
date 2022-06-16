@@ -91,7 +91,12 @@ allocproc(void)
 
 found:
   p->state = EMBRYO;
-  p->pid = nextpid++;
+  p->pid = nextpid++; 
+  p->vruntime = 0;
+  p->runtime = 0;
+  p->tickpass = 0;
+  p->time_slice = 0;
+  p->priority = 20;
 
   release(&ptable.lock);
 
@@ -154,7 +159,7 @@ userinit(void)
   acquire(&ptable.lock);
 
   p->state = RUNNABLE;
-  p->priority = 20;
+ 
   release(&ptable.lock);
 }
 
@@ -329,6 +334,7 @@ void
 scheduler(void)
 {
   struct proc *p;
+  struct proc *p2;
   struct cpu *c = mycpu();
   c->proc = 0;
   
@@ -341,13 +347,18 @@ scheduler(void)
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
       if(p->state != RUNNABLE)
         continue;
-
+	  
+	  for( p2 = ptable.proc; p2 < &ptable.proc[NPROC]; p2++ ){
+	  	if(p2->vruntime < p->vruntime && p2->state == RUNNABLE)
+				p = p2;
+	  }
       // Switch to chosen process.  It is the process's job
       // to release ptable.lock and then reacquire it
       // before jumping back to us.
       c->proc = p;
       switchuvm(p);
       p->state = RUNNING;
+	  set_time_slice(p);
 
       swtch(&(c->scheduler), p->context);
       switchkvm();
@@ -393,6 +404,7 @@ yield(void)
 {
   acquire(&ptable.lock);  //DOC: yieldlock
   myproc()->state = RUNNABLE;
+  cal_vruntime(myproc());
   sched();
   release(&ptable.lock);
 }
@@ -444,6 +456,7 @@ sleep(void *chan, struct spinlock *lk)
   // Go to sleep.
   p->chan = chan;
   p->state = SLEEPING;
+  cal_vruntime(p);
 
   sched();
 
@@ -466,8 +479,10 @@ wakeup1(void *chan)
   struct proc *p;
 
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
-    if(p->state == SLEEPING && p->chan == chan)
-      p->state = RUNNABLE;
+    if(p->state == SLEEPING && p->chan == chan){
+		p->state = RUNNABLE;
+	}
+  
 }
 
 // Wake up all processes sleeping on chan.
@@ -492,8 +507,9 @@ kill(int pid)
     if(p->pid == pid){
       p->killed = 1;
       // Wake process from sleep if necessary.
-      if(p->state == SLEEPING)
+      if(p->state == SLEEPING){
         p->state = RUNNABLE;
+	  }
       release(&ptable.lock);
       return 0;
     }
@@ -570,12 +586,12 @@ int setnice(int pid, int new_priority){
 char stateStr[6][10] = {"UNUSED", "EMBRYO", "SLEEPING", "RUNNABLE", "RUNNING", "ZOMBIE"};  
 void ps(int pid){
 	struct proc* p;
-	cprintf("check\n");
+	cprintf("weight0 = %d\n",weight[0]);
 	if( pid == 0 ){
-		cprintf("name	pid	  state   priority\n");
+		cprintf("name		pid		state		priority	runtime/weight		runtime		vruntime		tick %d\n",ticks);
 		for( p = ptable.proc; p < &ptable.proc[NPROC]; p++ ){
 			if( p->state == 2 || p->state == 3 || p->state == 4 )
-				cprintf("%s	 %d	 %s	 %d\n",p->name, p->pid, stateStr[p->state], p->priority);
+				cprintf("%s	 	%d	 	%s	%d		%d			%d		%d\n", p->name, p->pid, stateStr[p->state], p->priority, p->runtime / weight[p->priority], p->runtime, p->vruntime);
 		}
 	}
 	else{
@@ -583,4 +599,33 @@ void ps(int pid){
 		cprintf("name	pid	  state   priority");
 		cprintf("%s	 %d	 %s	 %d\n",p->name, p->pid, stateStr[p->state], p->priority);
 	}
+}
+
+// process state chage -> reset time_slice of processes
+// ptable.lock is needed before excute the function
+void set_time_slice(struct proc* p){
+	int total_weight = get_total_weight();
+
+	if(total_weight != 0){
+		p->time_slice = 10 * weight[p->priority] / total_weight;
+		if(weight[p->priority] % total_weight != 0)
+				p->time_slice++;
+	}
+}
+
+
+
+int get_total_weight(){
+	struct proc* p;
+	int total_weight = 0;
+	for( p = ptable.proc; p < &ptable.proc[NPROC]; p++ ){
+		if( p->state == RUNNABLE || p->state == RUNNING )
+			total_weight += weight[p->priority];
+	}
+	return total_weight;
+}
+
+void cal_vruntime(struct proc* p){
+	p->vruntime += p->tickpass * weight[20] / weight[p->priority];
+	p->runtime += p->tickpass;
 }
