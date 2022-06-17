@@ -210,6 +210,9 @@ fork(void)
   np->parent = curproc;
   *np->tf = *curproc->tf;
   np->priority = curproc->priority;
+  cal_vruntime(curproc);
+  np->vruntime = curproc->vruntime;
+  np->runtime = 0;
 
 
   // Clear %eax so that fork returns 0 in the child.
@@ -228,7 +231,7 @@ fork(void)
 
   np->state = RUNNABLE;
   release(&ptable.lock);
-
+  cprintf("fork parent_pid %d pid %d vruntime %d\n", curproc->pid, np->pid, np->vruntime);
   return pid;
 }
 
@@ -274,6 +277,7 @@ exit(void)
 
   // Jump into the scheduler, never to return.
   curproc->state = ZOMBIE;
+  cprintf("zombie check pid %d name %s priority %d \n",curproc->pid,curproc->name, curproc->priority);
   sched();
   panic("zombie exit");
 }
@@ -306,6 +310,8 @@ wait(void)
         p->name[0] = 0;
         p->killed = 0;
         p->state = UNUSED;
+		p->vruntime = 0;
+		p->runtime = 0;
         release(&ptable.lock);
         return pid;
       }
@@ -344,29 +350,40 @@ scheduler(void)
 
     // Loop over process table looking for process to run.
     acquire(&ptable.lock);
-    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-      if(p->state != RUNNABLE)
-        continue;
-	  
-	  for( p2 = ptable.proc; p2 < &ptable.proc[NPROC]; p2++ ){
-	  	if(p2->vruntime < p->vruntime && p2->state == RUNNABLE)
-				p = p2;
-	  }
-      // Switch to chosen process.  It is the process's job
-      // to release ptable.lock and then reacquire it
-      // before jumping back to us.
-      c->proc = p;
-      switchuvm(p);
-      p->state = RUNNING;
-	  set_time_slice(p);
+	p2 = ptable.proc;
 
-      swtch(&(c->scheduler), p->context);
-      switchkvm();
+	for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    	if(p->state == RUNNABLE){
+			p2 = p;
+			break;
+		}
+	}
 
-      // Process is done running for now.
-      // It should have changed its p->state before coming back.
-      c->proc = 0;
-    }
+	for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    	if((p->state == RUNNABLE) && (p->vruntime < p2->vruntime)){
+			p2 = p;
+		}
+	}
+	p = p2;
+
+	    // Switch to chosen process.  It is the process's job
+    	// to release ptable.lock and then reacquire it
+    	// before jumping back to us.
+		//cprintf("pid %d state %d name %s vruntime %d\n", p->pid, p->state, p->name, p->vruntime);
+	if(p->state == RUNNABLE){
+		cprintf("schedule pid %d\n",p->pid);
+		c->proc = p;
+		switchuvm(p);
+		p->state = RUNNING;
+		set_time_slice(p);
+
+      	swtch(&(c->scheduler), p->context);
+      	switchkvm();
+
+      	// Process is done running for now.
+      	// It should have changed its p->state before coming back.
+      	c->proc = 0;
+	}
     release(&ptable.lock);
 
   }
@@ -404,6 +421,8 @@ yield(void)
 {
   acquire(&ptable.lock);  //DOC: yieldlock
   myproc()->state = RUNNABLE;
+  //ps(0);
+  //cprintf("in yield : change myproc()->state to RUNNABLE name: %s, pid: %d\n",myproc()->name, myproc()->pid);
   cal_vruntime(myproc());
   sched();
   release(&ptable.lock);
@@ -477,11 +496,23 @@ static void
 wakeup1(void *chan)
 {
   struct proc *p;
-
-  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
-    if(p->state == SLEEPING && p->chan == chan){
-		p->state = RUNNABLE;
+  struct proc *p2;
+	p2 = ptable.proc;
+	for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+	{
+		if((p->state == RUNNABLE || p->state == RUNNING) && p->vruntime < p2->vruntime)
+				p2 = p;
 	}
+
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+	if(p->state == SLEEPING && p->chan == chan){
+		p->state = RUNNABLE;
+		if(p->state == RUNNABLE || p->state == RUNNING) 
+			p->vruntime = p2->vruntime - weight[20] / weight[p->priority];
+		else
+			p->vruntime = 0;
+	}
+  }
   
 }
 
@@ -586,11 +617,10 @@ int setnice(int pid, int new_priority){
 char stateStr[6][10] = {"UNUSED", "EMBRYO", "SLEEPING", "RUNNABLE", "RUNNING", "ZOMBIE"};  
 void ps(int pid){
 	struct proc* p;
-	cprintf("weight0 = %d\n",weight[0]);
 	if( pid == 0 ){
 		cprintf("name		pid		state		priority	runtime/weight		runtime		vruntime		tick %d\n",ticks);
 		for( p = ptable.proc; p < &ptable.proc[NPROC]; p++ ){
-			if( p->state == 2 || p->state == 3 || p->state == 4 )
+			if( p->state == 2 || p->state == 3 || p->state == 4 ||p->state == 5 )
 				cprintf("%s	 	%d	 	%s	%d		%d			%d		%d\n", p->name, p->pid, stateStr[p->state], p->priority, p->runtime / weight[p->priority], p->runtime, p->vruntime);
 		}
 	}
@@ -626,6 +656,11 @@ int get_total_weight(){
 }
 
 void cal_vruntime(struct proc* p){
-	p->vruntime += p->tickpass * weight[20] / weight[p->priority];
+//	ps(0);
+	cprintf("name %s pid %d tickpass %d vruntime %d priority %d runtime %d time_slice %d\n", p->name, p->pid, p->tickpass, p->vruntime, p->priority, p->runtime, p->time_slice);
+	p->vruntime += 1000 * p->tickpass * weight[20] / weight[p->priority];
 	p->runtime += p->tickpass;
+	if(p->pid == 3){
+			cprintf("pid3의 추가되는 값 %d vruntime %d\n",1000 * p->tickpass * weight[20]/weight[p->priority],p->vruntime);
+	}
 }

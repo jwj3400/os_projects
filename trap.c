@@ -51,7 +51,7 @@ trap(struct trapframe *tf)
     if(cpuid() == 0){
       acquire(&tickslock);
       ticks++;
-	  if(myproc() != 0){
+	  if(myproc() != 0 && myproc()->state == RUNNING){
 	  		myproc()->tickpass++;
 //	  		cprintf("pid %d name %s tickpass %d tick %d vruntime %d time_slice %d\n",myproc()->pid, myproc()->name, myproc()->tickpass, ticks, myproc()->vruntime, myproc()->time_slice);
 	  }
@@ -113,7 +113,7 @@ trap(struct trapframe *tf)
   // If interrupts were on while locks held, would need to check nlock.
   if(myproc() && myproc()->state == RUNNING &&
      tf->trapno == T_IRQ0+IRQ_TIMER && myproc()->tickpass >= myproc()->time_slice){
-//	cprintf("yield pid %d pid name %s tickpass %d timeslice %d tick %d\n",myproc()->pid, myproc()->name, myproc()->tickpass, myproc()->time_slice, ticks);
+//	cprintf("yield pid %d pid name %s tickpass %d timeslice %d tick %d vruntime %d\n",myproc()->pid, myproc()->name, myproc()->tickpass, myproc()->time_slice, ticks, myproc()->vruntime);
 	yield();
 	myproc()->tickpass = 0;
   }
