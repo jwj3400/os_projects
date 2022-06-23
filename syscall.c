@@ -105,9 +105,7 @@ extern int sys_write(void);
 extern int sys_uptime(void);
 extern int sys_swapread(void);
 extern int sys_swapwrite(void);
-extern int sys_getnice(void);
-extern int sys_setnice(void);
-extern int sys_ps(void);
+extern int sys_mmap(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -133,9 +131,7 @@ static int (*syscalls[])(void) = {
 [SYS_close]   sys_close,
 [SYS_swapread]	sys_swapread,
 [SYS_swapwrite] sys_swapwrite,
-[SYS_getnice] sys_getnice,
-[SYS_setnice] sys_setnice,
-[SYS_ps] sys_ps,
+[SYS_mmap] sys_mmap,
 };
 
 void

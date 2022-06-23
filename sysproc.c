@@ -91,48 +91,14 @@ sys_uptime(void)
   return xticks;
 }
 
-
-/*
-extern struct pt ptable;
-int 
-sys_getnice(void)
+int sys_mmap(void)
 {
- int pid;
- if(argint(0,&pid) < 0)
-	 return -1;
- struct proc* p;
- for(p = ptable.proc; p < &ptable.proc[NPROC];p++){
- 	if(p->pid == pid)
-	   return p->priority;		
- }
- return -1;
-}
-
-int
-sys_setnice(void)
-{
-	int pid, new_priority;
-	argint(0,&pid);
-	argint(1,&new_priority);
-
-	if(new_priority < 0 || new_priority > 40)
+	int addr;
+	int length, prot, flags, fd, offset;
+	
+	if( argint(0,&addr) < 0 || argint(1,&length) < 0 || argint(2,&prot) < 0 || argint(3,&flags) < 0 || argint(4,&fd) < 0 || argint(5,&offset) < 0 ){
 		return -1;
-	struct proc* p;
-	for(p = ptable.proc; p < &ptable.proc[NPROC];p++){
- 		if(p->pid == pid)
-	    p->priority = new_priority;
-		return 1;		
- 	}
-	return -1;
+	}
+	mmap(addr, length, prot, flags, fd, offset);
+	return 0;
 }
-
-
-int
-sys_ps(void)
-{
-	int a;
-	a = 1;
-	return a;
-}
-*/
-
