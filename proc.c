@@ -13,6 +13,10 @@ struct {
   struct proc proc[NPROC];
 } ptable;
 
+struct {
+	struct spinlock lock;
+	struct mmap_area[NMMAP]; 
+} mtable;
 
 static struct proc *initproc;
 
@@ -537,8 +541,120 @@ procdump(void)
   }
 }
 
+/////////////////////////////////////////////
+/////////////////////////////////////////////
+// implement mmap
 
 uint mmap(uint addr, int length, int prot, int flags, int fd, int offset){
+	struct mmap_area* m;	
+	struct proc * curproc = myproc();
 
-	return 0;
+	uint newAddr = MMAPBASE + addr;
+	acquire(&mmap_table.lock);
+	//map fixed 된 경우
+	if(flags & MAP_FIXED){
+		for(m = mtable.mmap_area; m < &mtable.mmap_area[NMMAP]; m++){
+			//mmap하려는 주소가 mtable에 이미 존재하는 경우 
+			if(m->proc == curproc && ((m->addr <= addr && newAddr < m->addr + m->length) || (newAddr <= m->addr && m->addr < newAddr + length))){
+				cprintf("already allocated memory addr");
+				release(&mmap_table.lock);
+				return 0;
+			}
+		}
+	
+	} 
+	else {
+		//fixed 되지 않으면 mtable에서 해당 proc 찾은 뒤 사용 가능한 주소를 줌
+		newAddr = MMAPBASE;
+		m = table.mmap_area;
+		for(; m < &mtable.mmap_area[NMMAP]; m++){
+			if(m->proc == curproc && ((m->addr <= addr && newAddr < m->addr + m->length) || (newAddr <= m->addr && m->addr < newAddr + length))){
+				newAddr = m->addr + m->length;
+				m = table.mmap_area;
+			}
+		}
+		if(newAddr >= KERNBASE){
+			cprintf("cannot use memory over KERNBASE");
+			release(&mmap_table.lock);
+			return 0;
+		}
+	}
+
+	//읽을 수 없는 파일을 mmap하는 경우 오류
+	struct file* f;
+	if(fd != -1){
+		f = curproc->ofile[fd];
+		fileup(f);
+		f->offset = offset;
+		if(f->readable == 0){
+			cprintf("cannot access non-readable file");
+			return 0;			
+		}
+	}
+//	struct file * processFile = curproc->file;
+	//map_populate 가 1 인 경우
+	char * mem;
+	if(flags & MAP_POPULATE){
+		if(fd != -1){		//fileread인 경우
+			if((flags & MAP_ANONYMOS) == 1){
+				cprintf("to use fd, MAP_ANONYMOS must be 0");
+				return 0;
+			}
+			for(char* a = 0; a < PGROUNDUP(length); a += PGSIZE){
+				mem = kalloc();
+				if(mem == 0){
+					cprintf("err: all memory is in used");
+				}
+				if(mappages(curproc->pgdir, newAddr + a, length, V2P(mem), prot) < 0){
+					cprintf("err: cannot alloc page table, all memory is in used");
+					deallocuvm(curproc->pgdir, newAddr + a, newAddr);
+				}
+				memset(mem,0,PGSIZE);
+				int readNum = 0;
+				if((readNum = fileread(f, mem, length)) < 0){
+					cprintf("err: filereading fail");
+					deallocuvm(curproc->pgdir, newAddr + a, newAddr);
+				}					
+				f->offset += readNum;
+			}
+		} else { 			//fileread가 아닌 경우
+			if((flags & MAP_ANONYMOUS) == 0){
+				cprintf("not to use fd, MAP_ANONYMOS must be 1");
+				return 0;
+			}
+			for(char* a = 0; a < PGROUNDUP(length); a += PGSIZE){
+				mem = kalloc();
+				if(mem == 0){
+					cprintf("err: all memory is in used");
+				}
+				memset(mem,0,PGSIZE);
+				if(mappages(curproc->pgdir, newAddr + a, length, V2P(mem), prot) < 0){
+					cprintf("err: cannot alloc page table, all memory is in used");
+					deallocuvm(curproc->pgdir, newAddr + a, newAddr);
+				}			
+			}
+		}
+	}
+
+	//빈 mmap_area를 찾아서 추가
+	acquire(&mmap_table.lock);
+	for(m = table.mmap_area; m < &mtable.mmap_area[NMMAP]; m++){
+		if(m->addr == 0)
+			break;	
+	}
+	m->addr = newAddr;
+	m->length = length;
+	m->offset = offset;
+	m->prot = prot;
+	m->flags = flags;
+	m->proc = curproc;
+	release(&mmap_table.lock);
+	return newAddr;
 };
+
+
+
+
+
+
+

@@ -47,6 +47,27 @@ trap(struct trapframe *tf)
   }
 
   switch(tf->trapno){
+
+//page fault
+  case T_PGFLT:
+/* lazy alloc
+  	uint faultAddr = rcr2();
+	uint pg_loc = PGROUNDDOWN(faultAddr);
+	char * mem = kalloc();
+	if(mem == 0){
+		cprintf("allocuvm out of memory\n");
+		break;
+	}
+	memset(mem, 0, PGSIZE);
+	mappages(myproc()->pgdir, (char*)pz_loc, PGSIZE, V2P(mem), PTE_W|PTE_U);
+	break;
+*/
+	uint faultAddr = rcr2();
+	for(int i = 0; i < NMMAP; i++){
+		if(faultAddr == mtable[i].addr)
+	}
+		  
+	break;
   case T_IRQ0 + IRQ_TIMER:
     if(cpuid() == 0){
       acquire(&tickslock);
