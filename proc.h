@@ -61,10 +61,10 @@ struct proc {
 
 struct mmap_area {
 	struct file *f;
-	uint addr;
-	int length;
-	int offset;
-	int prot;
+	uint addr;				// start addr of mmap
+	int length;				// length of mmap
+	int offset;				// start + offset 
+	int prot;				// property
 	int flags;
 	struct proc *p;
 };
