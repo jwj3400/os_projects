@@ -106,6 +106,8 @@ extern int sys_uptime(void);
 extern int sys_swapread(void);
 extern int sys_swapwrite(void);
 extern int sys_mmap(void);
+extern int sys_munmmap(void);
+extern int sys_freemem(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -132,6 +134,8 @@ static int (*syscalls[])(void) = {
 [SYS_swapread]	sys_swapread,
 [SYS_swapwrite] sys_swapwrite,
 [SYS_mmap] sys_mmap,
+[SYS_munmmap] sys_munmmap,
+[SYS_freemem] sys_freemem
 };
 
 void

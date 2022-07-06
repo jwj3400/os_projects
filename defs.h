@@ -121,6 +121,9 @@ int             wait(void);
 void            wakeup(void*);
 void            yield(void);
 uint 			mmap(uint,int,int,int,int,int);
+int 			munmmap(uint);
+int 			freemem(void);
+
 // swtch.S
 void            swtch(struct context**, struct context*);
 

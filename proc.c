@@ -608,16 +608,19 @@ uint mmap(uint addr, int length, int prot, int flags, int fd, int offset){
 				mem = kalloc();
 				if(mem == 0){
 					cprintf("err: all memory is in used");
+					return 0;
 				}
 				if(mappages(curproc->pgdir, newAddr + a, PGSIZE, V2P(mem), prot) < 0){
 					cprintf("err: cannot alloc page table, all memory is in used");
 					deallocuvm(curproc->pgdir, newAddr + a, newAddr);
+					return 0;
 				}
 				memset(mem,0,PGSIZE);
 				int readNum = 0;
 				if((readNum = fileread(f, mem, PGSIZE)) < 0){
 					cprintf("err: fail to read file");
 					deallocuvm(curproc->pgdir, newAddr + a, newAddr);
+					return 0;
 				}					
 				f->offset += readNum;
 			}
@@ -630,11 +633,13 @@ uint mmap(uint addr, int length, int prot, int flags, int fd, int offset){
 				mem = kalloc();
 				if(mem == 0){
 					cprintf("err: all memory is in used");
+					return 0;
 				}
 				memset(mem,0,PGSIZE);
 				if(mappages(curproc->pgdir, newAddr + a, PGSIZE, V2P(mem), prot) < 0){
 					cprintf("err: cannot alloc page table, all memory is in used");
 					deallocuvm(curproc->pgdir, newAddr + a, newAddr);
+					return 0;
 				}			
 			}
 		}
@@ -686,7 +691,7 @@ int munmap(uint addr){
 }
 
 
-int freemem(){
+int freemem(void){
 	if(kmem.use_lock)
 		acquire(&kmem.lock);
 
