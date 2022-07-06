@@ -685,3 +685,19 @@ int munmap(uint addr){
 	return -1;
 }
 
+
+int freemem(){
+	if(kmem.use_lock)
+		acquire(&kmem.lock);
+
+	int count = 0;
+	struct run * temp = kem.freelist;
+	while(temp){
+		count++;
+		temp = temp->next;
+	}
+
+	if(kmem.use_lock)
+		release(&kmem.lock);
+	return count;
+}
