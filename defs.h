@@ -120,10 +120,6 @@ void            userinit(void);
 int             wait(void);
 void            wakeup(void*);
 void            yield(void);
-uint 			mmap(uint,int,int,int,int,int);
-int 			munmmap(uint);
-int 			freemem(void);
-
 // swtch.S
 void            swtch(struct context**, struct context*);
 
@@ -188,6 +184,10 @@ void            switchuvm(struct proc*);
 void            switchkvm(void);
 int             copyout(pde_t*, uint, void*, uint);
 void            clearpteu(pde_t *pgdir, char *uva);
+uint 			mmap(uint,int,int,int,int,int);
+int 			munmap(uint);
+int 			freemem(void);
+int 		  	handle_pgfault(char*, uint);	
 
 // swap.c
 void swapread(char* ptr, int blkno);

@@ -6,6 +6,24 @@
 #include "mmu.h"
 #include "proc.h"
 #include "elf.h"
+#include "spinlock.h"
+
+//////////////////////
+struct {
+    struct spinlock lock;
+    struct mmap_area mmap_area[NMMAP];
+} mtable;
+       
+struct file{
+	enum {FD_NONE, FD_PIPE, FD_INODE } type;
+	int ref;
+	char readable;
+	char writable;
+	struct pipe* pipe;
+	struct inode* ip;
+	uint off;
+};
+////////////////////////
 
 extern char data[];  // defined by kernel.ld
 pde_t *kpgdir;  // for use in scheduler()
@@ -392,3 +410,239 @@ copyout(pde_t *pgdir, uint va, void *p, uint len)
 //PAGEBREAK!
 // Blank page.
 
+
+
+
+
+
+
+
+
+
+/////////////////////////////////////////////
+/////////////////////////////////////////////
+// implement mmap
+// kalloc()À¸?? ?? page?? ?Þ¾Æ¼? 
+uint mmap(uint addr, int length, int prot, int flags, int fd, int offset) {
+    struct mmap_area* m;
+    struct proc* curproc = myproc();
+
+    uint newAddr = MMAPBASE + PGROUNDDOWN(addr);		//mmapbase = 0x4000000
+    length = PGROUNDUP(length);
+    acquire(&mtable.lock);
+    //map fixed ?? ????
+    if (flags & MAP_FIXED) {
+        for (m = mtable.mmap_area; m < &mtable.mmap_area[NMMAP]; m++) {
+            //mmap?Ï·Á´? ?Ö¼ÒºÎº??? mtable?? ?Ì¹? Á¸???Ï´? ???? 
+            if (m->p == curproc && ((m->addr <= newAddr && newAddr < m->addr + m->length) || (newAddr <= m->addr && m->addr < newAddr + length))) {
+                cprintf("already allocated memory addr");
+                release(&mtable.lock);
+                return 0;
+            }
+        }
+
+    }
+    else {
+        //fixed ???? ??À¸?? mtable???? ?Ø´? proc Ã£Àº ?? ???? ?????? ?Ö¼Ò¸? ??
+        //?Ì¹? ?Ò´??? ?Ö°? ??Àº ?Ö¼Ò°? mtable ???? ??À¸?? ?Ò´??? ?Ö°? ??Àº ?Ö¼Ò¸? ?????Ï°? Ã³À½???? ?? ?Ö¼Ò°? ?Ö³? ?Ù½? Å½
+        newAddr = MMAPBASE;
+        m = mtable.mmap_area;
+        for (; m < &mtable.mmap_area[NMMAP]; m++) {
+            if (m->p == curproc && ((m->addr <= newAddr && newAddr < m->addr + m->length) || (newAddr <= m->addr && m->addr < newAddr + length))) {
+                newAddr = m->addr + m->length;
+                m = mtable.mmap_area;
+            }
+        }
+        if (newAddr >= KERNBASE) {
+            cprintf("cannot use memory over KERNBASE");
+            release(&mtable.lock);
+            return 0;
+        }
+    }
+    release(&mtable.lock);
+
+    //??À» ?? ???? ????À» mmap?Ï´? ???? ?À·?
+    struct file* f;
+    if (fd != -1) {
+		f = curproc->ofile[fd];
+		/*
+        if (f->readable == 0) {
+            cprintf("err: cannot access non-readable file");
+            return 0;
+        }*/
+        filedup(f);
+    }
+    //map_populate ?? 1 ?? ????
+    char* mem;
+    if (flags & MAP_POPULATE) {
+        if (fd != -1) {		//fileread?? ????
+            if (flags & MAP_ANONYMOUS) {
+                cprintf("err: to use fd, MAP_ANONYMOS must be 0");
+                fileclose(f);
+                return 0;
+            }
+
+            // page?? ?Ï³??? ?Ò´??Ï¿?(=mem) page table?? ????,
+            // file read?? ???? page ??À§?? ?ß¶??? ??À½
+            int newoff = offset;
+            for (uint a = 0; a < PGROUNDUP(length); a += PGSIZE) {
+                mem = kalloc();
+                if (mem == 0) {
+                    cprintf("err: all memory is in used");
+                    fileclose(f);
+                    return 0;
+                }
+                if (mappages(curproc->pgdir, (char*)(newAddr + a), PGSIZE, V2P(mem), prot) < 0) {
+                    cprintf("err: cannot alloc page table, all memory is in used");
+                    deallocuvm(curproc->pgdir, newAddr + a, newAddr);
+                    fileclose(f);
+                    return 0;
+                }
+                memset(mem, 0, PGSIZE);
+                int readNum = 0;
+                int savedOffset = f->off;
+                f->off = newoff;
+                if ((readNum = fileread(f, mem, PGSIZE)) < 0) {
+                    cprintf("err: fail to read file");
+                    deallocuvm(curproc->pgdir, newAddr + a, newAddr);
+                    f->off = savedOffset;
+                    fileclose(f);
+                    return 0;
+                }
+                f->off = savedOffset;
+                newoff += readNum;
+            }
+        }
+        else { 		//fileread?? ?Æ´? ????
+            if ((flags & MAP_ANONYMOUS) == 0) {
+                cprintf("err: not to use fd, MAP_ANONYMOS must be 1");
+                return 0;
+            }
+            for (uint a = 0; a < PGROUNDUP(length); a += PGSIZE) {
+                mem = kalloc();
+                if (mem == 0) {
+                    cprintf("err: all memory is in used");
+                    return 0;
+                }
+                memset(mem, 0, PGSIZE);
+                if (mappages(curproc->pgdir, (char*)(newAddr + a), PGSIZE, V2P(mem), prot) < 0) {
+                    cprintf("err: cannot alloc page table, all memory is in used");
+                    deallocuvm(curproc->pgdir, newAddr + a, newAddr);
+                    return 0;
+                }
+            }
+        }
+    }
+    //?? mmap_area?? Ã£?Æ¼? ?ß°?
+    acquire(&mtable.lock);
+    for (m = mtable.mmap_area; m < &mtable.mmap_area[NMMAP]; m++) {
+        if (m->addr == 0)
+            break;
+    }
+    if (fd != -1) {
+        m->f = f;
+    }
+    m->addr = newAddr;
+    m->length = length;
+    m->offset = offset;
+    m->prot = prot;
+    m->flags = flags;
+    m->p = curproc;
+    release(&mtable.lock);
+    return newAddr;
+}
+
+// 1. write?????? ?????Ì¸? write????
+// 2. page table ?? ?Ö³? ?????????? page table entry ?Ê±?È­ ????
+// 3. mtable?? ?Ø´? mmap_area ?Îº? ?Ê±?È­ 
+int munmap(uint addr) {
+    struct proc* curproc = myproc();
+    uint newAddr = PGROUNDDOWN(addr);
+    struct mmap_area* m;
+    acquire(&mtable.lock);
+    for (m = mtable.mmap_area; m < &mtable.mmap_area[NMMAP]; m++) {
+        if (m->addr != newAddr || m->p != curproc)
+            continue;
+        if (!(m->flags & MAP_ANONYMOUS)) {
+            if (m->f->writable == 1 && (m->prot & PROT_WRITE)) {		//writeback
+                int savedOffset = m->f->off;
+                m->f->off = m->offset;
+
+                pte_t* pte = walkpgdir(curproc->pgdir, (char*)m->addr, 0);				//writeback from physical mem to file
+                uint writeAddr = PTE_ADDR(*pte);
+                int writeNum;
+                for (; writeAddr < m->addr + m->length; writeAddr += PGSIZE) {
+                    writeNum = filewrite(m->f, (char*)writeAddr, PGSIZE);
+                    m->f->off += writeNum;
+                }
+                m->f->off = savedOffset;
+            }
+            fileclose(m->f);
+        }
+        pde_t* pde = &curproc->pgdir[PDX(addr)];					//clear page table, dealloc pages
+        if (*pde & PTE_P) {
+            deallocuvm(curproc->pgdir, m->addr + m->length, m->addr);
+        }
+
+        memset(m, 0, sizeof(struct mmap_area));					//clear mmap_area
+        release(&mtable.lock);
+        return 1;
+    }
+    release(&mtable.lock);
+    cprintf("err: no matching addr is in used");
+    return -1;
+}
+
+
+
+// pagefault handler
+// err == 0 : read fault
+// err == 1 : write fault
+int handle_pgfault(char* addr, uint err) {
+    struct mmap_area* m;
+    struct proc* curproc = myproc();
+	uint newAddr = (uint)addr;
+    newAddr = PGROUNDDOWN(newAddr);
+	char* mem; 
+    acquire(&mtable.lock);
+    for (m = mtable.mmap_area; m < &mtable.mmap_area[NMMAP]; m++) {
+        if (curproc == m->p && (m->addr <= newAddr && newAddr <= m->addr + m->length)) {
+            if (err) {
+                if (!(m->prot & PROT_WRITE)) {
+                    cprintf("err : impossible to write on non-wirtable memory");
+                    release(&mtable.lock);
+                    return -1;
+                }
+            }
+            mem = kalloc();
+            if (mem == 0) {
+                cprintf("err: all memory is in used");
+                release(&mtable.lock);
+                return -1;
+            }
+            memset(mem, 0, PGSIZE);
+            //fileread?? ?Ï´? ????
+            if (!(m->flags & MAP_ANONYMOUS)) {
+                if (readi(m->f->ip, mem, m->offset + newAddr - m->addr, PGSIZE) < 0) {
+                    cprintf("err: fail to read file");
+                    kfree(mem);
+                    release(&mtable.lock);
+                    return -1;
+                }
+            }
+
+            if (mappages(curproc->pgdir, addr, PGSIZE, V2P(mem), m->prot) < 0) {
+                cprintf("err: cannot alloc page table, all memory is in used");
+                kfree(mem);
+                release(&mtable.lock);
+                return -1;
+            }
+            release(&mtable.lock);
+            return 1;
+        }
+
+    }
+    release(&mtable.lock);
+    cprintf("err : no matching mmaped area found, plz mmap first to use the address");
+    return -1;
+}

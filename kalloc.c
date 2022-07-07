@@ -94,3 +94,20 @@ kalloc(void)
   return (char*)r;
 }
 
+
+//////////////////////////////
+int freemem(void) {
+    if (kmem.use_lock)
+        acquire(&kmem.lock);
+
+    int count = 0;
+    struct run* temp = kmem.freelist;
+    while (temp) {
+        count++;
+        temp = temp->next;
+    }
+
+    if (kmem.use_lock)
+        release(&kmem.lock);
+    return count;
+}

@@ -61,11 +61,14 @@ trap(struct trapframe *tf)
 	memset(mem, 0, PGSIZE);
 	mappages(myproc()->pgdir, (char*)pz_loc, PGSIZE, V2P(mem), PTE_W|PTE_U);
 	break;
-*/
+*/	;
 	uint faultAddr = rcr2();
-	for(int i = 0; i < NMMAP; i++){
-		if(faultAddr == mtable[i].addr)
-	}
+	int err = 0;
+	if(tf->err & 2)
+		err = 0;
+	else if(tf->err == 1)
+		err = 1;
+	handle_pgfault((char*)faultAddr, err);
 		  
 	break;
   case T_IRQ0 + IRQ_TIMER:

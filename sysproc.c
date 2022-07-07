@@ -103,16 +103,14 @@ int sys_mmap(void)
 }
 
 
-
-
-int sys_munmmap(void)
+int sys_munmap(void)
 {
 	int addr;
 	
 	if( argint(0,&addr) < 0 ){
 		return -1;
 	}
-	return munmmap(addr);
+	return munmap(addr);
 }
 
 
