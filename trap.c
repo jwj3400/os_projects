@@ -68,7 +68,10 @@ trap(struct trapframe *tf)
 		err = 0;
 	else if(tf->err == 1)
 		err = 1;
-	handle_pgfault((char*)faultAddr, err);
+	cprintf("pgfault addr %p, err %d\n",faultAddr, err);
+	if(handle_pgfault((char*)faultAddr, err) == -1){
+		myproc()->killed = 1;
+	}
 		  
 	break;
   case T_IRQ0 + IRQ_TIMER:
