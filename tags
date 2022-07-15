@@ -73,6 +73,7 @@ ELF_PROG_FLAG_EXEC	elf.h	40;"	d
 ELF_PROG_FLAG_READ	elf.h	42;"	d
 ELF_PROG_FLAG_WRITE	elf.h	41;"	d
 ELF_PROG_LOAD	elf.h	37;"	d
+EMBRYO	fmt/proc.h	/^2334 enum procstate { UNUSED, EMBRYO, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };$/;"	e	enum:procstate
 EMBRYO	proc.h	/^enum procstate { UNUSED, EMBRYO, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };$/;"	e	enum:procstate
 ENABLE	lapic.c	19;"	d	file:
 EOI	lapic.c	17;"	d	file:
@@ -82,8 +83,11 @@ EXEC	sh.c	8;"	d	file:
 EXTMEM	memlayout.h	3;"	d
 EXTRA	Makefile	/^EXTRA=\\$/;"	m
 FD_INODE	file.h	/^  enum { FD_NONE, FD_PIPE, FD_INODE } type;$/;"	e	enum:file::__anon8
+FD_INODE	fmt/file.h	/^4251   enum { FD_NONE, FD_PIPE, FD_INODE } type;$/;"	e	enum:file::__anon16
 FD_NONE	file.h	/^  enum { FD_NONE, FD_PIPE, FD_INODE } type;$/;"	e	enum:file::__anon8
+FD_NONE	fmt/file.h	/^4251   enum { FD_NONE, FD_PIPE, FD_INODE } type;$/;"	e	enum:file::__anon16
 FD_PIPE	file.h	/^  enum { FD_NONE, FD_PIPE, FD_INODE } type;$/;"	e	enum:file::__anon8
+FD_PIPE	fmt/file.h	/^4251   enum { FD_NONE, FD_PIPE, FD_INODE } type;$/;"	e	enum:file::__anon16
 FILES	Makefile	/^FILES = $(shell grep -v '^\\#' runoff.list)$/;"	m
 FIXED	lapic.c	30;"	d	file:
 FL_IF	mmu.h	5;"	d
@@ -202,6 +206,7 @@ PTE_U	mmu.h	96;"	d
 PTE_W	mmu.h	95;"	d
 PTX	mmu.h	77;"	d
 PTXSHIFT	mmu.h	87;"	d
+Ptable	fmt/proc.c	/^2412 } Ptable;$/;"	t	typeref:struct:pt	file:
 QEMU	Makefile	/^QEMU = $(shell if which qemu > \/dev\/null; \\$/;"	m
 QEMUGDB	Makefile	/^QEMUGDB = $(shell if $(QEMU) -help | grep -q '^-gdb'; \\$/;"	m
 QEMUOPTS	Makefile	/^QEMUOPTS = -drive file=fs.img,index=1,media=disk,format=raw -drive file=xv6.img,index=0,media=disk,format=raw -smp $(CPUS) -m 512 $(QEMUEXTRA)$/;"	m
@@ -213,13 +218,17 @@ ROOTDEV	param.h	8;"	d
 ROOTINO	fs.h	5;"	d
 RTC_ADDR	usertests.c	1701;"	d	file:
 RTC_DATA	usertests.c	1702;"	d	file:
+RUNNABLE	fmt/proc.h	/^2334 enum procstate { UNUSED, EMBRYO, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };$/;"	e	enum:procstate
 RUNNABLE	proc.h	/^enum procstate { UNUSED, EMBRYO, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };$/;"	e	enum:procstate
+RUNNING	fmt/proc.h	/^2334 enum procstate { UNUSED, EMBRYO, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };$/;"	e	enum:procstate
 RUNNING	proc.h	/^enum procstate { UNUSED, EMBRYO, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };$/;"	e	enum:procstate
 SCROLLLOCK	kbd.h	15;"	d
 SECS	lapic.c	167;"	d	file:
 SECTOR_SIZE	ide.c	16;"	d	file:
 SECTSIZE	bootmain.c	13;"	d	file:
+SEG	fmt/mmu.h	/^0751 #define SEG(type, base, lim, dpl) (struct segdesc)    \\$/;"	f
 SEG	mmu.h	43;"	d
+SEG16	fmt/mmu.h	/^0755 #define SEG16(type, base, lim, dpl) (struct segdesc)  \\$/;"	f
 SEG16	mmu.h	47;"	d
 SEG_ASM	asm.h	11;"	d
 SEG_KCODE	mmu.h	15;"	d
@@ -228,8 +237,10 @@ SEG_NULLASM	asm.h	5;"	d
 SEG_TSS	mmu.h	19;"	d
 SEG_UCODE	mmu.h	17;"	d
 SEG_UDATA	mmu.h	18;"	d
+SETGATE	fmt/mmu.h	/^0875 #define SETGATE(gate, istrap, sel, off, d)                \\$/;"	f
 SETGATE	mmu.h	168;"	d
 SHIFT	kbd.h	9;"	d
+SLEEPING	fmt/proc.h	/^2334 enum procstate { UNUSED, EMBRYO, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };$/;"	e	enum:procstate
 SLEEPING	proc.h	/^enum procstate { UNUSED, EMBRYO, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };$/;"	e	enum:procstate
 STARTUP	lapic.c	23;"	d	file:
 STA_R	asm.h	18;"	d
@@ -242,10 +253,8 @@ STS_IG32	mmu.h	62;"	d
 STS_T32A	mmu.h	61;"	d
 STS_TG32	mmu.h	63;"	d
 SVR	lapic.c	18;"	d	file:
-SWAPBASE	fs.c	673;"	d	file:
-SWAPBASE	kernel.asm	/^#define SWAPBASE	500$/;"	d
-SWAPMAX	fs.c	674;"	d	file:
-SWAPMAX	kernel.asm	/^#define SWAPMAX		(100000 - SWAPBASE)$/;"	d
+SWAPBASE	param.h	14;"	d
+SWAPMAX	param.h	15;"	d
 SYSCALL	usys.S	/^#define SYSCALL(name) \\$/;"	d
 SYS_chdir	syscall.h	10;"	d
 SYS_close	syscall.h	22;"	d
@@ -254,6 +263,7 @@ SYS_exec	syscall.h	8;"	d
 SYS_exit	syscall.h	3;"	d
 SYS_fork	syscall.h	2;"	d
 SYS_fstat	syscall.h	9;"	d
+SYS_getnice	syscall.h	25;"	d
 SYS_getpid	syscall.h	12;"	d
 SYS_kill	syscall.h	7;"	d
 SYS_link	syscall.h	20;"	d
@@ -261,8 +271,10 @@ SYS_mkdir	syscall.h	21;"	d
 SYS_mknod	syscall.h	18;"	d
 SYS_open	syscall.h	16;"	d
 SYS_pipe	syscall.h	5;"	d
+SYS_ps	syscall.h	27;"	d
 SYS_read	syscall.h	6;"	d
 SYS_sbrk	syscall.h	13;"	d
+SYS_setnice	syscall.h	26;"	d
 SYS_sleep	syscall.h	14;"	d
 SYS_swapread	syscall.h	23;"	d
 SYS_swapwrite	syscall.h	24;"	d
@@ -301,6 +313,7 @@ T_STACK	traps.h	16;"	d
 T_SYSCALL	traps.h	27;"	d
 T_TSS	traps.h	14;"	d
 ULIB	Makefile	/^ULIB = ulib.o usys.o printf.o umalloc.o$/;"	m
+UNUSED	fmt/proc.h	/^2334 enum procstate { UNUSED, EMBRYO, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };$/;"	e	enum:procstate
 UNUSED	proc.h	/^enum procstate { UNUSED, EMBRYO, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };$/;"	e	enum:procstate
 UPROGS	Makefile	/^UPROGS=\\$/;"	m
 V2P	memlayout.h	11;"	d
@@ -308,6 +321,7 @@ V2P_WO	memlayout.h	14;"	d
 VER	lapic.c	15;"	d	file:
 X1	lapic.c	33;"	d	file:
 YEAR	lapic.c	172;"	d	file:
+ZOMBIE	fmt/proc.h	/^2334 enum procstate { UNUSED, EMBRYO, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };$/;"	e	enum:procstate
 ZOMBIE	proc.h	/^enum procstate { UNUSED, EMBRYO, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };$/;"	e	enum:procstate
 _cat	cat.asm	/^_cat:     file format elf32-i386$/;"	l
 _echo	echo.asm	/^_echo:     file format elf32-i386$/;"	l
@@ -375,6 +389,7 @@ a0f	grep.asm	/^ a0f:	89 f8                	mov    %edi,%eax$/;"	l
 a0f	ls.asm	/^ a0f:	89 f8                	mov    %edi,%eax$/;"	l
 a0f	usertests.asm	/^     a0f:	90                   	nop$/;"	l
 a1	echo.asm	/^  a1:	5d                   	pop    %ebp$/;"	l
+a1	init.asm	/^  a1:	53                   	push   %ebx$/;"	l
 a1	ln.asm	/^  a1:	0f b6 1a             	movzbl (%edx),%ebx$/;"	l
 a1	mkdir.asm	/^  a1:	5d                   	pop    %ebp$/;"	l
 a1	rm.asm	/^  a1:	5d                   	pop    %ebp$/;"	l
@@ -402,6 +417,7 @@ a1e	grep.asm	/^ a1e:	89 4a 04             	mov    %ecx,0x4(%edx)$/;"	l
 a1e	ls.asm	/^ a1e:	89 4a 04             	mov    %ecx,0x4(%edx)$/;"	l
 a1f	usertests.asm	/^     a1f:	ff 35 f0 5e 00 00    	pushl  0x5ef0$/;"	l
 a2	echo.asm	/^  a2:	c3                   	ret    $/;"	l
+a2	init.asm	/^  a2:	53                   	push   %ebx$/;"	l
 a2	ls.asm	/^  a2:	83 ec 0c             	sub    $0xc,%esp$/;"	l
 a2	mkdir.asm	/^  a2:	c3                   	ret    $/;"	l
 a2	rm.asm	/^  a2:	c3                   	ret    $/;"	l
@@ -429,6 +445,7 @@ a2f	ls.asm	/^ a2f:	8d 42 08             	lea    0x8(%edx),%eax$/;"	l
 a3	cat.asm	/^  a3:	53                   	push   %ebx$/;"	l
 a3	echo.asm	/^  a3:	8d b4 26 00 00 00 00 	lea    0x0(%esi,%eiz,1),%esi$/;"	l
 a3	grep.asm	/^  a3:	52                   	push   %edx$/;"	l
+a3	init.asm	/^  a3:	68 5d 08 00 00       	push   $0x85d$/;"	l
 a3	mkdir.asm	/^  a3:	8d b4 26 00 00 00 00 	lea    0x0(%esi,%eiz,1),%esi$/;"	l
 a3	rm.asm	/^  a3:	8d b4 26 00 00 00 00 	lea    0x0(%esi,%eiz,1),%esi$/;"	l
 a3	usertests.asm	/^      a3:	e8 08 04 00 00       	call   4b0 <writetest>$/;"	l
@@ -457,7 +474,6 @@ a3e	usertests.asm	/^     a3e:	85 c0                	test   %eax,%eax$/;"	l
 a3f	sh.asm	/^     a3f:	89 d8                	mov    %ebx,%eax$/;"	l
 a4	cat.asm	/^  a4:	68 a0 0b 00 00       	push   $0xba0$/;"	l
 a4	grep.asm	/^  a4:	52                   	push   %edx$/;"	l
-a4	init.asm	/^  a4:	50                   	push   %eax$/;"	l
 a4	kill.asm	/^  a4:	55                   	push   %ebp$/;"	l
 a4	ln.asm	/^  a4:	84 c0                	test   %al,%al$/;"	l
 a4	wc.asm	/^  a4:	55                   	push   %ebp$/;"	l
@@ -484,7 +500,6 @@ a4f	grep.asm	/^ a4f:	c7 05 64 0e 00 00 64 	movl   $0xe64,0xe64$/;"	l
 a4f	ls.asm	/^ a4f:	c7 05 08 0e 00 00 08 	movl   $0xe08,0xe08$/;"	l
 a5	forktest.asm	/^  a5:	85 c0                	test   %eax,%eax$/;"	l
 a5	grep.asm	/^  a5:	6a 00                	push   $0x0$/;"	l
-a5	init.asm	/^  a5:	50                   	push   %eax$/;"	l
 a5	kill.asm	/^  a5:	89 e5                	mov    %esp,%ebp$/;"	l
 a5	ls.asm	/^  a5:	53                   	push   %ebx$/;"	l
 a5	sh.asm	/^      a5:	68 40 19 00 00       	push   $0x1940$/;"	l
@@ -505,7 +520,6 @@ a5b	sh.asm	/^     a5b:	89 d8                	mov    %ebx,%eax$/;"	l
 a5b	usertests.asm	/^     a5b:	8d 74 26 00          	lea    0x0(%esi,%eiz,1),%esi$/;"	l
 a5d	sh.asm	/^     a5d:	83 c4 10             	add    $0x10,%esp$/;"	l
 a5f	usertests.asm	/^     a5f:	90                   	nop$/;"	l
-a6	init.asm	/^  a6:	68 2c 0b 00 00       	push   $0xb2c$/;"	l
 a6	ln.asm	/^  a6:	75 19                	jne    c1 <strcmp+0x31>$/;"	l
 a6	ls.asm	/^  a6:	e8 15 03 00 00       	call   3c0 <strlen>$/;"	l
 a6	stressfs.asm	/^  a6:	50                   	push   %eax$/;"	l
@@ -555,6 +569,7 @@ a7b	sh.asm	/^     a7b:	83 c0 04             	add    $0x4,%eax$/;"	l
 a7b	usertests.asm	/^     a7b:	0f 85 38 01 00 00    	jne    bb9 <pipe1+0x159>$/;"	l
 a7e	sh.asm	/^     a7e:	c6 02 00             	movb   $0x0,(%edx)$/;"	l
 a8	grep.asm	/^  a8:	e8 83 01 00 00       	call   230 <grep>$/;"	l
+a8	init.asm	/^  a8:	6a 01                	push   $0x1$/;"	l
 a8	kill.asm	/^  a8:	8b 4d 08             	mov    0x8(%ebp),%ecx$/;"	l
 a8	ln.asm	/^  a8:	eb 26                	jmp    d0 <strcmp+0x40>$/;"	l
 a8	swaptest.asm	/^  a8:	66 90                	xchg   %ax,%ax$/;"	l
@@ -585,6 +600,7 @@ a9b	sh.asm	/^     a9b:	8b 43 0c             	mov    0xc(%ebx),%eax$/;"	l
 a9c	usertests.asm	/^     a9c:	be 01 00 00 00       	mov    $0x1,%esi$/;"	l
 a9e	sh.asm	/^     a9e:	83 c4 10             	add    $0x10,%esp$/;"	l
 aa	echo.asm	/^  aa:	8d b6 00 00 00 00    	lea    0x0(%esi),%esi$/;"	l
+aa	init.asm	/^  aa:	e8 21 04 00 00       	call   4d0 <printf>$/;"	l
 aa	ln.asm	/^  aa:	8d b6 00 00 00 00    	lea    0x0(%esi),%esi$/;"	l
 aa	mkdir.asm	/^  aa:	8d b6 00 00 00 00    	lea    0x0(%esi),%esi$/;"	l
 aa	rm.asm	/^  aa:	8d b6 00 00 00 00    	lea    0x0(%esi),%esi$/;"	l
@@ -602,7 +618,6 @@ aab	sh.asm	/^     aab:	8d 74 26 00          	lea    0x0(%esi,%eiz,1),%esi$/;"	l
 aad	usertests.asm	/^     aad:	83 c4 10             	add    $0x10,%esp$/;"	l
 aaf	sh.asm	/^     aaf:	90                   	nop$/;"	l
 ab	cat.asm	/^  ab:	e8 e3 02 00 00       	call   393 <write>$/;"	l
-ab	init.asm	/^  ab:	68 56 08 00 00       	push   $0x856$/;"	l
 ab	kill.asm	/^  ab:	8b 55 0c             	mov    0xc(%ebp),%edx$/;"	l
 ab	ls.asm	/^  ab:	83 c4 0c             	add    $0xc,%esp$/;"	l
 ab0	sh.asm	/^     ab0:	31 c0                	xor    %eax,%eax$/;"	l
@@ -632,7 +647,9 @@ ac9	sh.asm	/^     ac9:	8b 5d 08             	mov    0x8(%ebp),%ebx$/;"	l
 acc	sh.asm	/^     acc:	83 ec 0c             	sub    $0xc,%esp$/;"	l
 ace	usertests.asm	/^     ace:	8d 0c 3b             	lea    (%ebx,%edi,1),%ecx$/;"	l
 acf	sh.asm	/^     acf:	53                   	push   %ebx$/;"	l
+acquire	fmt/spinlock.c	/^1574 acquire(struct spinlock *lk)$/;"	f
 acquire	spinlock.c	/^acquire(struct spinlock *lk)$/;"	f
+acquiresleep	fmt/sleeplock.c	/^4722 acquiresleep(struct sleeplock *lk)$/;"	f
 acquiresleep	sleeplock.c	/^acquiresleep(struct sleeplock *lk)$/;"	f
 ad	grep.asm	/^  ad:	e8 f1 04 00 00       	call   5a3 <exit>$/;"	l
 ad	usertests.asm	/^      ad:	e8 ae 07 00 00       	call   860 <createtest>$/;"	l
@@ -649,10 +666,13 @@ ada	usertests.asm	/^     ada:	83 c3 01             	add    $0x1,%ebx$/;"	l
 adc	sh.asm	/^     adc:	53                   	push   %ebx$/;"	l
 add	sh.asm	/^     add:	50                   	push   %eax$/;"	l
 add	usertests.asm	/^     add:	38 90 e0 86 00 00    	cmp    %dl,0x86e0(%eax)$/;"	l
+addr	fmt/mp.h	/^7194   uint *addr;                  \/\/ I\/O APIC address$/;"	m	struct:mpioapic
 addr	kernel.asm	/^  addr = P2V(a);$/;"	d
 addr	kernel.asm	/^  addr = myproc()->sz;$/;"	d
 addr	mp.h	/^  uint *addr;                  \/\/ I\/O APIC address$/;"	m	struct:mpioapic
 addrs	file.h	/^  uint addrs[NDIRECT+1];$/;"	m	struct:inode
+addrs	fmt/file.h	/^4274   uint addrs[NDIRECT+1];$/;"	m	struct:inode
+addrs	fmt/fs.h	/^4184   uint addrs[NDIRECT+1];   \/\/ Data block addresses$/;"	m	struct:dinode
 addrs	fs.h	/^  uint addrs[NDIRECT+1];   \/\/ Data block addresses$/;"	m	struct:dinode
 ade	sh.asm	/^     ade:	e8 dd fd ff ff       	call   8c0 <parseline>$/;"	l
 ae	forktest.asm	/^  ae:	e8 08 03 00 00       	call   3bb <wait>$/;"	l
@@ -670,6 +690,7 @@ aea	usertests.asm	/^     aea:	75 ec                	jne    ad8 <pipe1+0x78>$/;"	
 aeb	sh.asm	/^     aeb:	68 81 12 00 00       	push   $0x1281$/;"	l
 aec	usertests.asm	/^     aec:	01 f6                	add    %esi,%esi$/;"	l
 aee	usertests.asm	/^     aee:	01 7d d4             	add    %edi,-0x2c(%ebp)$/;"	l
+af	init.asm	/^  af:	e8 af 02 00 00       	call   363 <exit>$/;"	l
 af	ls.asm	/^  af:	53                   	push   %ebx$/;"	l
 af	sh.asm	/^      af:	c7 04 24 43 19 00 00 	movl   $0x1943,(%esp)$/;"	l
 af	stressfs.asm	/^  af:	89 c7                	mov    %eax,%edi$/;"	l
@@ -686,7 +707,10 @@ afd	sh.asm	/^     afd:	39 d8                	cmp    %ebx,%eax$/;"	l
 aff	sh.asm	/^     aff:	75 12                	jne    b13 <parsecmd+0x53>$/;"	l
 aff	usertests.asm	/^     aff:	eb af                	jmp    ab0 <pipe1+0x50>$/;"	l
 align	elf.h	/^  uint align;$/;"	m	struct:proghdr
+align	fmt/elf.h	/^0932   uint align;$/;"	m	struct:proghdr
+allocproc	fmt/proc.c	/^2505 allocproc(void)$/;"	f	file:
 allocproc	proc.c	/^allocproc(void)$/;"	f	file:
+allocuvm	fmt/vm.c	/^1927 allocuvm(pde_t *pgdir, uint oldsz, uint newsz)$/;"	f
 allocuvm	vm.c	/^allocuvm(pde_t *pgdir, uint oldsz, uint newsz)$/;"	f
 alltraps	kernel.asm	/^alltraps:$/;"	l
 alltraps	trapasm.S	/^alltraps:$/;"	l
@@ -706,22 +730,33 @@ ap	swaptest.asm	/^  ap = (uint*)(void*)&fmt + 1;$/;"	d
 ap	usertests.asm	/^  ap = (uint*)(void*)&fmt + 1;$/;"	d
 ap	wc.asm	/^  ap = (uint*)(void*)&fmt + 1;$/;"	d
 ap	zombie.asm	/^  ap = (uint*)(void*)&fmt + 1;$/;"	d
+apicid	fmt/mp.h	/^7180   uchar apicid;                 \/\/ local APIC id$/;"	m	struct:mpproc
+apicid	fmt/proc.h	/^2302   uchar apicid;                \/\/ Local APIC ID$/;"	m	struct:cpu
 apicid	kernel.asm	/^  apicid = lapicid();$/;"	d
 apicid	mp.h	/^  uchar apicid;                 \/\/ local APIC id$/;"	m	struct:mpproc
 apicid	proc.h	/^  uchar apicid;                \/\/ Local APIC ID$/;"	m	struct:cpu
+apicno	fmt/mp.h	/^7191   uchar apicno;                 \/\/ I\/O APIC id$/;"	m	struct:mpioapic
 apicno	mp.h	/^  uchar apicno;                 \/\/ I\/O APIC id$/;"	m	struct:mpioapic
 argc	sh.asm	/^  argc = 0;$/;"	d
+argfd	fmt/sysfile.c	/^6171 argfd(int n, int *pfd, struct file **pf)$/;"	f	file:
 argfd	sysfile.c	/^argfd(int n, int *pfd, struct file **pf)$/;"	f	file:
+argint	fmt/syscall.c	/^3652 argint(int n, int *ip)$/;"	f
 argint	syscall.c	/^argint(int n, int *ip)$/;"	f
 argp	kernel.asm	/^  argp = (uint*)(void*)(&fmt + 1);$/;"	d
 argptest	usertests.c	/^void argptest()$/;"	f
+argptr	fmt/syscall.c	/^3661 argptr(int n, char **pp, int size)$/;"	f
 argptr	syscall.c	/^argptr(int n, char **pp, int size)$/;"	f
+args	fmt/mmu.h	/^0858   uint args : 5;        \/\/ # args, 0 for interrupt\/trap gates$/;"	m	struct:gatedesc
 args	mmu.h	/^  uint args : 5;        \/\/ # args, 0 for interrupt\/trap gates$/;"	m	struct:gatedesc
+argstr	fmt/syscall.c	/^3679 argstr(int n, char **pp)$/;"	f
 argstr	syscall.c	/^argstr(int n, char **pp)$/;"	f
+argv	fmt/init.c	/^8707 char *argv[] = { "sh", 0 };$/;"	v
+argv	fmt/sh.c	/^8771   char *argv[MAXARGS];$/;"	m	struct:execcmd	file:
 argv	init.c	/^char *argv[] = { "sh", 0 };$/;"	v
 argv	initcode.S	/^argv:$/;"	l
 argv	sh.c	/^  char *argv[MAXARGS];$/;"	m	struct:execcmd	file:
 atoi	ulib.c	/^atoi(const char *s)$/;"	f
+avl	fmt/mmu.h	/^0734   uint avl : 1;        \/\/ Unused (available for software use)$/;"	m	struct:segdesc
 avl	mmu.h	/^  uint avl : 1;        \/\/ Unused (available for software use)$/;"	m	struct:segdesc
 b	cat.asm	/^   b:	ff 71 fc             	pushl  -0x4(%ecx)$/;"	l
 b	echo.asm	/^   b:	ff 71 fc             	pushl  -0x4(%ecx)$/;"	l
@@ -742,7 +777,6 @@ b	wc.asm	/^   b:	ff 71 fc             	pushl  -0x4(%ecx)$/;"	l
 b	zombie.asm	/^   b:	ff 71 fc             	pushl  -0x4(%ecx)$/;"	l
 b0	cat.asm	/^  b0:	83 c4 10             	add    $0x10,%esp$/;"	l
 b0	echo.asm	/^  b0:	f3 0f 1e fb          	endbr32 $/;"	l
-b0	init.asm	/^  b0:	e8 d6 02 00 00       	call   38b <exec>$/;"	l
 b0	ln.asm	/^  b0:	0f b6 41 01          	movzbl 0x1(%ecx),%eax$/;"	l
 b0	ls.asm	/^  b0:	68 f4 0d 00 00       	push   $0xdf4$/;"	l
 b0	mkdir.asm	/^  b0:	f3 0f 1e fb          	endbr32 $/;"	l
@@ -804,6 +838,7 @@ b3c	usertests.asm	/^     b3c:	3d 09 04 00 00       	cmp    $0x409,%eax$/;"	l
 b3d	sh.asm	/^     b3d:	8b 5d 0c             	mov    0xc(%ebp),%ebx$/;"	l
 b4	echo.asm	/^  b4:	55                   	push   %ebp$/;"	l
 b4	grep.asm	/^  b4:	66 90                	xchg   %ax,%ax$/;"	l
+b4	init.asm	/^  b4:	50                   	push   %eax$/;"	l
 b4	kill.asm	/^  b4:	84 c0                	test   %al,%al$/;"	l
 b4	ln.asm	/^  b4:	83 c1 01             	add    $0x1,%ecx$/;"	l
 b4	mkdir.asm	/^  b4:	55                   	push   %ebp$/;"	l
@@ -822,7 +857,7 @@ b4c	usertests.asm	/^     b4c:	68 09 04 00 00       	push   $0x409$/;"	l
 b4e	sh.asm	/^     b4e:	89 c8                	mov    %ecx,%eax$/;"	l
 b5	cat.asm	/^  b5:	75 25                	jne    dc <cat+0x4c>$/;"	l
 b5	echo.asm	/^  b5:	89 e5                	mov    %esp,%ebp$/;"	l
-b5	init.asm	/^  b5:	5a                   	pop    %edx$/;"	l
+b5	init.asm	/^  b5:	50                   	push   %eax$/;"	l
 b5	ls.asm	/^  b5:	e8 b6 04 00 00       	call   570 <memmove>$/;"	l
 b5	mkdir.asm	/^  b5:	89 e5                	mov    %esp,%ebp$/;"	l
 b5	rm.asm	/^  b5:	89 e5                	mov    %esp,%ebp$/;"	l
@@ -839,7 +874,7 @@ b5a	sh.asm	/^     b5a:	8d b6 00 00 00 00    	lea    0x0(%esi),%esi$/;"	l
 b5e	usertests.asm	/^     b5e:	83 c4 10             	add    $0x10,%esp$/;"	l
 b6	forktest.asm	/^  b6:	75 49                	jne    101 <forktest+0xb1>$/;"	l
 b6	grep.asm	/^  b6:	66 90                	xchg   %ax,%ax$/;"	l
-b6	init.asm	/^  b6:	59                   	pop    %ecx$/;"	l
+b6	init.asm	/^  b6:	68 48 0b 00 00       	push   $0xb48$/;"	l
 b6	kill.asm	/^  b6:	75 19                	jne    d1 <strcmp+0x31>$/;"	l
 b6	sh.asm	/^      b6:	c6 80 3f 19 00 00 00 	movb   $0x0,0x193f(%eax)$/;"	l
 b6	wc.asm	/^  b6:	c7 45 dc 00 00 00 00 	movl   $0x0,-0x24(%ebp)$/;"	l
@@ -856,7 +891,6 @@ b6e	sh.asm	/^     b6e:	0f b6 01             	movzbl (%ecx),%eax$/;"	l
 b6e	usertests.asm	/^     b6e:	75 bb                	jne    b2b <pipe1+0xcb>$/;"	l
 b7	cat.asm	/^  b7:	83 ec 04             	sub    $0x4,%esp$/;"	l
 b7	echo.asm	/^  b7:	53                   	push   %ebx$/;"	l
-b7	init.asm	/^  b7:	68 59 08 00 00       	push   $0x859$/;"	l
 b7	ln.asm	/^  b7:	83 c2 01             	add    $0x1,%edx$/;"	l
 b7	mkdir.asm	/^  b7:	53                   	push   %ebx$/;"	l
 b7	rm.asm	/^  b7:	53                   	push   %ebx$/;"	l
@@ -919,6 +953,8 @@ ba5	usertests.asm	/^     ba5:	ff 75 d4             	pushl  -0x2c(%ebp)$/;"	l
 ba6	sh.asm	/^     ba6:	c3                   	ret    $/;"	l
 ba7	sh.asm	/^     ba7:	8d b4 26 00 00 00 00 	lea    0x0(%esi,%eiz,1),%esi$/;"	l
 ba8	usertests.asm	/^     ba8:	68 bc 41 00 00       	push   $0x41bc$/;"	l
+backcmd	fmt/sh.c	/^8796 struct backcmd {$/;"	s	file:
+backcmd	fmt/sh.c	/^9014 backcmd(struct cmd *subcmd)$/;"	f
 backcmd	sh.c	/^backcmd(struct cmd *subcmd)$/;"	f
 backcmd	sh.c	/^struct backcmd {$/;"	s	file:
 bad	kernel.asm	/^ bad:$/;"	l
@@ -926,14 +962,19 @@ bad	kernel.asm	/^bad:$/;"	l
 bad	usertests.asm	/^     bad:	6a 01                	push   $0x1$/;"	l
 bae	sh.asm	/^     bae:	66 90                	xchg   %ax,%ax$/;"	l
 baf	usertests.asm	/^     baf:	e8 3c 2f 00 00       	call   3af0 <printf>$/;"	l
+balloc	fmt/fs.c	/^5116 balloc(uint dev)$/;"	f	file:
 balloc	fs.c	/^balloc(uint dev)$/;"	f	file:
 balloc	mkfs.c	/^balloc(int used)$/;"	f
 base	umalloc.c	/^static Header base;$/;"	v	file:
+base_15_0	fmt/mmu.h	/^0727   uint base_15_0 : 16; \/\/ Low bits of segment base address$/;"	m	struct:segdesc
 base_15_0	mmu.h	/^  uint base_15_0 : 16; \/\/ Low bits of segment base address$/;"	m	struct:segdesc
+base_23_16	fmt/mmu.h	/^0728   uint base_23_16 : 8; \/\/ Middle bits of segment base address$/;"	m	struct:segdesc
 base_23_16	mmu.h	/^  uint base_23_16 : 8; \/\/ Middle bits of segment base address$/;"	m	struct:segdesc
+base_31_24	fmt/mmu.h	/^0738   uint base_31_24 : 8; \/\/ High bits of segment base address$/;"	m	struct:segdesc
 base_31_24	mmu.h	/^  uint base_31_24 : 8; \/\/ High bits of segment base address$/;"	m	struct:segdesc
 bb	echo.asm	/^  bb:	8b 55 0c             	mov    0xc(%ebp),%edx$/;"	l
 bb	forktest.asm	/^  bb:	68 96 04 00 00       	push   $0x496$/;"	l
+bb	init.asm	/^  bb:	68 70 08 00 00       	push   $0x870$/;"	l
 bb	mkdir.asm	/^  bb:	8b 55 0c             	mov    0xc(%ebp),%edx$/;"	l
 bb	rm.asm	/^  bb:	8b 55 0c             	mov    0xc(%ebp),%edx$/;"	l
 bb	stressfs.asm	/^  bb:	68 00 02 00 00       	push   $0x200$/;"	l
@@ -949,7 +990,6 @@ bbb	usertests.asm	/^     bbb:	68 91 41 00 00       	push   $0x4191$/;"	l
 bbd	sh.asm	/^     bbd:	74 21                	je     be0 <strlen+0x30>$/;"	l
 bbf	sh.asm	/^     bbf:	31 c0                	xor    %eax,%eax$/;"	l
 bc	grep.asm	/^  bc:	66 90                	xchg   %ax,%ax$/;"	l
-bc	init.asm	/^  bc:	6a 01                	push   $0x1$/;"	l
 bc	usertests.asm	/^      bc:	e8 5f 00 00 00       	call   120 <iputtest>$/;"	l
 bc0	usertests.asm	/^     bc0:	6a 01                	push   $0x1$/;"	l
 bc1	sh.asm	/^     bc1:	8d b4 26 00 00 00 00 	lea    0x0(%esi,%eiz,1),%esi$/;"	l
@@ -957,6 +997,7 @@ bc2	usertests.asm	/^     bc2:	e8 29 2f 00 00       	call   3af0 <printf>$/;"	l
 bc7	usertests.asm	/^     bc7:	e8 b7 2d 00 00       	call   3983 <exit>$/;"	l
 bc8	sh.asm	/^     bc8:	83 c0 01             	add    $0x1,%eax$/;"	l
 bcache	bio.c	/^} bcache;$/;"	v	typeref:struct:__anon3
+bcache	fmt/bio.c	/^4535 } bcache;$/;"	v	typeref:struct:__anon12
 bcb	sh.asm	/^     bcb:	80 3c 02 00          	cmpb   $0x0,(%edx,%eax,1)$/;"	l
 bcc	usertests.asm	/^     bcc:	50                   	push   %eax$/;"	l
 bcd	kernel.asm	/^  bcd = (sb & (1 << 2)) == 0;$/;"	d
@@ -982,7 +1023,6 @@ bde	sh.asm	/^     bde:	66 90                	xchg   %ax,%ax$/;"	l
 bdf	usertests.asm	/^     bdf:	56                   	push   %esi$/;"	l
 be	echo.asm	/^  be:	0f b6 01             	movzbl (%ecx),%eax$/;"	l
 be	grep.asm	/^  be:	66 90                	xchg   %ax,%ax$/;"	l
-be	init.asm	/^  be:	e8 fd 03 00 00       	call   4c0 <printf>$/;"	l
 be	mkdir.asm	/^  be:	0f b6 01             	movzbl (%ecx),%eax$/;"	l
 be	rm.asm	/^  be:	0f b6 01             	movzbl (%ecx),%eax$/;"	l
 be0	sh.asm	/^     be0:	31 c9                	xor    %ecx,%ecx$/;"	l
@@ -996,6 +1036,7 @@ be6	usertests.asm	/^     be6:	6a 01                	push   $0x1$/;"	l
 be8	usertests.asm	/^     be8:	e8 03 2f 00 00       	call   3af0 <printf>$/;"	l
 bed	sh.asm	/^     bed:	8d 76 00             	lea    0x0(%esi),%esi$/;"	l
 bed	usertests.asm	/^     bed:	e8 91 2d 00 00       	call   3983 <exit>$/;"	l
+begin_op	fmt/log.c	/^4928 begin_op(void)$/;"	f
 begin_op	log.c	/^begin_op(void)$/;"	f
 bf	cat.asm	/^  bf:	68 a0 0b 00 00       	push   $0xba0$/;"	l
 bf	ln.asm	/^  bf:	74 0f                	je     d0 <strcmp+0x40>$/;"	l
@@ -1009,24 +1050,32 @@ bf8	sh.asm	/^     bf8:	8b 55 08             	mov    0x8(%ebp),%edx$/;"	l
 bf9	usertests.asm	/^     bf9:	8d b4 26 00 00 00 00 	lea    0x0(%esi,%eiz,1),%esi$/;"	l
 bfb	sh.asm	/^     bfb:	8b 4d 10             	mov    0x10(%ebp),%ecx$/;"	l
 bfe	sh.asm	/^     bfe:	8b 45 0c             	mov    0xc(%ebp),%eax$/;"	l
+bfree	fmt/fs.c	/^5152 bfree(int dev, uint b)$/;"	f	file:
 bfree	fs.c	/^bfree(int dev, uint b)$/;"	f	file:
 bget	bio.c	/^bget(uint dev, uint blockno)$/;"	f	file:
+bget	fmt/bio.c	/^4566 bget(uint dev, uint blockno)$/;"	f	file:
 bigargtest	usertests.c	/^bigargtest(void)$/;"	f
 bigdir	usertests.c	/^bigdir(void)$/;"	f
 bigfile	usertests.c	/^bigfile(void)$/;"	f
 bigwrite	usertests.c	/^bigwrite(void)$/;"	f
 binit	bio.c	/^binit(void)$/;"	f
+binit	fmt/bio.c	/^4538 binit(void)$/;"	f
 blkno	swaptest.asm	/^	blkno = atoi(argv[1]);$/;"	d
+block	fmt/log.c	/^4835   int block[LOGSIZE];$/;"	m	struct:logheader	file:
 block	log.c	/^  int block[LOGSIZE];$/;"	m	struct:logheader	file:
 blockno	buf.h	/^  uint blockno;$/;"	m	struct:buf
+blockno	fmt/buf.h	/^3953   uint blockno;$/;"	m	struct:buf
+bmap	fmt/fs.c	/^5510 bmap(struct inode *ip, uint bn)$/;"	f	file:
 bmap	fs.c	/^bmap(struct inode *ip, uint bn)$/;"	f	file:
+bmapstart	fmt/fs.h	/^4170   uint bmapstart;    \/\/ Block number of first free map block$/;"	m	struct:superblock
 bmapstart	fs.h	/^  uint bmapstart;    \/\/ Block number of first free map block$/;"	m	struct:superblock
 bootmain	bootmain.c	/^bootmain(void)$/;"	f
+bootmain	fmt/bootmain.c	/^9417 bootmain(void)$/;"	f
 bp	cat.asm	/^  bp = (Header*)ap - 1;$/;"	d
 bp	echo.asm	/^  bp = (Header*)ap - 1;$/;"	d
 bp	grep.asm	/^  bp = (Header*)ap - 1;$/;"	d
 bp	init.asm	/^  bp = (Header*)ap - 1;$/;"	d
-bp	kernel.asm	/^		bp = bread(0, blkno + SWAPBASE + i);$/;"	d
+bp	kernel.asm	/^		bp = bread(0, blkno * 8 + SWAPBASE + i);$/;"	d
 bp	kernel.asm	/^    bp = bread(dev, BBLOCK(b, sb));$/;"	d
 bp	kernel.asm	/^    bp = bread(dev, IBLOCK(inum, sb));$/;"	d
 bp	kernel.asm	/^    bp = bread(ip->dev, IBLOCK(ip->inum, sb));$/;"	d
@@ -1050,12 +1099,17 @@ bp	usertests.asm	/^  bp = (Header*)ap - 1;$/;"	d
 bp	wc.asm	/^  bp = (Header*)ap - 1;$/;"	d
 bp	zombie.asm	/^  bp = (Header*)ap - 1;$/;"	d
 bread	bio.c	/^bread(uint dev, uint blockno)$/;"	f
+bread	fmt/bio.c	/^4602 bread(uint dev, uint blockno)$/;"	f
 brelse	bio.c	/^brelse(struct buf *b)$/;"	f
+brelse	fmt/bio.c	/^4626 brelse(struct buf *b)$/;"	f
 bsstest	usertests.c	/^bsstest(void)$/;"	f
 buf	bio.c	/^  struct buf buf[NBUF];$/;"	m	struct:__anon3	typeref:struct:__anon3::buf	file:
 buf	buf.h	/^struct buf {$/;"	s
 buf	cat.c	/^char buf[512];$/;"	v
 buf	console.c	/^  char buf[INPUT_BUF];$/;"	m	struct:__anon5	file:
+buf	fmt/bio.c	/^4530   struct buf buf[NBUF];$/;"	m	struct:__anon12	typeref:struct:__anon12::buf	file:
+buf	fmt/buf.h	/^3950 struct buf {$/;"	s
+buf	fmt/console.c	/^8268   char buf[INPUT_BUF];$/;"	m	struct:__anon14	file:
 buf	grep.c	/^char buf[1024];$/;"	v
 buf	kernel.asm	/^  buf = (char*)p;$/;"	d
 buf	usertests.c	/^char buf[8192];$/;"	v
@@ -1063,6 +1117,8 @@ buf	wc.c	/^char buf[512];$/;"	v
 buffer1	swaptest.c	/^char buffer1[4096];$/;"	v
 buffer2	swaptest.c	/^char buffer2[4096];$/;"	v
 bwrite	bio.c	/^bwrite(struct buf *b)$/;"	f
+bwrite	fmt/bio.c	/^4615 bwrite(struct buf *b)$/;"	f
+bzero	fmt/fs.c	/^5102 bzero(int dev, int bno)$/;"	f	file:
 bzero	fs.c	/^bzero(int dev, int bno)$/;"	f	file:
 c	cat.asm	/^    c = fmt[i] & 0xff;$/;"	d
 c	echo.asm	/^    c = fmt[i] & 0xff;$/;"	d
@@ -1093,6 +1149,7 @@ c	wc.asm	/^    c = fmt[i] & 0xff;$/;"	d
 c	zombie.asm	/^    c = fmt[i] & 0xff;$/;"	d
 c0	forktest.asm	/^  c0:	e8 0b 01 00 00       	call   1d0 <strlen>$/;"	l
 c0	grep.asm	/^  c0:	f3 0f 1e fb          	endbr32 $/;"	l
+c0	init.asm	/^  c0:	e8 d6 02 00 00       	call   39b <exec>$/;"	l
 c0	kill.asm	/^  c0:	0f b6 41 01          	movzbl 0x1(%ecx),%eax$/;"	l
 c0	stressfs.asm	/^  c0:	56                   	push   %esi$/;"	l
 c0	swaptest.asm	/^  c0:	0f b6 14 03          	movzbl (%ebx,%eax,1),%edx$/;"	l
@@ -1143,7 +1200,6 @@ c27	sh.asm	/^     c27:	8d b4 26 00 00 00 00 	lea    0x0(%esi,%eiz,1),%esi$/;"	l
 c27	usertests.asm	/^     c27:	8d b4 26 00 00 00 00 	lea    0x0(%esi,%eiz,1),%esi$/;"	l
 c2e	sh.asm	/^     c2e:	66 90                	xchg   %ax,%ax$/;"	l
 c2e	usertests.asm	/^     c2e:	66 90                	xchg   %ax,%ax$/;"	l
-c3	init.asm	/^  c3:	e8 8b 02 00 00       	call   353 <exit>$/;"	l
 c3	ln.asm	/^  c3:	74 eb                	je     b0 <strcmp+0x20>$/;"	l
 c30	sh.asm	/^     c30:	0f b6 50 01          	movzbl 0x1(%eax),%edx$/;"	l
 c30	usertests.asm	/^     c30:	89 c7                	mov    %eax,%edi$/;"	l
@@ -1181,6 +1237,7 @@ c4c	usertests.asm	/^     c4c:	e8 2a 2d 00 00       	call   397b <fork>$/;"	l
 c5	cat.asm	/^  c5:	e8 c1 02 00 00       	call   38b <read>$/;"	l
 c5	forktest.asm	/^  c5:	83 c4 0c             	add    $0xc,%esp$/;"	l
 c5	grep.asm	/^  c5:	89 e5                	mov    %esp,%ebp$/;"	l
+c5	init.asm	/^  c5:	5a                   	pop    %edx$/;"	l
 c5	ln.asm	/^  c5:	29 d8                	sub    %ebx,%eax$/;"	l
 c5	ls.asm	/^  c5:	bb f4 0d 00 00       	mov    $0xdf4,%ebx$/;"	l
 c5	sh.asm	/^      c5:	85 c0                	test   %eax,%eax$/;"	l
@@ -1200,6 +1257,7 @@ c5c	sh.asm	/^     c5c:	89 f3                	mov    %esi,%ebx$/;"	l
 c5d	usertests.asm	/^     c5d:	ff 75 e0             	pushl  -0x20(%ebp)$/;"	l
 c5e	sh.asm	/^     c5e:	83 ec 1c             	sub    $0x1c,%esp$/;"	l
 c6	echo.asm	/^  c6:	75 19                	jne    e1 <strcmp+0x31>$/;"	l
+c6	init.asm	/^  c6:	59                   	pop    %ecx$/;"	l
 c6	mkdir.asm	/^  c6:	75 19                	jne    e1 <strcmp+0x31>$/;"	l
 c6	rm.asm	/^  c6:	75 19                	jne    e1 <strcmp+0x31>$/;"	l
 c6	usertests.asm	/^      c6:	e8 95 09 00 00       	call   a60 <pipe1>$/;"	l
@@ -1213,6 +1271,7 @@ c6a	usertests.asm	/^     c6a:	68 b1 47 00 00       	push   $0x47b1$/;"	l
 c6d	sh.asm	/^     c6d:	8d 76 00             	lea    0x0(%esi),%esi$/;"	l
 c6f	usertests.asm	/^     c6f:	ff 75 e4             	pushl  -0x1c(%ebp)$/;"	l
 c7	grep.asm	/^  c7:	57                   	push   %edi$/;"	l
+c7	init.asm	/^  c7:	68 73 08 00 00       	push   $0x873$/;"	l
 c7	kill.asm	/^  c7:	83 c2 01             	add    $0x1,%edx$/;"	l
 c7	ln.asm	/^  c7:	5b                   	pop    %ebx$/;"	l
 c7	sh.asm	/^      c7:	79 aa                	jns    73 <main+0x73>$/;"	l
@@ -1231,7 +1290,6 @@ c7d	usertests.asm	/^     c7d:	0f 85 a4 00 00 00    	jne    d27 <preempt+0x127>$/
 c8	echo.asm	/^  c8:	eb 26                	jmp    f0 <strcmp+0x40>$/;"	l
 c8	forktest.asm	/^  c8:	50                   	push   %eax$/;"	l
 c8	grep.asm	/^  c8:	56                   	push   %esi$/;"	l
-c8	init.asm	/^  c8:	50                   	push   %eax$/;"	l
 c8	ln.asm	/^  c8:	5d                   	pop    %ebp$/;"	l
 c8	mkdir.asm	/^  c8:	eb 26                	jmp    f0 <strcmp+0x40>$/;"	l
 c8	rm.asm	/^  c8:	eb 26                	jmp    f0 <strcmp+0x40>$/;"	l
@@ -1249,7 +1307,6 @@ c8e	sh.asm	/^     c8e:	88 47 ff             	mov    %al,-0x1(%edi)$/;"	l
 c8e	usertests.asm	/^     c8e:	83 c4 10             	add    $0x10,%esp$/;"	l
 c9	forktest.asm	/^  c9:	68 96 04 00 00       	push   $0x496$/;"	l
 c9	grep.asm	/^  c9:	53                   	push   %ebx$/;"	l
-c9	init.asm	/^  c9:	6a 01                	push   $0x1$/;"	l
 c9	ln.asm	/^  c9:	c3                   	ret    $/;"	l
 c9	sh.asm	/^      c9:	50                   	push   %eax$/;"	l
 c91	sh.asm	/^     c91:	3c 0a                	cmp    $0xa,%al$/;"	l
@@ -1287,7 +1344,6 @@ cab	usertests.asm	/^     cab:	68 e0 86 00 00       	push   $0x86e0$/;"	l
 cae	sh.asm	/^     cae:	5b                   	pop    %ebx$/;"	l
 caf	sh.asm	/^     caf:	5e                   	pop    %esi$/;"	l
 cat	cat.c	/^cat(int fd)$/;"	f
-cb	init.asm	/^  cb:	6a 01                	push   $0x1$/;"	l
 cb	usertests.asm	/^      cb:	e8 30 0b 00 00       	call   c00 <preempt>$/;"	l
 cb	wc.asm	/^  cb:	68 00 02 00 00       	push   $0x200$/;"	l
 cb	zombie.asm	/^  cb:	80 3c 02 00          	cmpb   $0x0,(%edx,%eax,1)$/;"	l
@@ -1309,6 +1365,7 @@ cc	echo.asm	/^    cc = read(0, &c, 1);$/;"	d
 cc	forktest.asm	/^    cc = read(0, &c, 1);$/;"	d
 cc	grep.asm	/^    cc = read(0, &c, 1);$/;"	d
 cc	init.asm	/^    cc = read(0, &c, 1);$/;"	d
+cc	init.asm	/^  cc:	6a 01                	push   $0x1$/;"	l
 cc	kill.asm	/^    cc = read(0, &c, 1);$/;"	d
 cc	ln.asm	/^    cc = read(0, &c, 1);$/;"	d
 cc	ls.asm	/^    cc = read(0, &c, 1);$/;"	d
@@ -1343,7 +1400,6 @@ ccd	sh.asm	/^     ccd:	8d 76 00             	lea    0x0(%esi),%esi$/;"	l
 ccd	usertests.asm	/^     ccd:	68 1d 42 00 00       	push   $0x421d$/;"	l
 cd	cat.asm	/^  cd:	89 c3                	mov    %eax,%ebx$/;"	l
 cd	grep.asm	/^  cd:	8b 5d 08             	mov    0x8(%ebp),%ebx$/;"	l
-cd	init.asm	/^  cd:	68 28 08 00 00       	push   $0x828$/;"	l
 cd	kill.asm	/^  cd:	84 c0                	test   %al,%al$/;"	l
 cd	stressfs.asm	/^  cd:	75 e9                	jne    b8 <main+0xb8>$/;"	l
 cd0	sh.asm	/^     cd0:	f3 0f 1e fb          	endbr32 $/;"	l
@@ -1359,6 +1415,7 @@ cdc	sh.asm	/^     cdc:	6a 00                	push   $0x0$/;"	l
 cdc	usertests.asm	/^     cdc:	e8 d2 2c 00 00       	call   39b3 <kill>$/;"	l
 cde	sh.asm	/^     cde:	ff 75 08             	pushl  0x8(%ebp)$/;"	l
 ce	forktest.asm	/^  ce:	6a 01                	push   $0x1$/;"	l
+ce	init.asm	/^  ce:	e8 fd 03 00 00       	call   4d0 <printf>$/;"	l
 ce	swaptest.asm	/^  ce:	89 c8                	mov    %ecx,%eax$/;"	l
 ce1	sh.asm	/^     ce1:	e8 ed 00 00 00       	call   dd3 <open>$/;"	l
 ce1	usertests.asm	/^     ce1:	89 34 24             	mov    %esi,(%esp)$/;"	l
@@ -1387,16 +1444,25 @@ cfb	sh.asm	/^     cfb:	89 1c 24             	mov    %ebx,(%esp)$/;"	l
 cfe	sh.asm	/^     cfe:	89 c6                	mov    %eax,%esi$/;"	l
 cff	usertests.asm	/^     cff:	e8 87 2c 00 00       	call   398b <wait>$/;"	l
 cgaputc	console.c	/^cgaputc(int c)$/;"	f	file:
+cgaputc	fmt/console.c	/^8205 cgaputc(int c)$/;"	f	file:
+chan	fmt/proc.h	/^2346   void *chan;                  \/\/ If non-zero, sleeping on chan$/;"	m	struct:proc
 chan	proc.h	/^  void *chan;                  \/\/ If non-zero, sleeping on chan$/;"	m	struct:proc
 char	init.asm	/^char *argv[] = { "sh", 0 };$/;"	l
 char	sh.asm	/^char symbols[] = "<|>&;()";$/;"	l
 char	sh.asm	/^char whitespace[] = " \\t\\r\\n\\v";$/;"	l
 char	swaptest.asm	/^char buffer1[4096];$/;"	l
 char	swaptest.asm	/^char buffer2[4096];$/;"	l
+checksum	fmt/mp.h	/^7157   uchar checksum;               \/\/ all bytes must add up to 0$/;"	m	struct:mp
+checksum	fmt/mp.h	/^7167   uchar checksum;               \/\/ all bytes must add up to 0$/;"	m	struct:mpconf
 checksum	mp.h	/^  uchar checksum;               \/\/ all bytes must add up to 0$/;"	m	struct:mp
 checksum	mp.h	/^  uchar checksum;               \/\/ all bytes must add up to 0$/;"	m	struct:mpconf
+clearpteu	fmt/vm.c	/^2022 clearpteu(pde_t *pgdir, char *uva)$/;"	f
 clearpteu	vm.c	/^clearpteu(pde_t *pgdir, char *uva)$/;"	f
+cli	fmt/x86.h	/^0557 cli(void)$/;"	f
 cli	x86.h	/^cli(void)$/;"	f
+cmd	fmt/sh.c	/^8765 struct cmd {$/;"	s	file:
+cmd	fmt/sh.c	/^8777   struct cmd *cmd;$/;"	m	struct:redircmd	typeref:struct:redircmd::cmd	file:
+cmd	fmt/sh.c	/^8798   struct cmd *cmd;$/;"	m	struct:backcmd	typeref:struct:backcmd::cmd	file:
 cmd	sh.asm	/^      cmd = redircmd(cmd, q, eq, O_RDONLY, 0);$/;"	d
 cmd	sh.asm	/^      cmd = redircmd(cmd, q, eq, O_WRONLY|O_CREATE, 1);$/;"	d
 cmd	sh.asm	/^    cmd = backcmd(cmd);$/;"	d
@@ -1412,37 +1478,64 @@ cmd	sh.asm	/^  cmd = parseredirs(cmd, ps, es);$/;"	d
 cmd	sh.c	/^  struct cmd *cmd;$/;"	m	struct:backcmd	typeref:struct:backcmd::cmd	file:
 cmd	sh.c	/^  struct cmd *cmd;$/;"	m	struct:redircmd	typeref:struct:redircmd::cmd	file:
 cmd	sh.c	/^struct cmd {$/;"	s	file:
+cmos_read	fmt/lapic.c	/^7632 cmos_read(uint reg)$/;"	f	file:
 cmos_read	lapic.c	/^cmos_read(uint reg)$/;"	f	file:
+cmostime	fmt/lapic.c	/^7652 cmostime(struct rtcdate *r)$/;"	f
 cmostime	lapic.c	/^cmostime(struct rtcdate *r)$/;"	f
 code	kernel.asm	/^  code = P2V(0x7000);$/;"	d
+commit	fmt/log.c	/^5001 commit()$/;"	f	file:
 commit	log.c	/^commit()$/;"	f	file:
+committing	fmt/log.c	/^4843   int committing;  \/\/ in commit(), please wait.$/;"	m	struct:log	file:
 committing	log.c	/^  int committing;  \/\/ in commit(), please wait.$/;"	m	struct:log	file:
 concreate	usertests.c	/^concreate(void)$/;"	f
 conf	kernel.asm	/^  conf = (struct mpconf*) P2V((uint) mp->physaddr);$/;"	d
 cons	console.c	/^} cons;$/;"	v	typeref:struct:__anon4	file:
+cons	fmt/console.c	/^8024 } cons;$/;"	v	typeref:struct:__anon13	file:
 consoleinit	console.c	/^consoleinit(void)$/;"	f
+consoleinit	fmt/console.c	/^8374 consoleinit(void)$/;"	f
 consoleintr	console.c	/^consoleintr(int (*getc)(void))$/;"	f
+consoleintr	fmt/console.c	/^8277 consoleintr(int (*getc)(void))$/;"	f
 consoleread	console.c	/^consoleread(struct inode *ip, char *dst, int n)$/;"	f
+consoleread	fmt/console.c	/^8321 consoleread(struct inode *ip, char *dst, int n)$/;"	f
 consolewrite	console.c	/^consolewrite(struct inode *ip, char *buf, int n)$/;"	f
+consolewrite	fmt/console.c	/^8359 consolewrite(struct inode *ip, char *buf, int n)$/;"	f
 consputc	console.c	/^consputc(int c)$/;"	f
+consputc	fmt/console.c	/^8251 consputc(int c)$/;"	f
+context	fmt/proc.h	/^2326 struct context {$/;"	s
+context	fmt/proc.h	/^2345   struct context *context;     \/\/ swtch() here to run process$/;"	m	struct:proc	typeref:struct:proc::context
 context	proc.h	/^  struct context *context;     \/\/ swtch() here to run process$/;"	m	struct:proc	typeref:struct:proc::context
 context	proc.h	/^struct context {$/;"	s
+copyout	fmt/vm.c	/^2118 copyout(pde_t *pgdir, uint va, void *p, uint len)$/;"	f
 copyout	vm.c	/^copyout(pde_t *pgdir, uint va, void *p, uint len)$/;"	f
+copyuvm	fmt/vm.c	/^2035 copyuvm(pde_t *pgdir, uint sz)$/;"	f
 copyuvm	vm.c	/^copyuvm(pde_t *pgdir, uint sz)$/;"	f
 cprintf	console.c	/^cprintf(char *fmt, ...)$/;"	f
+cprintf	fmt/console.c	/^8102 cprintf(char *fmt, ...)$/;"	f
+cpu	fmt/proc.h	/^2301 struct cpu {$/;"	s
+cpu	fmt/spinlock.h	/^1506   struct cpu *cpu;   \/\/ The cpu holding the lock.$/;"	m	struct:spinlock	typeref:struct:spinlock::cpu
 cpu	proc.h	/^struct cpu {$/;"	s
 cpu	spinlock.h	/^  struct cpu *cpu;   \/\/ The cpu holding the lock.$/;"	m	struct:spinlock	typeref:struct:spinlock::cpu
+cpuid	fmt/proc.c	/^2433 cpuid() {$/;"	f
 cpuid	proc.c	/^cpuid() {$/;"	f
+cpus	fmt/mp.c	/^7313 struct cpu cpus[NCPU];$/;"	v	typeref:struct:cpu
 cpus	mp.c	/^struct cpu cpus[NCPU];$/;"	v	typeref:struct:cpu
+cr3	fmt/mmu.h	/^0825   void *cr3;         \/\/ Page directory base$/;"	m	struct:taskstate
 cr3	mmu.h	/^  void *cr3;         \/\/ Page directory base$/;"	m	struct:taskstate
+create	fmt/sysfile.c	/^6457 create(char *path, short type, short major, short minor)$/;"	f	file:
 create	sysfile.c	/^create(char *path, short type, short major, short minor)$/;"	f	file:
 createdelete	usertests.c	/^createdelete(void)$/;"	f
 createtest	usertests.c	/^createtest(void)$/;"	f
 crt	console.c	/^static ushort *crt = (ushort*)P2V(0xb8000);  \/\/ CGA memory$/;"	v	file:
+crt	fmt/console.c	/^8202 static ushort *crt = (ushort*)P2V(0xb8000);  \/\/ CGA memory$/;"	v	file:
+cs	fmt/mmu.h	/^0838   ushort cs;$/;"	m	struct:taskstate
+cs	fmt/mmu.h	/^0857   uint cs : 16;         \/\/ code segment selector$/;"	m	struct:gatedesc
+cs	fmt/x86.h	/^0627   ushort cs;$/;"	m	struct:trapframe
 cs	mmu.h	/^  uint cs : 16;         \/\/ code segment selector$/;"	m	struct:gatedesc
 cs	mmu.h	/^  ushort cs;$/;"	m	struct:taskstate
 cs	x86.h	/^  ushort cs;$/;"	m	struct:trapframe
+ctlmap	fmt/kbd.h	/^7900 static uchar ctlmap[256] =$/;"	v
 ctlmap	kbd.h	/^static uchar ctlmap[256] =$/;"	v
+cwd	fmt/proc.h	/^2349   struct inode *cwd;           \/\/ Current directory$/;"	m	struct:proc	typeref:struct:proc::inode
 cwd	proc.h	/^  struct inode *cwd;           \/\/ Current directory$/;"	m	struct:proc	typeref:struct:proc::inode
 d	kernel.asm	/^  d = dst;$/;"	d
 d0	echo.asm	/^  d0:	0f b6 41 01          	movzbl 0x1(%ecx),%eax$/;"	l
@@ -1480,7 +1573,6 @@ d1c	usertests.asm	/^     d1c:	83 c4 10             	add    $0x10,%esp$/;"	l
 d1d	sh.asm	/^     d1d:	eb e9                	jmp    d08 <stat+0x38>$/;"	l
 d1f	sh.asm	/^     d1f:	90                   	nop$/;"	l
 d1f	usertests.asm	/^     d1f:	8d 65 f4             	lea    -0xc(%ebp),%esp$/;"	l
-d2	init.asm	/^  d2:	e8 c4 02 00 00       	call   39b <mknod>$/;"	l
 d2	ln.asm	/^  d2:	29 d8                	sub    %ebx,%eax$/;"	l
 d2	stressfs.asm	/^  d2:	57                   	push   %edi$/;"	l
 d2	swaptest.asm	/^  d2:	c3                   	ret    $/;"	l
@@ -1501,6 +1593,7 @@ d2e	sh.asm	/^     d2e:	8d 48 d0             	lea    -0x30(%eax),%ecx$/;"	l
 d2f	usertests.asm	/^     d2f:	6a 01                	push   $0x1$/;"	l
 d3	cat.asm	/^  d3:	75 1b                	jne    f0 <cat+0x60>$/;"	l
 d3	grep.asm	/^  d3:	8b 7d 10             	mov    0x10(%ebp),%edi$/;"	l
+d3	init.asm	/^  d3:	e8 8b 02 00 00       	call   363 <exit>$/;"	l
 d3	kill.asm	/^  d3:	74 eb                	je     c0 <strcmp+0x20>$/;"	l
 d3	stressfs.asm	/^  d3:	e8 f3 02 00 00       	call   3cb <close>$/;"	l
 d3	swaptest.asm	/^  d3:	8d b4 26 00 00 00 00 	lea    0x0(%esi,%eiz,1),%esi$/;"	l
@@ -1566,7 +1659,6 @@ d6e	sh.asm	/^     d6e:	56                   	push   %esi$/;"	l
 d6e	usertests.asm	/^     d6e:	eb 10                	jmp    d80 <exitwait+0x20>$/;"	l
 d6f	sh.asm	/^     d6f:	8b 75 0c             	mov    0xc(%ebp),%esi$/;"	l
 d7	echo.asm	/^  d7:	83 c2 01             	add    $0x1,%edx$/;"	l
-d7	init.asm	/^  d7:	58                   	pop    %eax$/;"	l
 d7	kill.asm	/^  d7:	5b                   	pop    %ebx$/;"	l
 d7	ln.asm	/^  d7:	8d b4 26 00 00 00 00 	lea    0x0(%esi,%eiz,1),%esi$/;"	l
 d7	mkdir.asm	/^  d7:	83 c2 01             	add    $0x1,%edx$/;"	l
@@ -1585,7 +1677,7 @@ d7b	usertests.asm	/^     d7b:	83 ee 01             	sub    $0x1,%esi$/;"	l
 d7e	usertests.asm	/^     d7e:	74 41                	je     dc1 <exitwait+0x61>$/;"	l
 d8	cat.asm	/^  d8:	5b                   	pop    %ebx$/;"	l
 d8	forktest.asm	/^  d8:	c9                   	leave  $/;"	l
-d8	init.asm	/^  d8:	5a                   	pop    %edx$/;"	l
+d8	init.asm	/^  d8:	51                   	push   %ecx$/;"	l
 d8	kill.asm	/^  d8:	5d                   	pop    %ebp$/;"	l
 d8	stressfs.asm	/^  d8:	58                   	pop    %eax$/;"	l
 d8	wc.asm	/^  d8:	e8 2e 03 00 00       	call   40b <read>$/;"	l
@@ -1606,7 +1698,7 @@ d8b	usertests.asm	/^     d8b:	83 ec 08             	sub    $0x8,%esp$/;"	l
 d8e	usertests.asm	/^     d8e:	68 99 4d 00 00       	push   $0x4d99$/;"	l
 d9	cat.asm	/^  d9:	5e                   	pop    %esi$/;"	l
 d9	forktest.asm	/^  d9:	c3                   	ret    $/;"	l
-d9	init.asm	/^  d9:	6a 02                	push   $0x2$/;"	l
+d9	init.asm	/^  d9:	6a 01                	push   $0x1$/;"	l
 d9	kill.asm	/^  d9:	c3                   	ret    $/;"	l
 d9	ls.asm	/^  d9:	29 f2                	sub    %esi,%edx$/;"	l
 d9	stressfs.asm	/^  d9:	5a                   	pop    %edx$/;"	l
@@ -1643,13 +1735,18 @@ daa	sh.asm	/^     daa:	c3                   	ret    $/;"	l
 dab	sh.asm	/^     dab:	b8 05 00 00 00       	mov    $0x5,%eax$/;"	l
 dab	usertests.asm	/^     dab:	68 3b 42 00 00       	push   $0x423b$/;"	l
 data	buf.h	/^  uchar data[BSIZE];$/;"	m	struct:buf
+data	fmt/buf.h	/^3959   uchar data[BSIZE];$/;"	m	struct:buf
+data	fmt/ioapic.c	/^7730   uint data;$/;"	m	struct:ioapic	file:
+data	fmt/pipe.c	/^6864   char data[PIPESIZE];$/;"	m	struct:pipe	file:
 data	ioapic.c	/^  uint data;$/;"	m	struct:ioapic	file:
 data	kernel.asm	/^    data = (shift & E0ESC ? data : data & 0x7F);$/;"	d
 data	kernel.asm	/^  data = inb(KBDATAP);$/;"	d
 data	pipe.c	/^  char data[PIPESIZE];$/;"	m	struct:pipe	file:
 day	date.h	/^  uint day;$/;"	m	struct:rtcdate
+day	fmt/date.h	/^0954   uint day;$/;"	m	struct:rtcdate
 db	cat.asm	/^  db:	c3                   	ret    $/;"	l
-db	init.asm	/^  db:	68 28 08 00 00       	push   $0x828$/;"	l
+db	fmt/mmu.h	/^0736   uint db : 1;         \/\/ 0 = 16-bit segment, 1 = 32-bit segment$/;"	m	struct:segdesc
+db	init.asm	/^  db:	6a 01                	push   $0x1$/;"	l
 db	ls.asm	/^  db:	05 f4 0d 00 00       	add    $0xdf4,%eax$/;"	l
 db	mmu.h	/^  uint db : 1;         \/\/ 0 = 16-bit segment, 1 = 32-bit segment$/;"	m	struct:segdesc
 db	sh.asm	/^      db:	83 c4 10             	add    $0x10,%esp$/;"	l
@@ -1680,6 +1777,7 @@ dcb	sh.asm	/^     dcb:	b8 07 00 00 00       	mov    $0x7,%eax$/;"	l
 dcb	usertests.asm	/^     dcb:	e8 20 2d 00 00       	call   3af0 <printf>$/;"	l
 dd	echo.asm	/^  dd:	84 c0                	test   %al,%al$/;"	l
 dd	grep.asm	/^  dd:	8d 76 00             	lea    0x0(%esi),%esi$/;"	l
+dd	init.asm	/^  dd:	68 38 08 00 00       	push   $0x838$/;"	l
 dd	mkdir.asm	/^  dd:	84 c0                	test   %al,%al$/;"	l
 dd	rm.asm	/^  dd:	84 c0                	test   %al,%al$/;"	l
 dd	wc.asm	/^  dd:	83 c4 10             	add    $0x10,%esp$/;"	l
@@ -1711,6 +1809,7 @@ de8	sh.asm	/^     de8:	cd 40                	int    $0x40$/;"	l
 de8	usertests.asm	/^     de8:	31 f6                	xor    %esi,%esi$/;"	l
 dea	sh.asm	/^     dea:	c3                   	ret    $/;"	l
 dea	usertests.asm	/^     dea:	53                   	push   %ebx$/;"	l
+deallocuvm	fmt/vm.c	/^1961 deallocuvm(pde_t *pgdir, uint oldsz, uint newsz)$/;"	f
 deallocuvm	vm.c	/^deallocuvm(pde_t *pgdir, uint oldsz, uint newsz)$/;"	f
 deb	sh.asm	/^     deb:	b8 08 00 00 00       	mov    $0x8,%eax$/;"	l
 deb	usertests.asm	/^     deb:	83 ec 08             	sub    $0x8,%esp$/;"	l
@@ -1719,10 +1818,16 @@ default	kernel.asm	/^    default:$/;"	l
 default	kernel.asm	/^  default:$/;"	l
 dev	buf.h	/^  uint dev;$/;"	m	struct:buf
 dev	file.h	/^  uint dev;           \/\/ Device number$/;"	m	struct:inode
+dev	fmt/buf.h	/^3952   uint dev;$/;"	m	struct:buf
+dev	fmt/file.h	/^4263   uint dev;           \/\/ Device number$/;"	m	struct:inode
+dev	fmt/log.c	/^4844   int dev;$/;"	m	struct:log	file:
+dev	fmt/stat.h	/^4106   int dev;     \/\/ File system's disk device$/;"	m	struct:stat
 dev	log.c	/^  int dev;$/;"	m	struct:log	file:
 dev	stat.h	/^  int dev;     \/\/ File system's disk device$/;"	m	struct:stat
 devsw	file.c	/^struct devsw devsw[NDEV];$/;"	v	typeref:struct:devsw
 devsw	file.h	/^struct devsw {$/;"	s
+devsw	fmt/file.c	/^5962 struct devsw devsw[NDEV];$/;"	v	typeref:struct:devsw
+devsw	fmt/file.h	/^4279 struct devsw {$/;"	s
 df	cat.asm	/^  df:	68 48 08 00 00       	push   $0x848$/;"	l
 df	echo.asm	/^  df:	74 0f                	je     f0 <strcmp+0x40>$/;"	l
 df	forktest.asm	/^  df:	83 ec 0c             	sub    $0xc,%esp$/;"	l
@@ -1740,19 +1845,27 @@ dfa	sh.asm	/^     dfa:	c3                   	ret    $/;"	l
 dfa	usertests.asm	/^     dfa:	e8 04 2c 00 00       	call   3a03 <getpid>$/;"	l
 dfb	sh.asm	/^     dfb:	b8 14 00 00 00       	mov    $0x14,%eax$/;"	l
 dff	usertests.asm	/^     dff:	89 c3                	mov    %eax,%ebx$/;"	l
+dinode	fmt/fs.h	/^4178 struct dinode {$/;"	s
 dinode	fs.h	/^struct dinode {$/;"	s
 dip	kernel.asm	/^    dip = (struct dinode*)bp->data + inum%IPB;$/;"	d
 dip	kernel.asm	/^    dip = (struct dinode*)bp->data + ip->inum%IPB;$/;"	d
 dip	kernel.asm	/^  dip = (struct dinode*)bp->data + ip->inum%IPB;$/;"	d
+dirent	fmt/fs.h	/^4215 struct dirent {$/;"	s
 dirent	fs.h	/^struct dirent {$/;"	s
 dirfile	usertests.c	/^dirfile(void)$/;"	f
+dirlink	fmt/fs.c	/^5752 dirlink(struct inode *dp, char *name, uint inum)$/;"	f
 dirlink	fs.c	/^dirlink(struct inode *dp, char *name, uint inum)$/;"	f
+dirlookup	fmt/fs.c	/^5711 dirlookup(struct inode *dp, char *name, uint *poff)$/;"	f
 dirlookup	fs.c	/^dirlookup(struct inode *dp, char *name, uint *poff)$/;"	f
 dirtest	usertests.c	/^void dirtest(void)$/;"	f
 disksize	memide.c	/^static int disksize;$/;"	v	file:
 do_commit	kernel.asm	/^    do_commit = 1;$/;"	d
+dpl	fmt/mmu.h	/^0731   uint dpl : 2;        \/\/ Descriptor Privilege Level$/;"	m	struct:segdesc
+dpl	fmt/mmu.h	/^0862   uint dpl : 2;         \/\/ descriptor(meaning new) privilege level$/;"	m	struct:gatedesc
 dpl	mmu.h	/^  uint dpl : 2;         \/\/ descriptor(meaning new) privilege level$/;"	m	struct:gatedesc
 dpl	mmu.h	/^  uint dpl : 2;        \/\/ Descriptor Privilege Level$/;"	m	struct:segdesc
+ds	fmt/mmu.h	/^0842   ushort ds;$/;"	m	struct:taskstate
+ds	fmt/x86.h	/^0620   ushort ds;$/;"	m	struct:trapframe
 ds	mmu.h	/^  ushort ds;$/;"	m	struct:taskstate
 ds	x86.h	/^  ushort ds;$/;"	m	struct:trapframe
 dst	cat.asm	/^  dst = vdst;$/;"	d
@@ -1774,6 +1887,7 @@ dst	zombie.asm	/^  dst = vdst;$/;"	d
 e	cat.asm	/^   e:	55                   	push   %ebp$/;"	l
 e	console.c	/^  uint e;  \/\/ Edit index$/;"	m	struct:__anon5	file:
 e	echo.asm	/^   e:	55                   	push   %ebp$/;"	l
+e	fmt/console.c	/^8271   uint e;  \/\/ Edit index$/;"	m	struct:__anon14	file:
 e	grep.asm	/^   e:	55                   	push   %ebp$/;"	l
 e	init.asm	/^   e:	55                   	push   %ebp$/;"	l
 e	kernel.asm	/^  e = addr+len;$/;"	d
@@ -1788,7 +1902,6 @@ e	usertests.asm	/^       e:	55                   	push   %ebp$/;"	l
 e	wc.asm	/^   e:	55                   	push   %ebp$/;"	l
 e	zombie.asm	/^   e:	55                   	push   %ebp$/;"	l
 e0	grep.asm	/^  e0:	83 ec 08             	sub    $0x8,%esp$/;"	l
-e0	init.asm	/^  e0:	e8 ae 02 00 00       	call   393 <open>$/;"	l
 e0	kill.asm	/^  e0:	31 c0                	xor    %eax,%eax$/;"	l
 e0	ln.asm	/^  e0:	f3 0f 1e fb          	endbr32 $/;"	l
 e0	ls.asm	/^  e0:	52                   	push   %edx$/;"	l
@@ -1824,6 +1937,7 @@ e1b	sh.asm	/^     e1b:	b8 0c 00 00 00       	mov    $0xc,%eax$/;"	l
 e1c	usertests.asm	/^     e1c:	83 ec 0c             	sub    $0xc,%esp$/;"	l
 e1f	usertests.asm	/^     e1f:	68 11 27 00 00       	push   $0x2711$/;"	l
 e2	forktest.asm	/^  e2:	68 6f 04 00 00       	push   $0x46f$/;"	l
+e2	init.asm	/^  e2:	e8 c4 02 00 00       	call   3ab <mknod>$/;"	l
 e2	kill.asm	/^  e2:	29 d8                	sub    %ebx,%eax$/;"	l
 e2	wc.asm	/^  e2:	85 c0                	test   %eax,%eax$/;"	l
 e2	zombie.asm	/^  e2:	5d                   	pop    %ebp$/;"	l
@@ -1883,7 +1997,6 @@ e4f	sh.asm	/^     e4f:	90                   	nop$/;"	l
 e4f	usertests.asm	/^     e4f:	68 00 50 00 00       	push   $0x5000$/;"	l
 e5	echo.asm	/^  e5:	29 d8                	sub    %ebx,%eax$/;"	l
 e5	grep.asm	/^  e5:	e8 36 00 00 00       	call   120 <matchhere>$/;"	l
-e5	init.asm	/^  e5:	83 c4 10             	add    $0x10,%esp$/;"	l
 e5	kill.asm	/^  e5:	5d                   	pop    %ebp$/;"	l
 e5	ln.asm	/^  e5:	89 e5                	mov    %esp,%ebp$/;"	l
 e5	mkdir.asm	/^  e5:	29 d8                	sub    %ebx,%eax$/;"	l
@@ -1921,6 +2034,7 @@ e6d	sh.asm	/^     e6d:	74 79                	je     ee8 <printint+0x98>$/;"	l
 e6f	sh.asm	/^     e6f:	c7 45 bc 01 00 00 00 	movl   $0x1,-0x44(%ebp)$/;"	l
 e7	echo.asm	/^  e7:	5b                   	pop    %ebx$/;"	l
 e7	forktest.asm	/^  e7:	e8 e4 00 00 00       	call   1d0 <strlen>$/;"	l
+e7	init.asm	/^  e7:	5b                   	pop    %ebx$/;"	l
 e7	kill.asm	/^  e7:	8d b4 26 00 00 00 00 	lea    0x0(%esi,%eiz,1),%esi$/;"	l
 e7	ln.asm	/^  e7:	8b 55 08             	mov    0x8(%ebp),%edx$/;"	l
 e7	mkdir.asm	/^  e7:	5b                   	pop    %ebx$/;"	l
@@ -1935,7 +2049,7 @@ e7a	sh.asm	/^     e7a:	8d 75 d7             	lea    -0x29(%ebp),%esi$/;"	l
 e7c	usertests.asm	/^     e7c:	8d 74 26 00          	lea    0x0(%esi,%eiz,1),%esi$/;"	l
 e7d	sh.asm	/^     e7d:	8d 76 00             	lea    0x0(%esi),%esi$/;"	l
 e8	echo.asm	/^  e8:	5d                   	pop    %ebp$/;"	l
-e8	init.asm	/^  e8:	e9 40 ff ff ff       	jmp    2d <main+0x2d>$/;"	l
+e8	init.asm	/^  e8:	58                   	pop    %eax$/;"	l
 e8	mkdir.asm	/^  e8:	5d                   	pop    %ebp$/;"	l
 e8	rm.asm	/^  e8:	5d                   	pop    %ebp$/;"	l
 e8	swaptest.asm	/^  e8:	8b 4d 08             	mov    0x8(%ebp),%ecx$/;"	l
@@ -1951,6 +2065,7 @@ e89	sh.asm	/^     e89:	0f b6 92 58 13 00 00 	movzbl 0x1358(%edx),%edx$/;"	l
 e8a	usertests.asm	/^     e8a:	e8 61 2c 00 00       	call   3af0 <printf>$/;"	l
 e8f	usertests.asm	/^     e8f:	89 1c 24             	mov    %ebx,(%esp)$/;"	l
 e9	echo.asm	/^  e9:	c3                   	ret    $/;"	l
+e9	init.asm	/^  e9:	6a 02                	push   $0x2$/;"	l
 e9	ls.asm	/^  e9:	83 c4 10             	add    $0x10,%esp$/;"	l
 e9	mkdir.asm	/^  e9:	c3                   	ret    $/;"	l
 e9	rm.asm	/^  e9:	c3                   	ret    $/;"	l
@@ -1984,10 +2099,14 @@ eaa	sh.asm	/^     eaa:	c6 44 1d d8 2d       	movb   $0x2d,-0x28(%ebp,%ebx,1)$/;"
 eab	usertests.asm	/^     eab:	8d 74 26 00          	lea    0x0(%esi,%eiz,1),%esi$/;"	l
 eaf	sh.asm	/^     eaf:	89 d8                	mov    %ebx,%eax$/;"	l
 eaf	usertests.asm	/^     eaf:	90                   	nop$/;"	l
+eargv	fmt/sh.c	/^8772   char *eargv[MAXARGS];$/;"	m	struct:execcmd	file:
 eargv	sh.c	/^  char *eargv[MAXARGS];$/;"	m	struct:execcmd	file:
+eax	fmt/mmu.h	/^0828   uint eax;          \/\/ More saved state (registers)$/;"	m	struct:taskstate
+eax	fmt/x86.h	/^0611   uint eax;$/;"	m	struct:trapframe
 eax	mmu.h	/^  uint eax;          \/\/ More saved state (registers)$/;"	m	struct:taskstate
 eax	x86.h	/^  uint eax;$/;"	m	struct:trapframe
 eb	cat.asm	/^  eb:	e8 83 02 00 00       	call   373 <exit>$/;"	l
+eb	init.asm	/^  eb:	68 38 08 00 00       	push   $0x838$/;"	l
 eb	swaptest.asm	/^  eb:	8b 55 0c             	mov    0xc(%ebp),%edx$/;"	l
 eb0	usertests.asm	/^     eb0:	f3 0f 1e fb          	endbr32 $/;"	l
 eb1	sh.asm	/^     eb1:	ba 2d 00 00 00       	mov    $0x2d,%edx$/;"	l
@@ -2002,11 +2121,17 @@ eba	usertests.asm	/^     eba:	83 ec 34             	sub    $0x34,%esp$/;"	l
 ebd	sh.asm	/^     ebd:	eb 07                	jmp    ec6 <printint+0x76>$/;"	l
 ebd	usertests.asm	/^     ebd:	68 84 42 00 00       	push   $0x4284$/;"	l
 ebf	sh.asm	/^     ebf:	90                   	nop$/;"	l
+ebp	fmt/mmu.h	/^0833   uint *ebp;$/;"	m	struct:taskstate
+ebp	fmt/proc.h	/^2330   uint ebp;$/;"	m	struct:context
+ebp	fmt/x86.h	/^0606   uint ebp;$/;"	m	struct:trapframe
 ebp	kernel.asm	/^    ebp = (uint*)ebp[0]; \/\/ saved %ebp$/;"	d
 ebp	kernel.asm	/^  ebp = (uint*)v - 2;$/;"	d
 ebp	mmu.h	/^  uint *ebp;$/;"	m	struct:taskstate
 ebp	proc.h	/^  uint ebp;$/;"	m	struct:context
 ebp	x86.h	/^  uint ebp;$/;"	m	struct:trapframe
+ebx	fmt/mmu.h	/^0831   uint ebx;$/;"	m	struct:taskstate
+ebx	fmt/proc.h	/^2329   uint ebx;$/;"	m	struct:context
+ebx	fmt/x86.h	/^0608   uint ebx;$/;"	m	struct:trapframe
 ebx	mmu.h	/^  uint ebx;$/;"	m	struct:taskstate
 ebx	proc.h	/^  uint ebx;$/;"	m	struct:context
 ebx	x86.h	/^  uint ebx;$/;"	m	struct:trapframe
@@ -2025,10 +2150,11 @@ ecc	sh.asm	/^     ecc:	6a 01                	push   $0x1$/;"	l
 ece	sh.asm	/^     ece:	56                   	push   %esi$/;"	l
 ecf	sh.asm	/^     ecf:	57                   	push   %edi$/;"	l
 echoargv	usertests.c	/^char *echoargv[] = { "echo", "ALL", "TESTS", "PASSED", 0 };$/;"	v
+ecx	fmt/mmu.h	/^0829   uint ecx;$/;"	m	struct:taskstate
+ecx	fmt/x86.h	/^0610   uint ecx;$/;"	m	struct:trapframe
 ecx	mmu.h	/^  uint ecx;$/;"	m	struct:taskstate
 ecx	x86.h	/^  uint ecx;$/;"	m	struct:trapframe
 ed	grep.asm	/^  ed:	85 c0                	test   %eax,%eax$/;"	l
-ed	init.asm	/^  ed:	66 90                	xchg   %ax,%ax$/;"	l
 ed	ln.asm	/^  ed:	74 21                	je     110 <strlen+0x30>$/;"	l
 ed	stressfs.asm	/^  ed:	5b                   	pop    %ebx$/;"	l
 ed	zombie.asm	/^  ed:	8d 76 00             	lea    0x0(%esi),%esi$/;"	l
@@ -2043,9 +2169,14 @@ eda	sh.asm	/^     eda:	75 e4                	jne    ec0 <printint+0x70>$/;"	l
 edc	sh.asm	/^     edc:	8d 65 f4             	lea    -0xc(%ebp),%esp$/;"	l
 edc	usertests.asm	/^     edc:	68 93 42 00 00       	push   $0x4293$/;"	l
 edf	sh.asm	/^     edf:	5b                   	pop    %ebx$/;"	l
+edi	fmt/mmu.h	/^0835   uint edi;$/;"	m	struct:taskstate
+edi	fmt/proc.h	/^2327   uint edi;$/;"	m	struct:context
+edi	fmt/x86.h	/^0604   uint edi;$/;"	m	struct:trapframe
 edi	mmu.h	/^  uint edi;$/;"	m	struct:taskstate
 edi	proc.h	/^  uint edi;$/;"	m	struct:context
 edi	x86.h	/^  uint edi;$/;"	m	struct:trapframe
+edx	fmt/mmu.h	/^0830   uint edx;$/;"	m	struct:taskstate
+edx	fmt/x86.h	/^0609   uint edx;$/;"	m	struct:trapframe
 edx	mmu.h	/^  uint edx;$/;"	m	struct:taskstate
 edx	x86.h	/^  uint edx;$/;"	m	struct:trapframe
 ee	kill.asm	/^  ee:	66 90                	xchg   %ax,%ax$/;"	l
@@ -2066,7 +2197,6 @@ eeb	usertests.asm	/^     eeb:	0f 88 26 01 00 00    	js     1017 <sharedfd+0x167>
 eef	sh.asm	/^     eef:	eb 87                	jmp    e78 <printint+0x28>$/;"	l
 ef	forktest.asm	/^  ef:	50                   	push   %eax$/;"	l
 ef	grep.asm	/^  ef:	75 1f                	jne    110 <matchstar+0x50>$/;"	l
-ef	init.asm	/^  ef:	90                   	nop$/;"	l
 ef	ln.asm	/^  ef:	31 c0                	xor    %eax,%eax$/;"	l
 ef	ls.asm	/^  ef:	89 d8                	mov    %ebx,%eax$/;"	l
 ef1	sh.asm	/^     ef1:	8d b4 26 00 00 00 00 	lea    0x0(%esi,%eiz,1),%esi$/;"	l
@@ -2076,44 +2206,73 @@ ef6	usertests.asm	/^     ef6:	bb e8 03 00 00       	mov    $0x3e8,%ebx$/;"	l
 ef8	sh.asm	/^     ef8:	8d b4 26 00 00 00 00 	lea    0x0(%esi,%eiz,1),%esi$/;"	l
 efb	usertests.asm	/^     efb:	e8 7b 2a 00 00       	call   397b <fork>$/;"	l
 eff	sh.asm	/^     eff:	90                   	nop$/;"	l
+efile	fmt/sh.c	/^8779   char *efile;$/;"	m	struct:redircmd	file:
 efile	sh.c	/^  char *efile;$/;"	m	struct:redircmd	file:
+eflags	fmt/mmu.h	/^0827   uint eflags;$/;"	m	struct:taskstate
+eflags	fmt/x86.h	/^0629   uint eflags;$/;"	m	struct:trapframe
 eflags	kernel.asm	/^  eflags = readeflags();$/;"	d
 eflags	mmu.h	/^  uint eflags;$/;"	m	struct:taskstate
 eflags	x86.h	/^  uint eflags;$/;"	m	struct:trapframe
 ehsize	elf.h	/^  ushort ehsize;$/;"	m	struct:elfhdr
+ehsize	fmt/elf.h	/^0915   ushort ehsize;$/;"	m	struct:elfhdr
+eip	fmt/mmu.h	/^0826   uint *eip;         \/\/ Saved state from last task switch$/;"	m	struct:taskstate
+eip	fmt/proc.h	/^2331   uint eip;$/;"	m	struct:context
+eip	fmt/x86.h	/^0626   uint eip;$/;"	m	struct:trapframe
 eip	mmu.h	/^  uint *eip;         \/\/ Saved state from last task switch$/;"	m	struct:taskstate
 eip	proc.h	/^  uint eip;$/;"	m	struct:context
 eip	x86.h	/^  uint eip;$/;"	m	struct:trapframe
 elf	elf.h	/^  uchar elf[12];$/;"	m	struct:elfhdr
+elf	fmt/elf.h	/^0907   uchar elf[12];$/;"	m	struct:elfhdr
 elfhdr	elf.h	/^struct elfhdr {$/;"	s
+elfhdr	fmt/elf.h	/^0905 struct elfhdr {$/;"	s
 empty	kernel.asm	/^      empty = ip;$/;"	d
 empty	kernel.asm	/^  empty = 0;$/;"	d
+end_op	fmt/log.c	/^4953 end_op(void)$/;"	f
 end_op	log.c	/^end_op(void)$/;"	f
 entry	elf.h	/^  uint entry;$/;"	m	struct:elfhdr
 entry	entry.S	/^entry:$/;"	l
+entry	fmt/elf.h	/^0911   uint entry;$/;"	m	struct:elfhdr
+entry	fmt/mp.h	/^7171   ushort entry;                 \/\/ entry count$/;"	m	struct:mpconf
 entry	kernel.asm	/^entry:$/;"	l
 entry	mp.h	/^  ushort entry;                 \/\/ entry count$/;"	m	struct:mpconf
+entrypgdir	fmt/main.c	/^1260 pde_t entrypgdir[];  \/\/ For entry.S$/;"	v
+entrypgdir	fmt/main.c	/^1306 pde_t entrypgdir[NPDENTRIES] = {$/;"	v
 entrypgdir	main.c	/^pde_t entrypgdir[NPDENTRIES] = {$/;"	v
 entrypgdir	main.c	/^pde_t entrypgdir[];  \/\/ For entry.S$/;"	v
 ep	kernel.asm	/^  ep = (char*)curproc->sz;$/;"	d
 epa	bootblock.asm	/^  epa = pa + count;$/;"	d
 eph	bootblock.asm	/^  eph = ph + elf->phnum;$/;"	d
+err	fmt/x86.h	/^0625   uint err;$/;"	m	struct:trapframe
 err	x86.h	/^  uint err;$/;"	m	struct:trapframe
+es	fmt/mmu.h	/^0836   ushort es;         \/\/ Even more saved state (segment selectors)$/;"	m	struct:taskstate
+es	fmt/x86.h	/^0618   ushort es;$/;"	m	struct:trapframe
 es	mmu.h	/^  ushort es;         \/\/ Even more saved state (segment selectors)$/;"	m	struct:taskstate
 es	sh.asm	/^  es = s + strlen(s);$/;"	d
 es	x86.h	/^  ushort es;$/;"	m	struct:trapframe
+esi	fmt/mmu.h	/^0834   uint esi;$/;"	m	struct:taskstate
+esi	fmt/proc.h	/^2328   uint esi;$/;"	m	struct:context
+esi	fmt/x86.h	/^0605   uint esi;$/;"	m	struct:trapframe
 esi	mmu.h	/^  uint esi;$/;"	m	struct:taskstate
 esi	proc.h	/^  uint esi;$/;"	m	struct:context
 esi	x86.h	/^  uint esi;$/;"	m	struct:trapframe
+esp	fmt/mmu.h	/^0832   uint *esp;$/;"	m	struct:taskstate
+esp	fmt/x86.h	/^0632   uint esp;$/;"	m	struct:trapframe
 esp	mmu.h	/^  uint *esp;$/;"	m	struct:taskstate
 esp	x86.h	/^  uint esp;$/;"	m	struct:trapframe
+esp0	fmt/mmu.h	/^0816   uint esp0;         \/\/ Stack pointers and segment selectors$/;"	m	struct:taskstate
 esp0	mmu.h	/^  uint esp0;         \/\/ Stack pointers and segment selectors$/;"	m	struct:taskstate
+esp1	fmt/mmu.h	/^0819   uint *esp1;$/;"	m	struct:taskstate
 esp1	mmu.h	/^  uint *esp1;$/;"	m	struct:taskstate
+esp2	fmt/mmu.h	/^0822   uint *esp2;$/;"	m	struct:taskstate
 esp2	mmu.h	/^  uint *esp2;$/;"	m	struct:taskstate
 exec	exec.c	/^exec(char *path, char **argv)$/;"	f
+exec	fmt/exec.c	/^6710 exec(char *path, char **argv)$/;"	f
+execcmd	fmt/sh.c	/^8769 struct execcmd {$/;"	s	file:
+execcmd	fmt/sh.c	/^8953 execcmd(void)$/;"	f
 execcmd	sh.c	/^execcmd(void)$/;"	f
 execcmd	sh.c	/^struct execcmd {$/;"	s	file:
 exectest	usertests.c	/^exectest(void)$/;"	f
+exit	fmt/proc.c	/^2674 exit(void)$/;"	f
 exit	initcode.S	/^exit:$/;"	l
 exit	initcode.asm	/^exit:$/;"	l
 exit	proc.c	/^exit(void)$/;"	f
@@ -2142,7 +2301,7 @@ f	zombie.asm	/^   f:	89 e5                	mov    %esp,%ebp$/;"	l
 f0	cat.asm	/^  f0:	50                   	push   %eax$/;"	l
 f0	echo.asm	/^  f0:	31 c0                	xor    %eax,%eax$/;"	l
 f0	forktest.asm	/^  f0:	68 6f 04 00 00       	push   $0x46f$/;"	l
-f0	init.asm	/^  f0:	f3 0f 1e fb          	endbr32 $/;"	l
+f0	init.asm	/^  f0:	e8 ae 02 00 00       	call   3a3 <open>$/;"	l
 f0	kill.asm	/^  f0:	f3 0f 1e fb          	endbr32 $/;"	l
 f0	mkdir.asm	/^  f0:	31 c0                	xor    %eax,%eax$/;"	l
 f0	rm.asm	/^  f0:	31 c0                	xor    %eax,%eax$/;"	l
@@ -2213,7 +2372,6 @@ f3c	usertests.asm	/^     f3c:	68 84 4f 00 00       	push   $0x4f84$/;"	l
 f3d	sh.asm	/^     f3d:	83 ec 04             	sub    $0x4,%esp$/;"	l
 f4	echo.asm	/^  f4:	5b                   	pop    %ebx$/;"	l
 f4	grep.asm	/^  f4:	84 d2                	test   %dl,%dl$/;"	l
-f4	init.asm	/^  f4:	55                   	push   %ebp$/;"	l
 f4	kill.asm	/^  f4:	55                   	push   %ebp$/;"	l
 f4	ls.asm	/^  f4:	c3                   	ret    $/;"	l
 f4	mkdir.asm	/^  f4:	5b                   	pop    %ebx$/;"	l
@@ -2233,7 +2391,7 @@ f4e	sh.asm	/^     f4e:	8b 55 d4             	mov    -0x2c(%ebp),%edx$/;"	l
 f4e	usertests.asm	/^     f4e:	85 c9                	test   %ecx,%ecx$/;"	l
 f5	echo.asm	/^  f5:	5d                   	pop    %ebp$/;"	l
 f5	forktest.asm	/^  f5:	6a 01                	push   $0x1$/;"	l
-f5	init.asm	/^  f5:	31 c0                	xor    %eax,%eax$/;"	l
+f5	init.asm	/^  f5:	83 c4 10             	add    $0x10,%esp$/;"	l
 f5	kill.asm	/^  f5:	89 e5                	mov    %esp,%ebp$/;"	l
 f5	ls.asm	/^  f5:	8d b4 26 00 00 00 00 	lea    0x0(%esi,%eiz,1),%esi$/;"	l
 f5	mkdir.asm	/^  f5:	5d                   	pop    %ebp$/;"	l
@@ -2273,7 +2431,6 @@ f6d	usertests.asm	/^     f6d:	68 93 42 00 00       	push   $0x4293$/;"	l
 f7	cat.asm	/^  f7:	6a 01                	push   $0x1$/;"	l
 f7	echo.asm	/^  f7:	8d b4 26 00 00 00 00 	lea    0x0(%esi,%eiz,1),%esi$/;"	l
 f7	forktest.asm	/^  f7:	e8 d7 02 00 00       	call   3d3 <write>$/;"	l
-f7	init.asm	/^  f7:	89 e5                	mov    %esp,%ebp$/;"	l
 f7	kill.asm	/^  f7:	8b 55 08             	mov    0x8(%ebp),%edx$/;"	l
 f7	mkdir.asm	/^  f7:	8d b4 26 00 00 00 00 	lea    0x0(%esi,%eiz,1),%esi$/;"	l
 f7	rm.asm	/^  f7:	8d b4 26 00 00 00 00 	lea    0x0(%esi,%eiz,1),%esi$/;"	l
@@ -2289,6 +2446,7 @@ f7c	usertests.asm	/^     f7c:	89 45 d0             	mov    %eax,-0x30(%ebp)$/;"	
 f7f	sh.asm	/^     f7f:	74 5f                	je     fe0 <printf+0xe0>$/;"	l
 f7f	usertests.asm	/^     f7f:	85 c0                	test   %eax,%eax$/;"	l
 f8	grep.asm	/^  f8:	83 c7 01             	add    $0x1,%edi$/;"	l
+f8	init.asm	/^  f8:	e9 30 ff ff ff       	jmp    2d <main+0x2d>$/;"	l
 f8	ln.asm	/^  f8:	83 c0 01             	add    $0x1,%eax$/;"	l
 f8	swaptest.asm	/^  f8:	eb 26                	jmp    120 <strcmp+0x40>$/;"	l
 f8	usertests.asm	/^      f8:	e8 03 2b 00 00       	call   2c00 <iref>$/;"	l
@@ -2301,7 +2459,6 @@ f8a	sh.asm	/^     f8a:	83 f8 63             	cmp    $0x63,%eax$/;"	l
 f8d	sh.asm	/^     f8d:	0f 84 8d 00 00 00    	je     1020 <printf+0x120>$/;"	l
 f8e	usertests.asm	/^     f8e:	66 90                	xchg   %ax,%ax$/;"	l
 f9	cat.asm	/^  f9:	e8 e2 03 00 00       	call   4e0 <printf>$/;"	l
-f9	init.asm	/^  f9:	53                   	push   %ebx$/;"	l
 f90	usertests.asm	/^     f90:	83 ec 04             	sub    $0x4,%esp$/;"	l
 f93	sh.asm	/^     f93:	83 f8 25             	cmp    $0x25,%eax$/;"	l
 f93	usertests.asm	/^     f93:	89 55 d4             	mov    %edx,-0x2c(%ebp)$/;"	l
@@ -2312,7 +2469,6 @@ f99	usertests.asm	/^     f99:	ff 75 d0             	pushl  -0x30(%ebp)$/;"	l
 f9c	sh.asm	/^     f9c:	83 ec 04             	sub    $0x4,%esp$/;"	l
 f9c	usertests.asm	/^     f9c:	e8 fa 29 00 00       	call   399b <read>$/;"	l
 f9f	sh.asm	/^     f9f:	c6 45 e7 25          	movb   $0x25,-0x19(%ebp)$/;"	l
-fa	init.asm	/^  fa:	8b 4d 08             	mov    0x8(%ebp),%ecx$/;"	l
 fa	kill.asm	/^  fa:	80 3a 00             	cmpb   $0x0,(%edx)$/;"	l
 fa	swaptest.asm	/^  fa:	8d b6 00 00 00 00    	lea    0x0(%esi),%esi$/;"	l
 fa	wc.asm	/^  fa:	39 fe                	cmp    %edi,%esi$/;"	l
@@ -2363,11 +2519,12 @@ fcf	sh.asm	/^     fcf:	8d 65 f4             	lea    -0xc(%ebp),%esp$/;"	l
 fcf	usertests.asm	/^     fcf:	90                   	nop$/;"	l
 fd	cat.asm	/^  fd = open(n, O_RDONLY);$/;"	d
 fd	echo.asm	/^  fd = open(n, O_RDONLY);$/;"	d
+fd	fmt/sh.c	/^8781   int fd;$/;"	m	struct:redircmd	file:
 fd	forktest.asm	/^  fd = open(n, O_RDONLY);$/;"	d
 fd	grep.asm	/^  fd = open(n, O_RDONLY);$/;"	d
 fd	grep.asm	/^  fd:	74 e1                	je     e0 <matchstar+0x20>$/;"	l
 fd	init.asm	/^  fd = open(n, O_RDONLY);$/;"	d
-fd	init.asm	/^  fd:	8b 5d 0c             	mov    0xc(%ebp),%ebx$/;"	l
+fd	init.asm	/^  fd:	66 90                	xchg   %ax,%ax$/;"	l
 fd	kill.asm	/^  fd = open(n, O_RDONLY);$/;"	d
 fd	kill.asm	/^  fd:	74 21                	je     120 <strlen+0x30>$/;"	l
 fd	ln.asm	/^  fd = open(n, O_RDONLY);$/;"	d
@@ -2433,6 +2590,7 @@ fd5	sh.asm	/^     fd5:	5d                   	pop    %ebp$/;"	l
 fd6	sh.asm	/^     fd6:	c3                   	ret    $/;"	l
 fd6	usertests.asm	/^     fd6:	e8 d0 29 00 00       	call   39ab <close>$/;"	l
 fd7	sh.asm	/^     fd7:	8d b4 26 00 00 00 00 	lea    0x0(%esi,%eiz,1),%esi$/;"	l
+fdalloc	fmt/sysfile.c	/^6203 fdalloc(struct file *f)$/;"	f	file:
 fdalloc	sysfile.c	/^fdalloc(struct file *f)$/;"	f	file:
 fdb	usertests.asm	/^     fdb:	c7 04 24 93 42 00 00 	movl   $0x4293,(%esp)$/;"	l
 fde	sh.asm	/^     fde:	66 90                	xchg   %ax,%ax$/;"	l
@@ -2451,12 +2609,16 @@ fe7	usertests.asm	/^     fe7:	8b 55 d4             	mov    -0x2c(%ebp),%edx$/;"	
 fe8	sh.asm	/^     fe8:	6a 00                	push   $0x0$/;"	l
 fea	sh.asm	/^     fea:	8b 5d d0             	mov    -0x30(%ebp),%ebx$/;"	l
 fea	usertests.asm	/^     fea:	83 c4 10             	add    $0x10,%esp$/;"	l
+feature	fmt/mp.h	/^7185   uint feature;                 \/\/ feature flags from CPUID instruction$/;"	m	struct:mpproc
 feature	mp.h	/^  uint feature;                 \/\/ feature flags from CPUID instruction$/;"	m	struct:mpproc
 fed	sh.asm	/^     fed:	8b 45 08             	mov    0x8(%ebp),%eax$/;"	l
 fed	usertests.asm	/^     fed:	81 fa 10 27 00 00    	cmp    $0x2710,%edx$/;"	l
+fetchint	fmt/syscall.c	/^3617 fetchint(uint addr, int *ip)$/;"	f
 fetchint	syscall.c	/^fetchint(uint addr, int *ip)$/;"	f
+fetchstr	fmt/syscall.c	/^3631 fetchstr(uint addr, char **pp)$/;"	f
 fetchstr	syscall.c	/^fetchstr(uint addr, char **pp)$/;"	f
 ff	grep.asm	/^  ff:	83 fb 2e             	cmp    $0x2e,%ebx$/;"	l
+ff	init.asm	/^  ff:	90                   	nop$/;"	l
 ff	kernel.asm	/^  ff = *f;$/;"	d
 ff	kill.asm	/^  ff:	31 c0                	xor    %eax,%eax$/;"	l
 ff	ln.asm	/^  ff:	89 c1                	mov    %eax,%ecx$/;"	l
@@ -2472,27 +2634,47 @@ ffd	usertests.asm	/^     ffd:	83 ec 08             	sub    $0x8,%esp$/;"	l
 ffe	sh.asm	/^     ffe:	83 c0 04             	add    $0x4,%eax$/;"	l
 file	file.c	/^  struct file file[NFILE];$/;"	m	struct:__anon1	typeref:struct:__anon1::file	file:
 file	file.h	/^struct file {$/;"	s
+file	fmt/file.c	/^5965   struct file file[NFILE];$/;"	m	struct:__anon10	typeref:struct:__anon10::file	file:
+file	fmt/file.h	/^4250 struct file {$/;"	s
+file	fmt/sh.c	/^8778   char *file;$/;"	m	struct:redircmd	file:
 file	sh.c	/^  char *file;$/;"	m	struct:redircmd	file:
 filealloc	file.c	/^filealloc(void)$/;"	f
+filealloc	fmt/file.c	/^5976 filealloc(void)$/;"	f
 fileclose	file.c	/^fileclose(struct file *f)$/;"	f
+fileclose	fmt/file.c	/^6014 fileclose(struct file *f)$/;"	f
 filedup	file.c	/^filedup(struct file *f)$/;"	f
+filedup	fmt/file.c	/^6002 filedup(struct file *f)$/;"	f
 fileinit	file.c	/^fileinit(void)$/;"	f
+fileinit	fmt/file.c	/^5969 fileinit(void)$/;"	f
 fileread	file.c	/^fileread(struct file *f, char *addr, int n)$/;"	f
+fileread	fmt/file.c	/^6065 fileread(struct file *f, char *addr, int n)$/;"	f
 filestat	file.c	/^filestat(struct file *f, struct stat *st)$/;"	f
+filestat	fmt/file.c	/^6052 filestat(struct file *f, struct stat *st)$/;"	f
 filesz	elf.h	/^  uint filesz;$/;"	m	struct:proghdr
+filesz	fmt/elf.h	/^0929   uint filesz;$/;"	m	struct:proghdr
 filewrite	file.c	/^filewrite(struct file *f, char *addr, int n)$/;"	f
+filewrite	fmt/file.c	/^6102 filewrite(struct file *f, char *addr, int n)$/;"	f
+fill_rtcdate	fmt/lapic.c	/^7641 fill_rtcdate(struct rtcdate *r)$/;"	f	file:
 fill_rtcdate	lapic.c	/^fill_rtcdate(struct rtcdate *r)$/;"	f	file:
 first	kernel.asm	/^    first = 0;$/;"	d
 flags	buf.h	/^  int flags;$/;"	m	struct:buf
 flags	elf.h	/^  uint flags;$/;"	m	struct:elfhdr
 flags	elf.h	/^  uint flags;$/;"	m	struct:proghdr
+flags	fmt/buf.h	/^3951   int flags;$/;"	m	struct:buf
+flags	fmt/elf.h	/^0914   uint flags;$/;"	m	struct:elfhdr
+flags	fmt/elf.h	/^0931   uint flags;$/;"	m	struct:proghdr
+flags	fmt/mp.h	/^7182   uchar flags;                  \/\/ CPU flags$/;"	m	struct:mpproc
+flags	fmt/mp.h	/^7193   uchar flags;                  \/\/ I\/O APIC flags$/;"	m	struct:mpioapic
 flags	kernel.asm	/^    flags = PTE_FLAGS(*pte);$/;"	d
 flags	mp.h	/^  uchar flags;                  \/\/ CPU flags$/;"	m	struct:mpproc
 flags	mp.h	/^  uchar flags;                  \/\/ I\/O APIC flags$/;"	m	struct:mpioapic
 fmtname	ls.c	/^fmtname(char *path)$/;"	f
 fname	usertests.asm	/^    fname = names[i];$/;"	d
+fork	fmt/proc.c	/^2625 fork(void)$/;"	f
 fork	proc.c	/^fork(void)$/;"	f
+fork1	fmt/sh.c	/^8938 fork1(void)$/;"	f
 fork1	sh.c	/^fork1(void)$/;"	f
+forkret	fmt/proc.c	/^2903 forkret(void)$/;"	f
 forkret	proc.c	/^forkret(void)$/;"	f
 forktest	forktest.c	/^forktest(void)$/;"	f
 forktest	usertests.c	/^forktest(void)$/;"	f
@@ -2502,6 +2684,7 @@ fourteen	usertests.c	/^fourteen(void)$/;"	f
 free	umalloc.c	/^free(void *ap)$/;"	f
 freeblock	mkfs.c	/^uint freeblock;$/;"	v
 freeinode	mkfs.c	/^uint freeinode = 1;$/;"	v
+freelist	fmt/kalloc.c	/^3172   struct run *freelist;$/;"	m	struct:__anon11	typeref:struct:__anon11::run	file:
 freelist	kalloc.c	/^  struct run *freelist;$/;"	m	struct:__anon2	typeref:struct:__anon2::run	file:
 freep	cat.asm	/^      freep = prevp;$/;"	d
 freep	cat.asm	/^  freep = p;$/;"	d
@@ -2534,37 +2717,56 @@ freep	wc.asm	/^      freep = prevp;$/;"	d
 freep	wc.asm	/^  freep = p;$/;"	d
 freep	zombie.asm	/^      freep = prevp;$/;"	d
 freep	zombie.asm	/^  freep = p;$/;"	d
+freerange	fmt/kalloc.c	/^3201 freerange(void *vstart, void *vend)$/;"	f
 freerange	kalloc.c	/^freerange(void *vstart, void *vend)$/;"	f
+freevm	fmt/vm.c	/^2003 freevm(pde_t *pgdir)$/;"	f
 freevm	vm.c	/^freevm(pde_t *pgdir)$/;"	f
+fs	fmt/mmu.h	/^0844   ushort fs;$/;"	m	struct:taskstate
+fs	fmt/x86.h	/^0616   ushort fs;$/;"	m	struct:trapframe
 fs	mmu.h	/^  ushort fs;$/;"	m	struct:taskstate
 fs	x86.h	/^  ushort fs;$/;"	m	struct:trapframe
 fsfd	mkfs.c	/^int fsfd;$/;"	v
 fsfull	usertests.c	/^fsfull()$/;"	f
 ftable	file.c	/^} ftable;$/;"	v	typeref:struct:__anon1
+ftable	fmt/file.c	/^5966 } ftable;$/;"	v	typeref:struct:__anon10
+g	fmt/mmu.h	/^0737   uint g : 1;          \/\/ Granularity: limit scaled by 4K when set$/;"	m	struct:segdesc
 g	mmu.h	/^  uint g : 1;          \/\/ Granularity: limit scaled by 4K when set$/;"	m	struct:segdesc
+gatedesc	fmt/mmu.h	/^0855 struct gatedesc {$/;"	s
 gatedesc	mmu.h	/^struct gatedesc {$/;"	s
 gdt	bootasm.S	/^gdt:$/;"	l
 gdt	entryother.S	/^gdt:$/;"	l
+gdt	fmt/proc.h	/^2305   struct segdesc gdt[NSEGS];   \/\/ x86 global descriptor table$/;"	m	struct:cpu	typeref:struct:cpu::segdesc
 gdt	proc.h	/^  struct segdesc gdt[NSEGS];   \/\/ x86 global descriptor table$/;"	m	struct:cpu	typeref:struct:cpu::segdesc
 gdtdesc	bootasm.S	/^gdtdesc:$/;"	l
 gdtdesc	entryother.S	/^gdtdesc:$/;"	l
+getcallerpcs	fmt/spinlock.c	/^1627 getcallerpcs(void *v, uint pcs[])$/;"	f
 getcallerpcs	spinlock.c	/^getcallerpcs(void *v, uint pcs[])$/;"	f
+getcmd	fmt/sh.c	/^8884 getcmd(char *buf, int nbuf)$/;"	f
 getcmd	sh.c	/^getcmd(char *buf, int nbuf)$/;"	f
 gets	ulib.c	/^gets(char *buf, int max)$/;"	f
+gettoken	fmt/sh.c	/^9056 gettoken(char **ps, char *es, char **q, char **eq)$/;"	f
 gettoken	sh.c	/^gettoken(char **ps, char *es, char **q, char **eq)$/;"	f
 grep	grep.c	/^grep(char *pattern, int fd)$/;"	f
+growproc	fmt/proc.c	/^2603 growproc(int n)$/;"	f
 growproc	proc.c	/^growproc(int n)$/;"	f
+gs	fmt/mmu.h	/^0846   ushort gs;$/;"	m	struct:taskstate
+gs	fmt/x86.h	/^0614   ushort gs;$/;"	m	struct:trapframe
 gs	mmu.h	/^  ushort gs;$/;"	m	struct:taskstate
 gs	x86.h	/^  ushort gs;$/;"	m	struct:trapframe
+havedisk1	fmt/ide.c	/^4333 static int havedisk1;$/;"	v	file:
 havedisk1	ide.c	/^static int havedisk1;$/;"	v	file:
 havedisk1	kernel.asm	/^      havedisk1 = 1;$/;"	d
 havekids	kernel.asm	/^      havekids = 1;$/;"	d
 havekids	kernel.asm	/^    havekids = 0;$/;"	d
 head	bio.c	/^  struct buf head;$/;"	m	struct:__anon3	typeref:struct:__anon3::buf	file:
+head	fmt/bio.c	/^4534   struct buf head;$/;"	m	struct:__anon12	typeref:struct:__anon12::buf	file:
 header	umalloc.c	/^union header {$/;"	u	file:
+holding	fmt/spinlock.c	/^1652 holding(struct spinlock *lock)$/;"	f
 holding	spinlock.c	/^holding(struct spinlock *lock)$/;"	f
+holdingsleep	fmt/sleeplock.c	/^4751 holdingsleep(struct sleeplock *lk)$/;"	f
 holdingsleep	sleeplock.c	/^holdingsleep(struct sleeplock *lk)$/;"	f
 hour	date.h	/^  uint hour;$/;"	m	struct:rtcdate
+hour	fmt/date.h	/^0953   uint hour;$/;"	m	struct:rtcdate
 i	cat.asm	/^  i = 0;$/;"	d
 i	echo.asm	/^  i = 0;$/;"	d
 i	grep.asm	/^  i = 0;$/;"	d
@@ -2584,43 +2786,73 @@ i	usertests.asm	/^  i = 0;$/;"	d
 i	usertests.asm	/^  i = read(fd, buf, 2000);$/;"	d
 i	wc.asm	/^  i = 0;$/;"	d
 i	zombie.asm	/^  i = 0;$/;"	d
+ialloc	fmt/fs.c	/^5304 ialloc(uint dev, short type)$/;"	f
 ialloc	fs.c	/^ialloc(uint dev, short type)$/;"	f
 ialloc	mkfs.c	/^ialloc(ushort type)$/;"	f
 iappend	mkfs.c	/^iappend(uint inum, void *xp, int n)$/;"	f
+icache	fmt/fs.c	/^5240 } icache;$/;"	v	typeref:struct:__anon15
 icache	fs.c	/^} icache;$/;"	v	typeref:struct:__anon7
 id	kernel.asm	/^  id = ioapicread(REG_ID) >> 24;$/;"	d
+ideinit	fmt/ide.c	/^4351 ideinit(void)$/;"	f
 ideinit	ide.c	/^ideinit(void)$/;"	f
 ideinit	memide.c	/^ideinit(void)$/;"	f
+ideintr	fmt/ide.c	/^4404 ideintr(void)$/;"	f
 ideintr	ide.c	/^ideintr(void)$/;"	f
 ideintr	memide.c	/^ideintr(void)$/;"	f
+idelock	fmt/ide.c	/^4330 static struct spinlock idelock;$/;"	v	typeref:struct:spinlock	file:
 idelock	ide.c	/^static struct spinlock idelock;$/;"	v	typeref:struct:spinlock	file:
+idequeue	fmt/ide.c	/^4331 static struct buf *idequeue;$/;"	v	typeref:struct:buf	file:
 idequeue	ide.c	/^static struct buf *idequeue;$/;"	v	typeref:struct:buf	file:
 idequeue	kernel.asm	/^  idequeue = b->qnext;$/;"	d
+iderw	fmt/ide.c	/^4454 iderw(struct buf *b)$/;"	f
 iderw	ide.c	/^iderw(struct buf *b)$/;"	f
 iderw	memide.c	/^iderw(struct buf *b)$/;"	f
+idestart	fmt/ide.c	/^4374 idestart(struct buf *b)$/;"	f	file:
 idestart	ide.c	/^idestart(struct buf *b)$/;"	f	file:
+idewait	fmt/ide.c	/^4338 idewait(int checkerr)$/;"	f	file:
 idewait	ide.c	/^idewait(int checkerr)$/;"	f	file:
+idt	fmt/trap.c	/^3411 struct gatedesc idt[256];$/;"	v	typeref:struct:gatedesc
 idt	trap.c	/^struct gatedesc idt[256];$/;"	v	typeref:struct:gatedesc
+idtinit	fmt/trap.c	/^3429 idtinit(void)$/;"	f
 idtinit	trap.c	/^idtinit(void)$/;"	f
+idup	fmt/fs.c	/^5389 idup(struct inode *ip)$/;"	f
 idup	fs.c	/^idup(struct inode *ip)$/;"	f
+iget	fmt/fs.c	/^5354 iget(uint dev, uint inum)$/;"	f	file:
 iget	fs.c	/^iget(uint dev, uint inum)$/;"	f	file:
+iinit	fmt/fs.c	/^5243 iinit(int dev)$/;"	f
 iinit	fs.c	/^iinit(int dev)$/;"	f
+ilock	fmt/fs.c	/^5403 ilock(struct inode *ip)$/;"	f
 ilock	fs.c	/^ilock(struct inode *ip)$/;"	f
+imcrp	fmt/mp.h	/^7159   uchar imcrp;$/;"	m	struct:mp
 imcrp	mp.h	/^  uchar imcrp;$/;"	m	struct:mp
+inb	fmt/x86.h	/^0453 inb(ushort port)$/;"	f
 inb	x86.h	/^inb(ushort port)$/;"	f
 init	initcode.S	/^init:$/;"	l
+initlock	fmt/spinlock.c	/^1562 initlock(struct spinlock *lk, char *name)$/;"	f
 initlock	spinlock.c	/^initlock(struct spinlock *lk, char *name)$/;"	f
+initlog	fmt/log.c	/^4856 initlog(int dev)$/;"	f
 initlog	log.c	/^initlog(int dev)$/;"	f
+initproc	fmt/proc.c	/^2417 static struct proc *initproc;$/;"	v	typeref:struct:proc	file:
 initproc	kernel.asm	/^  initproc = p;$/;"	d
 initproc	proc.c	/^static struct proc *initproc;$/;"	v	typeref:struct:proc	file:
+initsleeplock	fmt/sleeplock.c	/^4713 initsleeplock(struct sleeplock *lk, char *name)$/;"	f
 initsleeplock	sleeplock.c	/^initsleeplock(struct sleeplock *lk, char *name)$/;"	f
+inituvm	fmt/vm.c	/^1886 inituvm(pde_t *pgdir, char *init, uint sz)$/;"	f
 inituvm	vm.c	/^inituvm(pde_t *pgdir, char *init, uint sz)$/;"	f
+ino	fmt/stat.h	/^4107   uint ino;    \/\/ Inode number$/;"	m	struct:stat
 ino	stat.h	/^  uint ino;    \/\/ Inode number$/;"	m	struct:stat
 inode	file.h	/^struct inode {$/;"	s
+inode	fmt/file.h	/^4262 struct inode {$/;"	s
+inode	fmt/fs.c	/^5239   struct inode inode[NINODE];$/;"	m	struct:__anon15	typeref:struct:__anon15::inode	file:
 inode	fs.c	/^  struct inode inode[NINODE];$/;"	m	struct:__anon7	typeref:struct:__anon7::inode	file:
+inodestart	fmt/fs.h	/^4169   uint inodestart;   \/\/ Block number of first inode block$/;"	m	struct:superblock
 inodestart	fs.h	/^  uint inodestart;   \/\/ Block number of first inode block$/;"	m	struct:superblock
 input	console.c	/^} input;$/;"	v	typeref:struct:__anon5
+input	fmt/console.c	/^8272 } input;$/;"	v	typeref:struct:__anon14
+insert_lru	kalloc.c	/^void insert_lru(struct page* newPG){$/;"	f
+insl	fmt/x86.h	/^0462 insl(int port, void *addr, int cnt)$/;"	f
 insl	x86.h	/^insl(int port, void *addr, int cnt)$/;"	f
+install_trans	fmt/log.c	/^4872 install_trans(void)$/;"	f	file:
 install_trans	log.c	/^install_trans(void)$/;"	f	file:
 int	cat.asm	/^int$/;"	l
 int	echo.asm	/^int$/;"	l
@@ -2643,107 +2875,182 @@ int	swaptest.asm	/^int$/;"	l
 int	usertests.asm	/^int$/;"	l
 int	wc.asm	/^int$/;"	l
 int	zombie.asm	/^int$/;"	l
+intena	fmt/proc.h	/^2308   int intena;                  \/\/ Were interrupts enabled before pushcli?$/;"	m	struct:cpu
 intena	kernel.asm	/^  intena = mycpu()->intena;$/;"	d
 intena	proc.h	/^  int intena;                  \/\/ Were interrupts enabled before pushcli?$/;"	m	struct:cpu
 inum	file.h	/^  uint inum;          \/\/ Inode number$/;"	m	struct:inode
+inum	fmt/file.h	/^4264   uint inum;          \/\/ Inode number$/;"	m	struct:inode
+inum	fmt/fs.h	/^4216   ushort inum;$/;"	m	struct:dirent
 inum	fs.h	/^  ushort inum;$/;"	m	struct:dirent
 inum	kernel.asm	/^      inum = de.inum;$/;"	d
 inword	wc.asm	/^        inword = 0;$/;"	d
 inword	wc.asm	/^        inword = 1;$/;"	d
 inword	wc.asm	/^  inword = 0;$/;"	d
+ioapic	fmt/ioapic.c	/^7724 volatile struct ioapic *ioapic;$/;"	v	typeref:struct:ioapic
+ioapic	fmt/ioapic.c	/^7727 struct ioapic {$/;"	s	file:
 ioapic	ioapic.c	/^struct ioapic {$/;"	s	file:
 ioapic	ioapic.c	/^volatile struct ioapic *ioapic;$/;"	v	typeref:struct:ioapic
 ioapic	kernel.asm	/^  ioapic = (volatile struct ioapic*)IOAPIC;$/;"	d
+ioapicenable	fmt/ioapic.c	/^7770 ioapicenable(int irq, int cpunum)$/;"	f
 ioapicenable	ioapic.c	/^ioapicenable(int irq, int cpunum)$/;"	f
+ioapicid	fmt/mp.c	/^7315 uchar ioapicid;$/;"	v
 ioapicid	kernel.asm	/^      ioapicid = ioapic->apicno;$/;"	d
 ioapicid	mp.c	/^uchar ioapicid;$/;"	v
+ioapicinit	fmt/ioapic.c	/^7751 ioapicinit(void)$/;"	f
 ioapicinit	ioapic.c	/^ioapicinit(void)$/;"	f
+ioapicread	fmt/ioapic.c	/^7734 ioapicread(int reg)$/;"	f	file:
 ioapicread	ioapic.c	/^ioapicread(int reg)$/;"	f	file:
+ioapicwrite	fmt/ioapic.c	/^7741 ioapicwrite(int reg, uint data)$/;"	f	file:
 ioapicwrite	ioapic.c	/^ioapicwrite(int reg, uint data)$/;"	f	file:
+iomb	fmt/mmu.h	/^0851   ushort iomb;       \/\/ I\/O map base address$/;"	m	struct:taskstate
 iomb	mmu.h	/^  ushort iomb;       \/\/ I\/O map base address$/;"	m	struct:taskstate
 ip	file.h	/^  struct inode *ip;$/;"	m	struct:file	typeref:struct:file::inode
+ip	fmt/file.h	/^4256   struct inode *ip;$/;"	m	struct:file	typeref:struct:file::inode
 ip	kernel.asm	/^    ip = create(path, T_FILE, 0, 0);$/;"	d
 ip	kernel.asm	/^    ip = idup(myproc()->cwd);$/;"	d
 ip	kernel.asm	/^    ip = iget(ROOTDEV, ROOTINO);$/;"	d
 ip	kernel.asm	/^    ip = next;$/;"	d
 ip	kernel.asm	/^  ip = empty;$/;"	d
+iput	fmt/fs.c	/^5458 iput(struct inode *ip)$/;"	f
 iput	fs.c	/^iput(struct inode *ip)$/;"	f
 iputtest	usertests.c	/^iputtest(void)$/;"	f
 iref	usertests.c	/^iref(void)$/;"	f
+isdirempty	fmt/sysfile.c	/^6352 isdirempty(struct inode *dp)$/;"	f	file:
 isdirempty	sysfile.c	/^isdirempty(struct inode *dp)$/;"	f	file:
 ismp	kernel.asm	/^      ismp = 0;$/;"	d
 ismp	kernel.asm	/^  ismp = 1;$/;"	d
+itrunc	fmt/fs.c	/^5556 itrunc(struct inode *ip)$/;"	f	file:
 itrunc	fs.c	/^itrunc(struct inode *ip)$/;"	f	file:
+iunlock	fmt/fs.c	/^5431 iunlock(struct inode *ip)$/;"	f
 iunlock	fs.c	/^iunlock(struct inode *ip)$/;"	f
+iunlockput	fmt/fs.c	/^5482 iunlockput(struct inode *ip)$/;"	f
 iunlockput	fs.c	/^iunlockput(struct inode *ip)$/;"	f
+iupdate	fmt/fs.c	/^5330 iupdate(struct inode *ip)$/;"	f
 iupdate	fs.c	/^iupdate(struct inode *ip)$/;"	f
+kalloc	fmt/kalloc.c	/^3237 kalloc(void)$/;"	f
 kalloc	kalloc.c	/^kalloc(void)$/;"	f
+kbdgetc	fmt/kbd.c	/^7956 kbdgetc(void)$/;"	f
 kbdgetc	kbd.c	/^kbdgetc(void)$/;"	f
+kbdintr	fmt/kbd.c	/^7996 kbdintr(void)$/;"	f
 kbdintr	kbd.c	/^kbdintr(void)$/;"	f
 kernel	kernel.asm	/^kernel:     file format elf32-i386$/;"	l
+kfree	fmt/kalloc.c	/^3214 kfree(char *v)$/;"	f
 kfree	kalloc.c	/^kfree(char *v)$/;"	f
+kill	fmt/proc.c	/^3025 kill(int pid)$/;"	f
 kill	proc.c	/^kill(int pid)$/;"	f
+killed	fmt/proc.h	/^2347   int killed;                  \/\/ If non-zero, have been killed$/;"	m	struct:proc
 killed	proc.h	/^  int killed;                  \/\/ If non-zero, have been killed$/;"	m	struct:proc
+kinit1	fmt/kalloc.c	/^3181 kinit1(void *vstart, void *vend)$/;"	f
 kinit1	kalloc.c	/^kinit1(void *vstart, void *vend)$/;"	f
+kinit2	fmt/kalloc.c	/^3189 kinit2(void *vstart, void *vend)$/;"	f
 kinit2	kalloc.c	/^kinit2(void *vstart, void *vend)$/;"	f
+kmap	fmt/vm.c	/^1804 static struct kmap {$/;"	s	file:
+kmap	fmt/vm.c	/^1809 } kmap[] = {$/;"	v	typeref:struct:kmap	file:
 kmap	vm.c	/^static struct kmap {$/;"	s	file:
 kmap	vm.c	/^} kmap[] = {$/;"	v	typeref:struct:kmap	file:
+kmem	fmt/kalloc.c	/^3173 } kmem;$/;"	v	typeref:struct:__anon11
 kmem	kalloc.c	/^} kmem;$/;"	v	typeref:struct:__anon2
+kpgdir	fmt/vm.c	/^1710 pde_t *kpgdir;  \/\/ for use in scheduler()$/;"	v
 kpgdir	kernel.asm	/^  kpgdir = setupkvm();$/;"	d
 kpgdir	vm.c	/^pde_t *kpgdir;  \/\/ for use in scheduler()$/;"	v
+kstack	fmt/proc.h	/^2340   char *kstack;                \/\/ Bottom of kernel stack for this process$/;"	m	struct:proc
 kstack	proc.h	/^  char *kstack;                \/\/ Bottom of kernel stack for this process$/;"	m	struct:proc
+kvmalloc	fmt/vm.c	/^1840 kvmalloc(void)$/;"	f
 kvmalloc	vm.c	/^kvmalloc(void)$/;"	f
 l	wc.asm	/^  l = w = c = 0;$/;"	d
+lapic	fmt/lapic.c	/^7493 volatile uint *lapic;  \/\/ Initialized in mp.c$/;"	v
 lapic	kernel.asm	/^  lapic = (uint*)conf->lapicaddr;$/;"	d
 lapic	lapic.c	/^volatile uint *lapic;  \/\/ Initialized in mp.c$/;"	v
+lapicaddr	fmt/mp.h	/^7172   uint *lapicaddr;              \/\/ address of local APIC$/;"	m	struct:mpconf
 lapicaddr	mp.h	/^  uint *lapicaddr;              \/\/ address of local APIC$/;"	m	struct:mpconf
+lapiceoi	fmt/lapic.c	/^7564 lapiceoi(void)$/;"	f
 lapiceoi	lapic.c	/^lapiceoi(void)$/;"	f
+lapicid	fmt/lapic.c	/^7555 lapicid(void)$/;"	f
 lapicid	lapic.c	/^lapicid(void)$/;"	f
+lapicinit	fmt/lapic.c	/^7508 lapicinit(void)$/;"	f
 lapicinit	lapic.c	/^lapicinit(void)$/;"	f
+lapicstartap	fmt/lapic.c	/^7583 lapicstartap(uchar apicid, uint addr)$/;"	f
 lapicstartap	lapic.c	/^lapicstartap(uchar apicid, uint addr)$/;"	f
+lapicw	fmt/lapic.c	/^7501 lapicw(int index, int value)$/;"	f	file:
 lapicw	lapic.c	/^lapicw(int index, int value)$/;"	f	file:
 last	kernel.asm	/^  last = (char*)PGROUNDDOWN(((uint)va) + size - 1);$/;"	d
 lcmd	sh.asm	/^    lcmd = (struct listcmd*)cmd;$/;"	d
+lcr3	fmt/x86.h	/^0590 lcr3(uint val)$/;"	f
 lcr3	x86.h	/^lcr3(uint val)$/;"	f
+ldt	fmt/mmu.h	/^0848   ushort ldt;$/;"	m	struct:taskstate
 ldt	mmu.h	/^  ushort ldt;$/;"	m	struct:taskstate
+left	fmt/sh.c	/^8786   struct cmd *left;$/;"	m	struct:pipecmd	typeref:struct:pipecmd::cmd	file:
+left	fmt/sh.c	/^8792   struct cmd *left;$/;"	m	struct:listcmd	typeref:struct:listcmd::cmd	file:
 left	sh.c	/^  struct cmd *left;$/;"	m	struct:listcmd	typeref:struct:listcmd::cmd	file:
 left	sh.c	/^  struct cmd *left;$/;"	m	struct:pipecmd	typeref:struct:pipecmd::cmd	file:
 len	kernel.asm	/^  len = path - s;$/;"	d
+length	fmt/mp.h	/^7155   uchar length;                 \/\/ 1$/;"	m	struct:mp
+length	fmt/mp.h	/^7165   ushort length;                \/\/ total table length$/;"	m	struct:mpconf
 length	mp.h	/^  uchar length;                 \/\/ 1$/;"	m	struct:mp
 length	mp.h	/^  ushort length;                \/\/ total table length$/;"	m	struct:mpconf
+lgdt	fmt/x86.h	/^0512 lgdt(struct segdesc *p, int size)$/;"	f
 lgdt	x86.h	/^lgdt(struct segdesc *p, int size)$/;"	f
+lh	fmt/log.c	/^4845   struct logheader lh;$/;"	m	struct:log	typeref:struct:log::logheader	file:
 lh	log.c	/^  struct logheader lh;$/;"	m	struct:log	typeref:struct:log::logheader	file:
+lidt	fmt/x86.h	/^0526 lidt(struct gatedesc *p, int size)$/;"	f
 lidt	x86.h	/^lidt(struct gatedesc *p, int size)$/;"	f
+lim_15_0	fmt/mmu.h	/^0726   uint lim_15_0 : 16;  \/\/ Low bits of segment limit$/;"	m	struct:segdesc
 lim_15_0	mmu.h	/^  uint lim_15_0 : 16;  \/\/ Low bits of segment limit$/;"	m	struct:segdesc
+lim_19_16	fmt/mmu.h	/^0733   uint lim_19_16 : 4;  \/\/ High bits of segment limit$/;"	m	struct:segdesc
 lim_19_16	mmu.h	/^  uint lim_19_16 : 4;  \/\/ High bits of segment limit$/;"	m	struct:segdesc
+link	fmt/mmu.h	/^0815   uint link;         \/\/ Old ts selector$/;"	m	struct:taskstate
 link	mmu.h	/^  uint link;         \/\/ Old ts selector$/;"	m	struct:taskstate
 linktest	usertests.c	/^linktest(void)$/;"	f
 linkunlink	usertests.c	/^linkunlink()$/;"	f
+listcmd	fmt/sh.c	/^8790 struct listcmd {$/;"	s	file:
+listcmd	fmt/sh.c	/^9001 listcmd(struct cmd *left, struct cmd *right)$/;"	f
 listcmd	sh.c	/^listcmd(struct cmd *left, struct cmd *right)$/;"	f
 listcmd	sh.c	/^struct listcmd {$/;"	s	file:
+lk	fmt/sleeplock.h	/^4003   struct spinlock lk; \/\/ spinlock protecting this sleep lock$/;"	m	struct:sleeplock	typeref:struct:sleeplock::spinlock
 lk	sleeplock.h	/^  struct spinlock lk; \/\/ spinlock protecting this sleep lock$/;"	m	struct:sleeplock	typeref:struct:sleeplock::spinlock
+loadgs	fmt/x86.h	/^0551 loadgs(ushort v)$/;"	f
 loadgs	x86.h	/^loadgs(ushort v)$/;"	f
+loaduvm	fmt/vm.c	/^1903 loaduvm(pde_t *pgdir, char *addr, struct inode *ip, uint offset, uint sz)$/;"	f
 loaduvm	vm.c	/^loaduvm(pde_t *pgdir, char *addr, struct inode *ip, uint offset, uint sz)$/;"	f
 lock	bio.c	/^  struct spinlock lock;$/;"	m	struct:__anon3	typeref:struct:__anon3::spinlock	file:
 lock	buf.h	/^  struct sleeplock lock;$/;"	m	struct:buf	typeref:struct:buf::sleeplock
 lock	console.c	/^  struct spinlock lock;$/;"	m	struct:__anon4	typeref:struct:__anon4::spinlock	file:
 lock	file.c	/^  struct spinlock lock;$/;"	m	struct:__anon1	typeref:struct:__anon1::spinlock	file:
 lock	file.h	/^  struct sleeplock lock; \/\/ protects everything below here$/;"	m	struct:inode	typeref:struct:inode::sleeplock
+lock	fmt/bio.c	/^4529   struct spinlock lock;$/;"	m	struct:__anon12	typeref:struct:__anon12::spinlock	file:
+lock	fmt/buf.h	/^3954   struct sleeplock lock;$/;"	m	struct:buf	typeref:struct:buf::sleeplock
+lock	fmt/console.c	/^8022   struct spinlock lock;$/;"	m	struct:__anon13	typeref:struct:__anon13::spinlock	file:
+lock	fmt/file.c	/^5964   struct spinlock lock;$/;"	m	struct:__anon10	typeref:struct:__anon10::spinlock	file:
+lock	fmt/file.h	/^4266   struct sleeplock lock; \/\/ protects everything below here$/;"	m	struct:inode	typeref:struct:inode::sleeplock
+lock	fmt/fs.c	/^5238   struct spinlock lock;$/;"	m	struct:__anon15	typeref:struct:__anon15::spinlock	file:
+lock	fmt/kalloc.c	/^3170   struct spinlock lock;$/;"	m	struct:__anon11	typeref:struct:__anon11::spinlock	file:
+lock	fmt/log.c	/^4839   struct spinlock lock;$/;"	m	struct:log	typeref:struct:log::spinlock	file:
+lock	fmt/pipe.c	/^6863   struct spinlock lock;$/;"	m	struct:pipe	typeref:struct:pipe::spinlock	file:
+lock	fmt/proc.c	/^2410   struct spinlock lock;$/;"	m	struct:pt	typeref:struct:pt::spinlock	file:
 lock	fs.c	/^  struct spinlock lock;$/;"	m	struct:__anon7	typeref:struct:__anon7::spinlock	file:
 lock	kalloc.c	/^  struct spinlock lock;$/;"	m	struct:__anon2	typeref:struct:__anon2::spinlock	file:
 lock	log.c	/^  struct spinlock lock;$/;"	m	struct:log	typeref:struct:log::spinlock	file:
 lock	pipe.c	/^  struct spinlock lock;$/;"	m	struct:pipe	typeref:struct:pipe::spinlock	file:
 lock	proc.c	/^  struct spinlock lock;$/;"	m	struct:__anon6	typeref:struct:__anon6::spinlock	file:
+locked	fmt/sleeplock.h	/^4002   uint locked;       \/\/ Is the lock held?$/;"	m	struct:sleeplock
+locked	fmt/spinlock.h	/^1502   uint locked;       \/\/ Is the lock held?$/;"	m	struct:spinlock
 locked	sleeplock.h	/^  uint locked;       \/\/ Is the lock held?$/;"	m	struct:sleeplock
 locked	spinlock.h	/^  uint locked;       \/\/ Is the lock held?$/;"	m	struct:spinlock
 locking	console.c	/^  int locking;$/;"	m	struct:__anon4	file:
+locking	fmt/console.c	/^8023   int locking;$/;"	m	struct:__anon13	file:
 locking	kernel.asm	/^  locking = cons.locking;$/;"	d
+log	fmt/log.c	/^4838 struct log {$/;"	s	file:
+log	fmt/log.c	/^4850 struct log log;$/;"	v	typeref:struct:log
 log	log.c	/^struct log log;$/;"	v	typeref:struct:log
 log	log.c	/^struct log {$/;"	s	file:
+log_write	fmt/log.c	/^5022 log_write(struct buf *b)$/;"	f
 log_write	log.c	/^log_write(struct buf *b)$/;"	f
+logheader	fmt/log.c	/^4833 struct logheader {$/;"	s	file:
 logheader	log.c	/^struct logheader {$/;"	s	file:
+logstart	fmt/fs.h	/^4168   uint logstart;     \/\/ Block number of first log block$/;"	m	struct:superblock
 logstart	fs.h	/^  uint logstart;     \/\/ Block number of first log block$/;"	m	struct:superblock
 ls	ls.c	/^ls(char *path)$/;"	f
+ltr	fmt/x86.h	/^0538 ltr(ushort sel)$/;"	f
 ltr	x86.h	/^ltr(ushort sel)$/;"	f
 m	grep.asm	/^      m = 0;$/;"	d
 m	grep.asm	/^  m = 0;$/;"	d
@@ -2753,9 +3060,14 @@ m	kernel.asm	/^  m = 1 << (bi % 8);$/;"	d
 m1	usertests.asm	/^    m1 = malloc(1024*20);$/;"	d
 m2	usertests.asm	/^      m2 = *(char**)m1;$/;"	d
 machine	elf.h	/^  ushort machine;$/;"	m	struct:elfhdr
+machine	fmt/elf.h	/^0909   ushort machine;$/;"	m	struct:elfhdr
 magic	elf.h	/^  uint magic;  \/\/ must equal ELF_MAGIC$/;"	m	struct:elfhdr
+magic	fmt/elf.h	/^0906   uint magic;  \/\/ must equal ELF_MAGIC$/;"	m	struct:elfhdr
 main	cat.c	/^main(int argc, char *argv[])$/;"	f
 main	echo.c	/^main(int argc, char *argv[])$/;"	f
+main	fmt/init.c	/^8710 main(void)$/;"	f
+main	fmt/main.c	/^1217 main(void)$/;"	f
+main	fmt/sh.c	/^8901 main(void)$/;"	f
 main	forktest.c	/^main(void)$/;"	f
 main	grep.c	/^main(int argc, char *argv[])$/;"	f
 main	init.c	/^main(void)$/;"	f
@@ -2773,8 +3085,11 @@ main	usertests.c	/^main(int argc, char *argv[])$/;"	f
 main	wc.c	/^main(int argc, char *argv[])$/;"	f
 main	zombie.c	/^main(void)$/;"	f
 major	file.h	/^  short major;$/;"	m	struct:inode
+major	fmt/file.h	/^4270   short major;$/;"	m	struct:inode
+major	fmt/fs.h	/^4180   short major;          \/\/ Major device number (T_DEV only)$/;"	m	struct:dinode
 major	fs.h	/^  short major;          \/\/ Major device number (T_DEV only)$/;"	m	struct:dinode
 malloc	umalloc.c	/^malloc(uint nbytes)$/;"	f
+mappages	fmt/vm.c	/^1760 mappages(pde_t *pgdir, void *va, uint size, uint pa, int perm)$/;"	f	file:
 mappages	vm.c	/^mappages(pde_t *pgdir, void *va, uint size, uint pa, int perm)$/;"	f	file:
 match	grep.c	/^match(char *re, char *text)$/;"	f
 matchhere	grep.c	/^int matchhere(char *re, char *text)$/;"	f
@@ -2783,40 +3098,64 @@ maxintr	kernel.asm	/^  maxintr = (ioapicread(REG_VER) >> 16) & 0xFF;$/;"	d
 mem	kernel.asm	/^    mem = kalloc();$/;"	d
 mem	kernel.asm	/^  mem = kalloc();$/;"	d
 mem	usertests.c	/^mem(void)$/;"	f
+memcmp	fmt/string.c	/^7015 memcmp(const void *v1, const void *v2, uint n)$/;"	f
 memcmp	string.c	/^memcmp(const void *v1, const void *v2, uint n)$/;"	f
+memcpy	fmt/string.c	/^7052 memcpy(void *dst, const void *src, uint n)$/;"	f
 memcpy	string.c	/^memcpy(void *dst, const void *src, uint n)$/;"	f
 memdisk	memide.c	/^static uchar *memdisk;$/;"	v	file:
+memmove	fmt/string.c	/^7031 memmove(void *dst, const void *src, uint n)$/;"	f
 memmove	string.c	/^memmove(void *dst, const void *src, uint n)$/;"	f
 memmove	ulib.c	/^memmove(void *vdst, const void *vsrc, int n)$/;"	f
+memset	fmt/string.c	/^7004 memset(void *dst, int c, uint n)$/;"	f
 memset	string.c	/^memset(void *dst, int c, uint n)$/;"	f
 memset	ulib.c	/^memset(void *dst, int c, uint n)$/;"	f
 memsz	elf.h	/^  uint memsz;$/;"	m	struct:proghdr
+memsz	fmt/elf.h	/^0930   uint memsz;$/;"	m	struct:proghdr
+microdelay	fmt/lapic.c	/^7573 microdelay(int us)$/;"	f
 microdelay	lapic.c	/^microdelay(int us)$/;"	f
 min	fs.c	24;"	d	file:
 min	mkfs.c	253;"	d	file:
 minor	file.h	/^  short minor;$/;"	m	struct:inode
+minor	fmt/file.h	/^4271   short minor;$/;"	m	struct:inode
+minor	fmt/fs.h	/^4181   short minor;          \/\/ Minor device number (T_DEV only)$/;"	m	struct:dinode
 minor	fs.h	/^  short minor;          \/\/ Minor device number (T_DEV only)$/;"	m	struct:dinode
 minute	date.h	/^  uint minute;$/;"	m	struct:rtcdate
+minute	fmt/date.h	/^0952   uint minute;$/;"	m	struct:rtcdate
+mode	fmt/sh.c	/^8780   int mode;$/;"	m	struct:redircmd	file:
 mode	sh.c	/^  int mode;$/;"	m	struct:redircmd	file:
 month	date.h	/^  uint month;$/;"	m	struct:rtcdate
+month	fmt/date.h	/^0955   uint month;$/;"	m	struct:rtcdate
 morecore	umalloc.c	/^morecore(uint nu)$/;"	f	file:
+mp	fmt/mp.h	/^7152 struct mp {             \/\/ floating pointer$/;"	s
 mp	mp.h	/^struct mp {             \/\/ floating pointer$/;"	s
+mpconf	fmt/mp.h	/^7163 struct mpconf {         \/\/ configuration table header$/;"	s
 mpconf	mp.h	/^struct mpconf {         \/\/ configuration table header$/;"	s
+mpconfig	fmt/mp.c	/^7380 mpconfig(struct mp **pmp)$/;"	f	file:
 mpconfig	mp.c	/^mpconfig(struct mp **pmp)$/;"	f	file:
+mpenter	fmt/main.c	/^1241 mpenter(void)$/;"	f	file:
 mpenter	main.c	/^mpenter(void)$/;"	f	file:
+mpinit	fmt/mp.c	/^7401 mpinit(void)$/;"	f
 mpinit	mp.c	/^mpinit(void)$/;"	f
+mpioapic	fmt/mp.h	/^7189 struct mpioapic {       \/\/ I\/O APIC table entry$/;"	s
 mpioapic	mp.h	/^struct mpioapic {       \/\/ I\/O APIC table entry$/;"	s
+mpmain	fmt/main.c	/^1252 mpmain(void)$/;"	f	file:
 mpmain	main.c	/^mpmain(void)$/;"	f	file:
+mpproc	fmt/mp.h	/^7178 struct mpproc {         \/\/ processor table entry$/;"	s
 mpproc	mp.h	/^struct mpproc {         \/\/ processor table entry$/;"	s
+mpsearch	fmt/mp.c	/^7356 mpsearch(void)$/;"	f	file:
 mpsearch	mp.c	/^mpsearch(void)$/;"	f	file:
+mpsearch1	fmt/mp.c	/^7330 mpsearch1(uint a, int len)$/;"	f	file:
 mpsearch1	mp.c	/^mpsearch1(uint a, int len)$/;"	f	file:
 multiboot_header	entry.S	/^multiboot_header:$/;"	l
+mycpu	fmt/proc.c	/^2453 mycpu(void)$/;"	f
 mycpu	proc.c	/^mycpu(void)$/;"	f
+myproc	fmt/proc.c	/^2473 myproc(void) {$/;"	f
 myproc	proc.c	/^myproc(void) {$/;"	f
 n	cat.asm	/^    n = n*10 + *s++ - '0';$/;"	d
 n	cat.asm	/^  n = 0;$/;"	d
 n	echo.asm	/^    n = n*10 + *s++ - '0';$/;"	d
 n	echo.asm	/^  n = 0;$/;"	d
+n	fmt/log.c	/^4834   int n;$/;"	m	struct:logheader	file:
 n	forktest.asm	/^    n = n*10 + *s++ - '0';$/;"	d
 n	forktest.asm	/^  n = 0;$/;"	d
 n	grep.asm	/^    n = n*10 + *s++ - '0';$/;"	d
@@ -2852,6 +3191,10 @@ n	zombie.asm	/^  n = 0;$/;"	d
 n1	kernel.asm	/^        n1 = max;$/;"	d
 name	cat.asm	/^  name: \\$/;"	l
 name	echo.asm	/^  name: \\$/;"	l
+name	fmt/fs.h	/^4217   char name[DIRSIZ];$/;"	m	struct:dirent
+name	fmt/proc.h	/^2350   char name[16];               \/\/ Process name (debugging)$/;"	m	struct:proc
+name	fmt/sleeplock.h	/^4006   char *name;        \/\/ Name of lock.$/;"	m	struct:sleeplock
+name	fmt/spinlock.h	/^1505   char *name;        \/\/ Name of lock.$/;"	m	struct:spinlock
 name	forktest.asm	/^  name: \\$/;"	l
 name	fs.h	/^  char name[DIRSIZ];$/;"	m	struct:dirent
 name	grep.asm	/^  name: \\$/;"	l
@@ -2872,15 +3215,22 @@ name	usertests.c	/^char name[3];$/;"	v
 name	usys.S	/^  name: \\$/;"	l
 name	wc.asm	/^  name: \\$/;"	l
 name	zombie.asm	/^  name: \\$/;"	l
+namecmp	fmt/fs.c	/^5703 namecmp(const char *s, const char *t)$/;"	f
 namecmp	fs.c	/^namecmp(const char *s, const char *t)$/;"	f
+namei	fmt/fs.c	/^5890 namei(char *path)$/;"	f
 namei	fs.c	/^namei(char *path)$/;"	f
+nameiparent	fmt/fs.c	/^5901 nameiparent(char *path, char *name)$/;"	f
 nameiparent	fs.c	/^nameiparent(char *path, char *name)$/;"	f
+namex	fmt/fs.c	/^5855 namex(char *path, int nameiparent, char *name)$/;"	f	file:
 namex	fs.c	/^namex(char *path, int nameiparent, char *name)$/;"	f	file:
 nbitmap	mkfs.c	/^int nbitmap = FSSIZE\/(BSIZE*8) + 1;$/;"	v
+nblocks	fmt/fs.h	/^4165   uint nblocks;      \/\/ Number of data blocks$/;"	m	struct:superblock
 nblocks	fs.h	/^  uint nblocks;      \/\/ Number of data blocks$/;"	m	struct:superblock
 nblocks	mkfs.c	/^int nblocks;  \/\/ Number of data blocks$/;"	v
 nc	usertests.asm	/^  nc = np = 0;$/;"	d
+ncli	fmt/proc.h	/^2307   int ncli;                    \/\/ Depth of pushcli nesting.$/;"	m	struct:cpu
 ncli	proc.h	/^  int ncli;                    \/\/ Depth of pushcli nesting.$/;"	m	struct:cpu
+ncpu	fmt/mp.c	/^7314 int ncpu;$/;"	v
 ncpu	mp.c	/^int ncpu;$/;"	v
 neg	cat.asm	/^    neg = 1;$/;"	d
 neg	cat.asm	/^  neg = 0;$/;"	d
@@ -2913,20 +3263,36 @@ neg	wc.asm	/^  neg = 0;$/;"	d
 neg	zombie.asm	/^    neg = 1;$/;"	d
 neg	zombie.asm	/^  neg = 0;$/;"	d
 next	buf.h	/^  struct buf *next;$/;"	m	struct:buf	typeref:struct:buf::buf
+next	fmt/buf.h	/^3957   struct buf *next;$/;"	m	struct:buf	typeref:struct:buf::buf
+next	fmt/kalloc.c	/^3166   struct run *next;$/;"	m	struct:run	typeref:struct:run::run	file:
 next	kalloc.c	/^  struct run *next;$/;"	m	struct:run	typeref:struct:run::run	file:
+next	mmu.h	/^	struct page *next;$/;"	m	struct:page	typeref:struct:page::page
+nextpid	fmt/proc.c	/^2419 int nextpid = 1;$/;"	v
 nextpid	proc.c	/^int nextpid = 1;$/;"	v
 ninodeblocks	mkfs.c	/^int ninodeblocks = NINODES \/ IPB + 1;$/;"	v
+ninodes	fmt/fs.h	/^4166   uint ninodes;      \/\/ Number of inodes.$/;"	m	struct:superblock
 ninodes	fs.h	/^  uint ninodes;      \/\/ Number of inodes.$/;"	m	struct:superblock
 nlink	file.h	/^  short nlink;$/;"	m	struct:inode
+nlink	fmt/file.h	/^4272   short nlink;$/;"	m	struct:inode
+nlink	fmt/fs.h	/^4182   short nlink;          \/\/ Number of links to inode in file system$/;"	m	struct:dinode
+nlink	fmt/stat.h	/^4108   short nlink; \/\/ Number of links to file$/;"	m	struct:stat
 nlink	fs.h	/^  short nlink;          \/\/ Number of links to inode in file system$/;"	m	struct:dinode
 nlink	stat.h	/^  short nlink; \/\/ Number of links to file$/;"	m	struct:stat
+nlog	fmt/fs.h	/^4167   uint nlog;         \/\/ Number of log blocks$/;"	m	struct:superblock
 nlog	fs.h	/^  uint nlog;         \/\/ Number of log blocks$/;"	m	struct:superblock
 nlog	mkfs.c	/^int nlog = LOGSIZE;$/;"	v
 nmeta	mkfs.c	/^int nmeta;    \/\/ Number of meta blocks (boot, sb, nlog, inode, bitmap)$/;"	v
+normalmap	fmt/kbd.h	/^7850 static uchar normalmap[256] =$/;"	v
 normalmap	kbd.h	/^static uchar normalmap[256] =$/;"	v
+nr_sectors_read	fs.c	/^int nr_sectors_read;$/;"	v
+nr_sectors_write	fs.c	/^int nr_sectors_write;$/;"	v
+nread	fmt/pipe.c	/^6865   uint nread;     \/\/ number of bytes read$/;"	m	struct:pipe	file:
 nread	pipe.c	/^  uint nread;     \/\/ number of bytes read$/;"	m	struct:pipe	file:
+nulterminate	fmt/sh.c	/^9252 nulterminate(struct cmd *cmd)$/;"	f
 nulterminate	sh.c	/^nulterminate(struct cmd *cmd)$/;"	f
 num	kernel.asm	/^  num = curproc->tf->eax;$/;"	d
+num_free_pages	kalloc.c	/^int num_free_pages;$/;"	v
+num_lru_pages	kalloc.c	/^int num_lru_pages;$/;"	v
 nunits	cat.asm	/^  nunits = (nbytes + sizeof(Header) - 1)\/sizeof(Header) + 1;$/;"	d
 nunits	echo.asm	/^  nunits = (nbytes + sizeof(Header) - 1)\/sizeof(Header) + 1;$/;"	d
 nunits	grep.asm	/^  nunits = (nbytes + sizeof(Header) - 1)\/sizeof(Header) + 1;$/;"	d
@@ -2942,15 +3308,24 @@ nunits	swaptest.asm	/^  nunits = (nbytes + sizeof(Header) - 1)\/sizeof(Header) +
 nunits	usertests.asm	/^  nunits = (nbytes + sizeof(Header) - 1)\/sizeof(Header) + 1;$/;"	d
 nunits	wc.asm	/^  nunits = (nbytes + sizeof(Header) - 1)\/sizeof(Header) + 1;$/;"	d
 nunits	zombie.asm	/^  nunits = (nbytes + sizeof(Header) - 1)\/sizeof(Header) + 1;$/;"	d
+nwrite	fmt/pipe.c	/^6866   uint nwrite;    \/\/ number of bytes written$/;"	m	struct:pipe	file:
 nwrite	pipe.c	/^  uint nwrite;    \/\/ number of bytes written$/;"	m	struct:pipe	file:
+oemlength	fmt/mp.h	/^7170   ushort oemlength;             \/\/ OEM table length$/;"	m	struct:mpconf
 oemlength	mp.h	/^  ushort oemlength;             \/\/ OEM table length$/;"	m	struct:mpconf
+oemtable	fmt/mp.h	/^7169   uint *oemtable;               \/\/ OEM table pointer$/;"	m	struct:mpconf
 oemtable	mp.h	/^  uint *oemtable;               \/\/ OEM table pointer$/;"	m	struct:mpconf
+oesp	fmt/x86.h	/^0607   uint oesp;      \/\/ useless & ignored$/;"	m	struct:trapframe
 oesp	x86.h	/^  uint oesp;      \/\/ useless & ignored$/;"	m	struct:trapframe
 off	elf.h	/^  uint off;$/;"	m	struct:proghdr
 off	file.h	/^  uint off;$/;"	m	struct:file
+off	fmt/elf.h	/^0926   uint off;$/;"	m	struct:proghdr
+off	fmt/file.h	/^4257   uint off;$/;"	m	struct:file
+off_15_0	fmt/mmu.h	/^0856   uint off_15_0 : 16;   \/\/ low 16 bits of offset in segment$/;"	m	struct:gatedesc
 off_15_0	mmu.h	/^  uint off_15_0 : 16;   \/\/ low 16 bits of offset in segment$/;"	m	struct:gatedesc
+off_31_16	fmt/mmu.h	/^0864   uint off_31_16 : 16;  \/\/ high bits of offset in segment$/;"	m	struct:gatedesc
 off_31_16	mmu.h	/^  uint off_31_16 : 16;  \/\/ high bits of offset in segment$/;"	m	struct:gatedesc
 offset	bootblock.asm	/^  offset = (offset \/ SECTSIZE) + 1;$/;"	d
+ofile	fmt/proc.h	/^2348   struct file *ofile[NOFILE];  \/\/ Open files$/;"	m	struct:proc	typeref:struct:proc::file
 ofile	proc.h	/^  struct file *ofile[NOFILE];  \/\/ Open files$/;"	m	struct:proc	typeref:struct:proc::file
 oldbrk	usertests.asm	/^  oldbrk = sbrk(0);$/;"	d
 oldpgdir	kernel.asm	/^  oldpgdir = curproc->pgdir;$/;"	d
@@ -2973,12 +3348,18 @@ os	swaptest.asm	/^  os = s;$/;"	d
 os	usertests.asm	/^  os = s;$/;"	d
 os	wc.asm	/^  os = s;$/;"	d
 os	zombie.asm	/^  os = s;$/;"	d
+outb	fmt/x86.h	/^0471 outb(ushort port, uchar data)$/;"	f
 outb	x86.h	/^outb(ushort port, uchar data)$/;"	f
+outsl	fmt/x86.h	/^0483 outsl(int port, const void *addr, int cnt)$/;"	f
 outsl	x86.h	/^outsl(int port, const void *addr, int cnt)$/;"	f
+outstanding	fmt/log.c	/^4842   int outstanding; \/\/ how many FS sys calls are executing.$/;"	m	struct:log	file:
 outstanding	log.c	/^  int outstanding; \/\/ how many FS sys calls are executing.$/;"	m	struct:log	file:
+outw	fmt/x86.h	/^0477 outw(ushort port, ushort data)$/;"	f
 outw	x86.h	/^outw(ushort port, ushort data)$/;"	f
 p	cat.asm	/^  p = sbrk(nu * sizeof(Header));$/;"	d
 p	echo.asm	/^  p = sbrk(nu * sizeof(Header));$/;"	d
+p	fmt/mmu.h	/^0732   uint p : 1;          \/\/ Present$/;"	m	struct:segdesc
+p	fmt/mmu.h	/^0863   uint p : 1;           \/\/ Present$/;"	m	struct:gatedesc
 p	grep.asm	/^      p = q+1;$/;"	d
 p	grep.asm	/^    p = buf;$/;"	d
 p	grep.asm	/^  p = sbrk(nu * sizeof(Header));$/;"	d
@@ -3007,53 +3388,99 @@ pa	bootblock.asm	/^    pa = (uchar*)ph->paddr;$/;"	d
 pa	kernel.asm	/^      pa = PTE_ADDR(*pte);$/;"	d
 pa	kernel.asm	/^    pa = PTE_ADDR(*pte);$/;"	d
 pa0	kernel.asm	/^    pa0 = uva2ka(pgdir, (char*)va0);$/;"	d
+pad	fmt/ioapic.c	/^7729   uint pad[3];$/;"	m	struct:ioapic	file:
 pad	ioapic.c	/^  uint pad[3];$/;"	m	struct:ioapic	file:
 pad	runoff	/^pad()$/;"	f
+padding1	fmt/mmu.h	/^0818   ushort padding1;$/;"	m	struct:taskstate
+padding1	fmt/x86.h	/^0615   ushort padding1;$/;"	m	struct:trapframe
 padding1	mmu.h	/^  ushort padding1;$/;"	m	struct:taskstate
 padding1	x86.h	/^  ushort padding1;$/;"	m	struct:trapframe
+padding10	fmt/mmu.h	/^0849   ushort padding10;$/;"	m	struct:taskstate
 padding10	mmu.h	/^  ushort padding10;$/;"	m	struct:taskstate
+padding2	fmt/mmu.h	/^0821   ushort padding2;$/;"	m	struct:taskstate
+padding2	fmt/x86.h	/^0617   ushort padding2;$/;"	m	struct:trapframe
 padding2	mmu.h	/^  ushort padding2;$/;"	m	struct:taskstate
 padding2	x86.h	/^  ushort padding2;$/;"	m	struct:trapframe
+padding3	fmt/mmu.h	/^0824   ushort padding3;$/;"	m	struct:taskstate
+padding3	fmt/x86.h	/^0619   ushort padding3;$/;"	m	struct:trapframe
 padding3	mmu.h	/^  ushort padding3;$/;"	m	struct:taskstate
 padding3	x86.h	/^  ushort padding3;$/;"	m	struct:trapframe
+padding4	fmt/mmu.h	/^0837   ushort padding4;$/;"	m	struct:taskstate
+padding4	fmt/x86.h	/^0621   ushort padding4;$/;"	m	struct:trapframe
 padding4	mmu.h	/^  ushort padding4;$/;"	m	struct:taskstate
 padding4	x86.h	/^  ushort padding4;$/;"	m	struct:trapframe
+padding5	fmt/mmu.h	/^0839   ushort padding5;$/;"	m	struct:taskstate
+padding5	fmt/x86.h	/^0628   ushort padding5;$/;"	m	struct:trapframe
 padding5	mmu.h	/^  ushort padding5;$/;"	m	struct:taskstate
 padding5	x86.h	/^  ushort padding5;$/;"	m	struct:trapframe
+padding6	fmt/mmu.h	/^0841   ushort padding6;$/;"	m	struct:taskstate
+padding6	fmt/x86.h	/^0634   ushort padding6;$/;"	m	struct:trapframe
 padding6	mmu.h	/^  ushort padding6;$/;"	m	struct:taskstate
 padding6	x86.h	/^  ushort padding6;$/;"	m	struct:trapframe
+padding7	fmt/mmu.h	/^0843   ushort padding7;$/;"	m	struct:taskstate
 padding7	mmu.h	/^  ushort padding7;$/;"	m	struct:taskstate
+padding8	fmt/mmu.h	/^0845   ushort padding8;$/;"	m	struct:taskstate
 padding8	mmu.h	/^  ushort padding8;$/;"	m	struct:taskstate
+padding9	fmt/mmu.h	/^0847   ushort padding9;$/;"	m	struct:taskstate
 padding9	mmu.h	/^  ushort padding9;$/;"	m	struct:taskstate
 paddr	elf.h	/^  uint paddr;$/;"	m	struct:proghdr
+paddr	fmt/elf.h	/^0928   uint paddr;$/;"	m	struct:proghdr
+page	mmu.h	/^struct page{$/;"	s
+page_lru_head	kalloc.c	/^struct page *page_lru_head;$/;"	v	typeref:struct:page
+pages	kalloc.c	/^struct page pages[PHYSTOP\/PGSIZE];$/;"	v	typeref:struct:page
 panic	console.c	/^panic(char *s)$/;"	f
+panic	fmt/console.c	/^8155 panic(char *s)$/;"	f
+panic	fmt/sh.c	/^8931 panic(char *s)$/;"	f
 panic	sh.c	/^panic(char *s)$/;"	f
 panicked	console.c	/^static int panicked = 0;$/;"	v	file:
+panicked	fmt/console.c	/^8019 static int panicked = 0;$/;"	v	file:
 panicked	kernel.asm	/^  panicked = 1; \/\/ freeze other CPU$/;"	d
+parent	fmt/proc.h	/^2343   struct proc *parent;         \/\/ Parent process$/;"	m	struct:proc	typeref:struct:proc::proc
 parent	proc.h	/^  struct proc *parent;         \/\/ Parent process$/;"	m	struct:proc	typeref:struct:proc::proc
+parseblock	fmt/sh.c	/^9201 parseblock(char **ps, char *es)$/;"	f
 parseblock	sh.c	/^parseblock(char **ps, char *es)$/;"	f
+parsecmd	fmt/sh.c	/^9118 parsecmd(char *s)$/;"	f
 parsecmd	sh.c	/^parsecmd(char *s)$/;"	f
+parseexec	fmt/sh.c	/^9217 parseexec(char **ps, char *es)$/;"	f
 parseexec	sh.c	/^parseexec(char **ps, char *es)$/;"	f
+parseline	fmt/sh.c	/^9135 parseline(char **ps, char *es)$/;"	f
 parseline	sh.c	/^parseline(char **ps, char *es)$/;"	f
+parsepipe	fmt/sh.c	/^9151 parsepipe(char **ps, char *es)$/;"	f
 parsepipe	sh.c	/^parsepipe(char **ps, char *es)$/;"	f
+parseredirs	fmt/sh.c	/^9164 parseredirs(struct cmd *cmd, char **ps, char *es)$/;"	f
 parseredirs	sh.c	/^parseredirs(struct cmd *cmd, char **ps, char *es)$/;"	f
 pattern	grep.asm	/^  pattern = argv[1];$/;"	d
+pcs	fmt/spinlock.h	/^1507   uint pcs[10];      \/\/ The call stack (an array of program counters)$/;"	m	struct:spinlock
 pcs	spinlock.h	/^  uint pcs[10];      \/\/ The call stack (an array of program counters)$/;"	m	struct:spinlock
 pde	kernel.asm	/^  pde = &pgdir[PDX(va)];$/;"	d
+pde_t	fmt/types.h	/^0103 typedef uint pde_t;$/;"	t
 pde_t	types.h	/^typedef uint pde_t;$/;"	t
+peek	fmt/sh.c	/^9101 peek(char **ps, char *es, char *toks)$/;"	f
 peek	sh.c	/^peek(char **ps, char *es, char *toks)$/;"	f
+perm	fmt/vm.c	/^1808   int perm;$/;"	m	struct:kmap	file:
 perm	vm.c	/^  int perm;$/;"	m	struct:kmap	file:
+pgdir	fmt/proc.h	/^2339   pde_t* pgdir;                \/\/ Page table$/;"	m	struct:proc
 pgdir	kernel.asm	/^  pgdir = 0;$/;"	d
+pgdir	mmu.h	/^	pde_t *pgdir;$/;"	m	struct:page
 pgdir	proc.h	/^  pde_t* pgdir;                \/\/ Page table$/;"	m	struct:proc
 pgtab	kernel.asm	/^    pgtab = (pte_t*)P2V(PTE_ADDR(*pde));$/;"	d
 ph	bootblock.asm	/^  ph = (struct proghdr*)((uchar*)elf + elf->phoff);$/;"	d
 phentsize	elf.h	/^  ushort phentsize;$/;"	m	struct:elfhdr
+phentsize	fmt/elf.h	/^0916   ushort phentsize;$/;"	m	struct:elfhdr
 phnum	elf.h	/^  ushort phnum;$/;"	m	struct:elfhdr
+phnum	fmt/elf.h	/^0917   ushort phnum;$/;"	m	struct:elfhdr
 phoff	elf.h	/^  uint phoff;$/;"	m	struct:elfhdr
+phoff	fmt/elf.h	/^0912   uint phoff;$/;"	m	struct:elfhdr
+phys_end	fmt/vm.c	/^1807   uint phys_end;$/;"	m	struct:kmap	file:
 phys_end	vm.c	/^  uint phys_end;$/;"	m	struct:kmap	file:
+phys_start	fmt/vm.c	/^1806   uint phys_start;$/;"	m	struct:kmap	file:
 phys_start	vm.c	/^  uint phys_start;$/;"	m	struct:kmap	file:
+physaddr	fmt/mp.h	/^7154   void *physaddr;               \/\/ phys addr of MP config table$/;"	m	struct:mp
 physaddr	mp.h	/^  void *physaddr;               \/\/ phys addr of MP config table$/;"	m	struct:mp
+picinit	fmt/picirq.c	/^8510 picinit(void)$/;"	f
 picinit	picirq.c	/^picinit(void)$/;"	f
+pid	fmt/proc.h	/^2342   int pid;                     \/\/ Process ID$/;"	m	struct:proc
+pid	fmt/sleeplock.h	/^4007   int pid;           \/\/ Process holding lock$/;"	m	struct:sleeplock
 pid	forktest.asm	/^    pid = fork();$/;"	d
 pid	init.asm	/^    pid = fork();$/;"	d
 pid	kernel.asm	/^        pid = p->pid;$/;"	d
@@ -3066,44 +3493,72 @@ pid	usertests.asm	/^  pid = fork();$/;"	d
 pid1	usertests.asm	/^  pid1 = fork();$/;"	d
 pid2	usertests.asm	/^  pid2 = fork();$/;"	d
 pid3	usertests.asm	/^  pid3 = fork();$/;"	d
+pinit	fmt/proc.c	/^2426 pinit(void)$/;"	f
 pinit	proc.c	/^pinit(void)$/;"	f
 pipe	file.h	/^  struct pipe *pipe;$/;"	m	struct:file	typeref:struct:file::pipe
+pipe	fmt/file.h	/^4255   struct pipe *pipe;$/;"	m	struct:file	typeref:struct:file::pipe
+pipe	fmt/pipe.c	/^6862 struct pipe {$/;"	s	file:
 pipe	pipe.c	/^struct pipe {$/;"	s	file:
 pipe1	usertests.c	/^pipe1(void)$/;"	f
+pipealloc	fmt/pipe.c	/^6872 pipealloc(struct file **f0, struct file **f1)$/;"	f
 pipealloc	pipe.c	/^pipealloc(struct file **f0, struct file **f1)$/;"	f
+pipeclose	fmt/pipe.c	/^6911 pipeclose(struct pipe *p, int writable)$/;"	f
 pipeclose	pipe.c	/^pipeclose(struct pipe *p, int writable)$/;"	f
+pipecmd	fmt/sh.c	/^8784 struct pipecmd {$/;"	s	file:
+pipecmd	fmt/sh.c	/^8980 pipecmd(struct cmd *left, struct cmd *right)$/;"	f
 pipecmd	sh.c	/^pipecmd(struct cmd *left, struct cmd *right)$/;"	f
 pipecmd	sh.c	/^struct pipecmd {$/;"	s	file:
+piperead	fmt/pipe.c	/^6951 piperead(struct pipe *p, char *addr, int n)$/;"	f
 piperead	pipe.c	/^piperead(struct pipe *p, char *addr, int n)$/;"	f
+pipewrite	fmt/pipe.c	/^6930 pipewrite(struct pipe *p, char *addr, int n)$/;"	f
 pipewrite	pipe.c	/^pipewrite(struct pipe *p, char *addr, int n)$/;"	f
+popcli	fmt/spinlock.c	/^1679 popcli(void)$/;"	f
 popcli	spinlock.c	/^popcli(void)$/;"	f
 pos	kernel.asm	/^  pos = inb(CRTPORT+1) << 8;$/;"	d
 ppid	usertests.asm	/^    ppid = getpid();$/;"	d
 ppid	usertests.asm	/^  ppid = getpid();$/;"	d
 preempt	usertests.c	/^preempt(void)$/;"	f
 prev	buf.h	/^  struct buf *prev; \/\/ LRU cache list$/;"	m	struct:buf	typeref:struct:buf::buf
+prev	fmt/buf.h	/^3956   struct buf *prev; \/\/ LRU cache list$/;"	m	struct:buf	typeref:struct:buf::buf
+prev	mmu.h	/^	struct page *prev;$/;"	m	struct:page	typeref:struct:page::page
 printf	forktest.c	/^printf(int fd, const char *s, ...)$/;"	f
 printf	printf.c	/^printf(int fd, const char *fmt, ...)$/;"	f
 printint	console.c	/^printint(int xx, int base, int sign)$/;"	f	file:
+printint	fmt/console.c	/^8027 printint(int xx, int base, int sign)$/;"	f	file:
 printint	printf.c	/^printint(int fd, int xx, int base, int sgn)$/;"	f	file:
+priority	fmt/proc.h	/^2351   int priority;			\/\/ process priority$/;"	m	struct:proc
+priority	proc.h	/^  int priority;			\/\/ process priority$/;"	m	struct:proc
+proc	fmt/proc.c	/^2411   struct proc proc[NPROC];$/;"	m	struct:pt	typeref:struct:pt::proc	file:
+proc	fmt/proc.h	/^2309   struct proc *proc;           \/\/ The process running on this cpu or null$/;"	m	struct:cpu	typeref:struct:cpu::proc
+proc	fmt/proc.h	/^2337 struct proc {$/;"	s
 proc	proc.c	/^  struct proc proc[NPROC];$/;"	m	struct:__anon6	typeref:struct:__anon6::proc	file:
 proc	proc.h	/^  struct proc *proc;           \/\/ The process running on this cpu or null$/;"	m	struct:cpu	typeref:struct:cpu::proc
 proc	proc.h	/^struct proc {$/;"	s
+procdump	fmt/proc.c	/^3054 procdump(void)$/;"	f
 procdump	proc.c	/^procdump(void)$/;"	f
+procstate	fmt/proc.h	/^2334 enum procstate { UNUSED, EMBRYO, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };$/;"	g
 procstate	proc.h	/^enum procstate { UNUSED, EMBRYO, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };$/;"	g
+product	fmt/mp.h	/^7168   uchar product[20];            \/\/ product id$/;"	m	struct:mpconf
 product	mp.h	/^  uchar product[20];            \/\/ product id$/;"	m	struct:mpconf
 proghdr	elf.h	/^struct proghdr {$/;"	s
+proghdr	fmt/elf.h	/^0924 struct proghdr {$/;"	s
+pt	fmt/proc.c	/^2409 typedef struct pt {$/;"	s	file:
+ptable	fmt/proc.c	/^2414 Ptable ptable;$/;"	v
 ptable	proc.c	/^} ptable;$/;"	v	typeref:struct:__anon6
 pte	kernel.asm	/^    pte = walkpgdir(pgdir, (char*)a, 0);$/;"	d
 pte	kernel.asm	/^  pte = walkpgdir(pgdir, uva, 0);$/;"	d
+pte_t	fmt/mmu.h	/^0811 typedef uint pte_t;$/;"	t
 pte_t	mmu.h	/^typedef uint pte_t;$/;"	t
 ptr	umalloc.c	/^    union header *ptr;$/;"	m	struct:header::__anon9	typeref:union:header::__anon9::header	file:
+pushcli	fmt/spinlock.c	/^1667 pushcli(void)$/;"	f
 pushcli	spinlock.c	/^pushcli(void)$/;"	f
 putc	printf.c	/^putc(int fd, char c)$/;"	f	file:
 qnext	buf.h	/^  struct buf *qnext; \/\/ disk queue$/;"	m	struct:buf	typeref:struct:buf::buf
+qnext	fmt/buf.h	/^3958   struct buf *qnext; \/\/ disk queue$/;"	m	struct:buf	typeref:struct:buf::buf
 r	cat.asm	/^  r = fstat(fd, st);$/;"	d
 r	console.c	/^  uint r;  \/\/ Read index$/;"	m	struct:__anon5	file:
 r	echo.asm	/^  r = fstat(fd, st);$/;"	d
+r	fmt/console.c	/^8269   uint r;  \/\/ Read index$/;"	m	struct:__anon14	file:
 r	forktest.asm	/^  r = fstat(fd, st);$/;"	d
 r	grep.asm	/^  r = fstat(fd, st);$/;"	d
 r	init.asm	/^  r = fstat(fd, st);$/;"	d
@@ -3125,25 +3580,48 @@ r	zombie.asm	/^  r = fstat(fd, st);$/;"	d
 rand	usertests.c	/^rand()$/;"	f
 randstate	usertests.asm	/^  randstate = randstate * 1664525 + 1013904223;$/;"	d
 randstate	usertests.c	/^unsigned long randstate = 1;$/;"	v
+rcr2	fmt/x86.h	/^0582 rcr2(void)$/;"	f
 rcr2	x86.h	/^rcr2(void)$/;"	f
 read	file.h	/^  int (*read)(struct inode*, char*, int);$/;"	m	struct:devsw
+read	fmt/file.h	/^4280   int (*read)(struct inode*, char*, int);$/;"	m	struct:devsw
+read_head	fmt/log.c	/^4888 read_head(void)$/;"	f	file:
 read_head	log.c	/^read_head(void)$/;"	f	file:
 readable	file.h	/^  char readable;$/;"	m	struct:file
+readable	fmt/file.h	/^4253   char readable;$/;"	m	struct:file
+readeflags	fmt/x86.h	/^0544 readeflags(void)$/;"	f
 readeflags	x86.h	/^readeflags(void)$/;"	f
+readi	fmt/fs.c	/^5603 readi(struct inode *ip, char *dst, uint off, uint n)$/;"	f
 readi	fs.c	/^readi(struct inode *ip, char *dst, uint off, uint n)$/;"	f
+readopen	fmt/pipe.c	/^6867   int readopen;   \/\/ read fd is still open$/;"	m	struct:pipe	file:
 readopen	pipe.c	/^  int readopen;   \/\/ read fd is still open$/;"	m	struct:pipe	file:
+readsb	fmt/fs.c	/^5081 readsb(int dev, struct superblock *sb)$/;"	f
 readsb	fs.c	/^readsb(int dev, struct superblock *sb)$/;"	f
 readsect	bootmain.c	/^readsect(void *dst, uint offset)$/;"	f
+readsect	fmt/bootmain.c	/^9460 readsect(void *dst, uint offset)$/;"	f
 readseg	bootmain.c	/^readseg(uchar* pa, uint count, uint offset)$/;"	f
+readseg	fmt/bootmain.c	/^9479 readseg(uchar* pa, uint count, uint offset)$/;"	f
+reclaim	kalloc.c	/^static void reclaim(){$/;"	f	file:
+recover_from_log	fmt/log.c	/^4918 recover_from_log(void)$/;"	f	file:
 recover_from_log	log.c	/^recover_from_log(void)$/;"	f	file:
+redircmd	fmt/sh.c	/^8775 struct redircmd {$/;"	s	file:
+redircmd	fmt/sh.c	/^8964 redircmd(struct cmd *subcmd, char *file, char *efile, int mode, int fd)$/;"	f
 redircmd	sh.c	/^redircmd(struct cmd *subcmd, char *file, char *efile, int mode, int fd)$/;"	f
 redircmd	sh.c	/^struct redircmd {$/;"	s	file:
 ref	file.h	/^  int ref;            \/\/ Reference count$/;"	m	struct:inode
 ref	file.h	/^  int ref; \/\/ reference count$/;"	m	struct:file
+ref	fmt/file.h	/^4252   int ref; \/\/ reference count$/;"	m	struct:file
+ref	fmt/file.h	/^4265   int ref;            \/\/ Reference count$/;"	m	struct:inode
 refcnt	buf.h	/^  uint refcnt;$/;"	m	struct:buf
+refcnt	fmt/buf.h	/^3955   uint refcnt;$/;"	m	struct:buf
+reg	fmt/ioapic.c	/^7728   uint reg;$/;"	m	struct:ioapic	file:
 reg	ioapic.c	/^  uint reg;$/;"	m	struct:ioapic	file:
+release	fmt/spinlock.c	/^1602 release(struct spinlock *lk)$/;"	f
 release	spinlock.c	/^release(struct spinlock *lk)$/;"	f
+releasesleep	fmt/sleeplock.c	/^4734 releasesleep(struct sleeplock *lk)$/;"	f
 releasesleep	sleeplock.c	/^releasesleep(struct sleeplock *lk)$/;"	f
+reserved	fmt/mp.h	/^7160   uchar reserved[3];$/;"	m	struct:mp
+reserved	fmt/mp.h	/^7175   uchar reserved;$/;"	m	struct:mpconf
+reserved	fmt/mp.h	/^7186   uchar reserved[8];$/;"	m	struct:mpproc
 reserved	mp.h	/^  uchar reserved;$/;"	m	struct:mpconf
 reserved	mp.h	/^  uchar reserved[3];$/;"	m	struct:mp
 reserved	mp.h	/^  uchar reserved[8];$/;"	m	struct:mpproc
@@ -3154,20 +3632,29 @@ ret	sh.asm	/^  ret = *s;$/;"	d
 ret	sh.asm	/^  ret = execcmd();$/;"	d
 ret	sh.asm	/^  ret = parseredirs(ret, ps, es);$/;"	d
 return	kernel.asm	/^  return d;$/;"	d
+right	fmt/sh.c	/^8787   struct cmd *right;$/;"	m	struct:pipecmd	typeref:struct:pipecmd::cmd	file:
+right	fmt/sh.c	/^8793   struct cmd *right;$/;"	m	struct:listcmd	typeref:struct:listcmd::cmd	file:
 right	sh.c	/^  struct cmd *right;$/;"	m	struct:listcmd	typeref:struct:listcmd::cmd	file:
 right	sh.c	/^  struct cmd *right;$/;"	m	struct:pipecmd	typeref:struct:pipecmd::cmd	file:
 rinode	mkfs.c	/^rinode(uint inum, struct dinode *ip)$/;"	f
 rmdot	usertests.c	/^rmdot(void)$/;"	f
 rsect	mkfs.c	/^rsect(uint sec, void *buf)$/;"	f
+rsv1	fmt/mmu.h	/^0735   uint rsv1 : 1;       \/\/ Reserved$/;"	m	struct:segdesc
+rsv1	fmt/mmu.h	/^0859   uint rsv1 : 3;        \/\/ reserved(should be zero I guess)$/;"	m	struct:gatedesc
 rsv1	mmu.h	/^  uint rsv1 : 1;       \/\/ Reserved$/;"	m	struct:segdesc
 rsv1	mmu.h	/^  uint rsv1 : 3;        \/\/ reserved(should be zero I guess)$/;"	m	struct:gatedesc
 rtcdate	date.h	/^struct rtcdate {$/;"	s
+rtcdate	fmt/date.h	/^0950 struct rtcdate {$/;"	s
+run	fmt/kalloc.c	/^3165 struct run {$/;"	s	file:
 run	kalloc.c	/^struct run {$/;"	s	file:
+runcmd	fmt/sh.c	/^8806 runcmd(struct cmd *cmd)$/;"	f
 runcmd	sh.c	/^runcmd(struct cmd *cmd)$/;"	f
 s	cat.asm	/^          s = "(null)";$/;"	d
 s	cat.asm	/^        s = (char*)*ap;$/;"	d
 s	echo.asm	/^          s = "(null)";$/;"	d
 s	echo.asm	/^        s = (char*)*ap;$/;"	d
+s	fmt/mmu.h	/^0730   uint s : 1;          \/\/ 0 = system, 1 = application$/;"	m	struct:segdesc
+s	fmt/mmu.h	/^0861   uint s : 1;           \/\/ must be 0 (system)$/;"	m	struct:gatedesc
 s	grep.asm	/^          s = "(null)";$/;"	d
 s	grep.asm	/^        s = (char*)*ap;$/;"	d
 s	init.asm	/^          s = "(null)";$/;"	d
@@ -3202,45 +3689,73 @@ s	zombie.asm	/^          s = "(null)";$/;"	d
 s	zombie.asm	/^        s = (char*)*ap;$/;"	d
 s1	kernel.asm	/^  s1 = v1;$/;"	d
 s2	kernel.asm	/^  s2 = v2;$/;"	d
+safestrcpy	fmt/string.c	/^7082 safestrcpy(char *s, const char *t, int n)$/;"	f
 safestrcpy	string.c	/^safestrcpy(char *s, const char *t, int n)$/;"	f
+sb	fmt/fs.c	/^5077 struct superblock sb;$/;"	v	typeref:struct:superblock
 sb	fs.c	/^struct superblock sb; $/;"	v	typeref:struct:superblock
 sb	kernel.asm	/^  sb = cmos_read(CMOS_STATB);$/;"	d
 sb	mkfs.c	/^struct superblock sb;$/;"	v	typeref:struct:superblock
 sbrktest	usertests.c	/^sbrktest(void)$/;"	f
+sched	fmt/proc.c	/^2858 sched(void)$/;"	f
 sched	proc.c	/^sched(void)$/;"	f
+scheduler	fmt/proc.c	/^2808 scheduler(void)$/;"	f
+scheduler	fmt/proc.h	/^2303   struct context *scheduler;   \/\/ swtch() here to enter scheduler$/;"	m	struct:cpu	typeref:struct:cpu::context
 scheduler	proc.c	/^scheduler(void)$/;"	f
 scheduler	proc.h	/^  struct context *scheduler;   \/\/ swtch() here to enter scheduler$/;"	m	struct:cpu	typeref:struct:cpu::context
 second	date.h	/^  uint second;$/;"	m	struct:rtcdate
+second	fmt/date.h	/^0951   uint second;$/;"	m	struct:rtcdate
+segdesc	fmt/mmu.h	/^0725 struct segdesc {$/;"	s
 segdesc	mmu.h	/^struct segdesc {$/;"	s
+seginit	fmt/vm.c	/^1715 seginit(void)$/;"	f
 seginit	vm.c	/^seginit(void)$/;"	f
 seq	usertests.asm	/^  seq = 0;$/;"	d
+setupkvm	fmt/vm.c	/^1818 setupkvm(void)$/;"	f
 setupkvm	vm.c	/^setupkvm(void)$/;"	f
 sharedfd	usertests.c	/^sharedfd(void)$/;"	f
 shentsize	elf.h	/^  ushort shentsize;$/;"	m	struct:elfhdr
+shentsize	fmt/elf.h	/^0918   ushort shentsize;$/;"	m	struct:elfhdr
+shiftcode	fmt/kbd.h	/^7833 static uchar shiftcode[256] =$/;"	v
 shiftcode	kbd.h	/^static uchar shiftcode[256] =$/;"	v
+shiftmap	fmt/kbd.h	/^7872 static uchar shiftmap[256] =$/;"	v
 shiftmap	kbd.h	/^static uchar shiftmap[256] =$/;"	v
 shnum	elf.h	/^  ushort shnum;$/;"	m	struct:elfhdr
+shnum	fmt/elf.h	/^0919   ushort shnum;$/;"	m	struct:elfhdr
 shoff	elf.h	/^  uint shoff;$/;"	m	struct:elfhdr
+shoff	fmt/elf.h	/^0913   uint shoff;$/;"	m	struct:elfhdr
 shstrndx	elf.h	/^  ushort shstrndx;$/;"	m	struct:elfhdr
+shstrndx	fmt/elf.h	/^0920   ushort shstrndx;$/;"	m	struct:elfhdr
+signature	fmt/mp.h	/^7153   uchar signature[4];           \/\/ "_MP_"$/;"	m	struct:mp
+signature	fmt/mp.h	/^7164   uchar signature[4];           \/\/ "PCMP"$/;"	m	struct:mpconf
+signature	fmt/mp.h	/^7184   uchar signature[4];           \/\/ CPU signature$/;"	m	struct:mpproc
 signature	mp.h	/^  uchar signature[4];           \/\/ "PCMP"$/;"	m	struct:mpconf
 signature	mp.h	/^  uchar signature[4];           \/\/ "_MP_"$/;"	m	struct:mp
 signature	mp.h	/^  uchar signature[4];           \/\/ CPU signature$/;"	m	struct:mpproc
 size	file.h	/^  uint size;$/;"	m	struct:inode
+size	fmt/file.h	/^4273   uint size;$/;"	m	struct:inode
+size	fmt/fs.h	/^4164   uint size;         \/\/ Size of file system image (blocks)$/;"	m	struct:superblock
+size	fmt/fs.h	/^4183   uint size;            \/\/ Size of file (bytes)$/;"	m	struct:dinode
+size	fmt/log.c	/^4841   int size;$/;"	m	struct:log	file:
+size	fmt/stat.h	/^4109   uint size;   \/\/ Size of file in bytes$/;"	m	struct:stat
 size	fs.h	/^  uint size;            \/\/ Size of file (bytes)$/;"	m	struct:dinode
 size	fs.h	/^  uint size;         \/\/ Size of file system image (blocks)$/;"	m	struct:superblock
 size	log.c	/^  int size;$/;"	m	struct:log	file:
 size	stat.h	/^  uint size;   \/\/ Size of file in bytes$/;"	m	struct:stat
 size	umalloc.c	/^    uint size;$/;"	m	struct:header::__anon9	file:
+skipelem	fmt/fs.c	/^5815 skipelem(char *path, char *name)$/;"	f	file:
 skipelem	fs.c	/^skipelem(char *path, char *name)$/;"	f	file:
+sleep	fmt/proc.c	/^2924 sleep(void *chan, struct spinlock *lk)$/;"	f
 sleep	proc.c	/^sleep(void *chan, struct spinlock *lk)$/;"	f
+sleeplock	fmt/sleeplock.h	/^4001 struct sleeplock {$/;"	s
 sleeplock	sleeplock.h	/^struct sleeplock {$/;"	s
 sp	kernel.asm	/^    sp = (sp - (strlen(argv[argc]) + 1)) & ~3;$/;"	d
 sp	kernel.asm	/^  sp = p->kstack + KSTACKSIZE;$/;"	d
+specrev	fmt/mp.h	/^7156   uchar specrev;                \/\/ [14]$/;"	m	struct:mp
 specrev	mp.h	/^  uchar specrev;                \/\/ [14]$/;"	m	struct:mp
 spin	bootasm.S	/^spin:$/;"	l
 spin	bootblock.asm	/^spin:$/;"	l
 spin	entryother.S	/^spin:$/;"	l
 spin	entryother.asm	/^spin:$/;"	l
+spinlock	fmt/spinlock.h	/^1501 struct spinlock {$/;"	s
 spinlock	spinlock.h	/^struct spinlock {$/;"	s
 src	cat.asm	/^  src = vsrc;$/;"	d
 src	echo.asm	/^  src = vsrc;$/;"	d
@@ -3258,10 +3773,15 @@ src	swaptest.asm	/^  src = vsrc;$/;"	d
 src	usertests.asm	/^  src = vsrc;$/;"	d
 src	wc.asm	/^  src = vsrc;$/;"	d
 src	zombie.asm	/^  src = vsrc;$/;"	d
+ss	fmt/mmu.h	/^0840   ushort ss;$/;"	m	struct:taskstate
+ss	fmt/x86.h	/^0633   ushort ss;$/;"	m	struct:trapframe
 ss	mmu.h	/^  ushort ss;$/;"	m	struct:taskstate
 ss	x86.h	/^  ushort ss;$/;"	m	struct:trapframe
+ss0	fmt/mmu.h	/^0817   ushort ss0;        \/\/   after an increase in privilege level$/;"	m	struct:taskstate
 ss0	mmu.h	/^  ushort ss0;        \/\/   after an increase in privilege level$/;"	m	struct:taskstate
+ss1	fmt/mmu.h	/^0820   ushort ss1;$/;"	m	struct:taskstate
 ss1	mmu.h	/^  ushort ss1;$/;"	m	struct:taskstate
+ss2	fmt/mmu.h	/^0823   ushort ss2;$/;"	m	struct:taskstate
 ss2	mmu.h	/^  ushort ss2;$/;"	m	struct:taskstate
 st	kernel.asm	/^  st = inb(KBSTATP);$/;"	d
 stack	kernel.asm	/^    stack = kalloc();$/;"	d
@@ -3269,6 +3789,7 @@ start	bootasm.S	/^start:$/;"	l
 start	bootblock.asm	/^start:$/;"	l
 start	entryother.S	/^start:$/;"	l
 start	entryother.asm	/^start:$/;"	l
+start	fmt/log.c	/^4840   int start;$/;"	m	struct:log	file:
 start	initcode.S	/^start:$/;"	l
 start	initcode.asm	/^start:$/;"	l
 start	log.c	/^  int start;$/;"	m	struct:log	file:
@@ -3276,8 +3797,11 @@ start32	bootasm.S	/^start32:$/;"	l
 start32	bootblock.asm	/^start32:$/;"	l
 start32	entryother.S	/^start32:$/;"	l
 start32	entryother.asm	/^start32:$/;"	l
+started	fmt/proc.h	/^2306   volatile uint started;       \/\/ Has the CPU started?$/;"	m	struct:cpu
 started	proc.h	/^  volatile uint started;       \/\/ Has the CPU started?$/;"	m	struct:cpu
+startothers	fmt/main.c	/^1264 startothers(void)$/;"	f	file:
 startothers	main.c	/^startothers(void)$/;"	f	file:
+stat	fmt/stat.h	/^4104 struct stat {$/;"	s
 stat	mkfs.c	8;"	d	file:
 stat	stat.h	/^struct stat {$/;"	s
 stat	ulib.c	/^stat(const char *n, struct stat *st)$/;"	f
@@ -3287,6 +3811,7 @@ state	cat.asm	/^  state = 0;$/;"	d
 state	echo.asm	/^        state = '%';$/;"	d
 state	echo.asm	/^      state = 0;$/;"	d
 state	echo.asm	/^  state = 0;$/;"	d
+state	fmt/proc.h	/^2341   enum procstate state;        \/\/ Process state$/;"	m	struct:proc	typeref:enum:proc::procstate
 state	grep.asm	/^        state = '%';$/;"	d
 state	grep.asm	/^      state = 0;$/;"	d
 state	grep.asm	/^  state = 0;$/;"	d
@@ -3328,6 +3853,7 @@ state	wc.asm	/^  state = 0;$/;"	d
 state	zombie.asm	/^        state = '%';$/;"	d
 state	zombie.asm	/^      state = 0;$/;"	d
 state	zombie.asm	/^  state = 0;$/;"	d
+stati	fmt/fs.c	/^5588 stati(struct inode *ip, struct stat *st)$/;"	f
 stati	fs.c	/^stati(struct inode *ip, struct stat *st)$/;"	f
 static	bootblock.asm	/^static inline uchar$/;"	l
 static	bootblock.asm	/^static inline void$/;"	l
@@ -3403,79 +3929,149 @@ static	zombie.asm	/^static inline void$/;"	l
 static	zombie.asm	/^static void$/;"	l
 static_assert	mkfs.c	15;"	d	file:
 stdout	usertests.c	/^int stdout = 1;$/;"	v
+sti	fmt/x86.h	/^0563 sti(void)$/;"	f
 sti	x86.h	/^sti(void)$/;"	f
+stosb	fmt/x86.h	/^0492 stosb(void *addr, int data, int cnt)$/;"	f
 stosb	x86.h	/^stosb(void *addr, int data, int cnt)$/;"	f
+stosl	fmt/x86.h	/^0501 stosl(void *addr, int data, int cnt)$/;"	f
 stosl	x86.h	/^stosl(void *addr, int data, int cnt)$/;"	f
 strchr	ulib.c	/^strchr(const char *s, char c)$/;"	f
 strcmp	ulib.c	/^strcmp(const char *p, const char *q)$/;"	f
 strcpy	ulib.c	/^strcpy(char *s, const char *t)$/;"	f
+strlen	fmt/string.c	/^7101 strlen(const char *s)$/;"	f
 strlen	string.c	/^strlen(const char *s)$/;"	f
 strlen	ulib.c	/^strlen(const char *s)$/;"	f
+strncmp	fmt/string.c	/^7058 strncmp(const char *p, const char *q, uint n)$/;"	f
 strncmp	string.c	/^strncmp(const char *p, const char *q, uint n)$/;"	f
+strncpy	fmt/string.c	/^7068 strncpy(char *s, const char *t, int n)$/;"	f
 strncpy	string.c	/^strncpy(char *s, const char *t, int n)$/;"	f
 struct	kernel.asm	/^  struct proc *curproc = myproc();$/;"	l
 struct	kernel.asm	/^  struct proc *p;$/;"	l
 subdir	usertests.c	/^subdir(void)$/;"	f
+sum	fmt/mp.c	/^7318 sum(uchar *addr, int len)$/;"	f	file:
 sum	kernel.asm	/^  sum = 0;$/;"	d
 sum	mp.c	/^sum(uchar *addr, int len)$/;"	f	file:
+superblock	fmt/fs.h	/^4163 struct superblock {$/;"	s
 superblock	fs.h	/^struct superblock {$/;"	s
+swapread	fmt/fs.c	/^5909 void swapread(char* ptr, int blkno)$/;"	f
 swapread	fs.c	/^void swapread(char* ptr, int blkno)$/;"	f
+swapwrite	fmt/fs.c	/^5924 void swapwrite(char* ptr, int blkno)$/;"	f
 swapwrite	fs.c	/^void swapwrite(char* ptr, int blkno)$/;"	f
+switchkvm	fmt/vm.c	/^1853 switchkvm(void)$/;"	f
 switchkvm	vm.c	/^switchkvm(void)$/;"	f
+switchuvm	fmt/vm.c	/^1860 switchuvm(struct proc *p)$/;"	f
 switchuvm	vm.c	/^switchuvm(struct proc *p)$/;"	f
 swtch	kernel.asm	/^swtch:$/;"	l
 swtch	swtch.S	/^swtch:$/;"	l
+symbols	fmt/sh.c	/^9053 char symbols[] = "<|>&;()";$/;"	v
 symbols	sh.c	/^char symbols[] = "<|>&;()";$/;"	v
+sys_chdir	fmt/sysfile.c	/^6601 sys_chdir(void)$/;"	f
 sys_chdir	sysfile.c	/^sys_chdir(void)$/;"	f
+sys_close	fmt/sysfile.c	/^6263 sys_close(void)$/;"	f
 sys_close	sysfile.c	/^sys_close(void)$/;"	f
+sys_dup	fmt/sysfile.c	/^6218 sys_dup(void)$/;"	f
 sys_dup	sysfile.c	/^sys_dup(void)$/;"	f
+sys_exec	fmt/sysfile.c	/^6626 sys_exec(void)$/;"	f
 sys_exec	sysfile.c	/^sys_exec(void)$/;"	f
+sys_exit	fmt/sysproc.c	/^3816 sys_exit(void)$/;"	f
 sys_exit	sysproc.c	/^sys_exit(void)$/;"	f
+sys_fork	fmt/sysproc.c	/^3810 sys_fork(void)$/;"	f
 sys_fork	sysproc.c	/^sys_fork(void)$/;"	f
+sys_fstat	fmt/sysfile.c	/^6276 sys_fstat(void)$/;"	f
 sys_fstat	sysfile.c	/^sys_fstat(void)$/;"	f
+sys_getnice	fmt/sysproc.c	/^3902 sys_getnice(void)$/;"	f
+sys_getpid	fmt/sysproc.c	/^3839 sys_getpid(void)$/;"	f
 sys_getpid	sysproc.c	/^sys_getpid(void)$/;"	f
+sys_kill	fmt/sysproc.c	/^3829 sys_kill(void)$/;"	f
 sys_kill	sysproc.c	/^sys_kill(void)$/;"	f
+sys_link	fmt/sysfile.c	/^6302 sys_link(void)$/;"	f
 sys_link	sysfile.c	/^sys_link(void)$/;"	f
+sys_mkdir	fmt/sysfile.c	/^6551 sys_mkdir(void)$/;"	f
 sys_mkdir	sysfile.c	/^sys_mkdir(void)$/;"	f
+sys_mknod	fmt/sysfile.c	/^6567 sys_mknod(void)$/;"	f
 sys_mknod	sysfile.c	/^sys_mknod(void)$/;"	f
+sys_open	fmt/sysfile.c	/^6501 sys_open(void)$/;"	f
 sys_open	sysfile.c	/^sys_open(void)$/;"	f
+sys_pipe	fmt/sysfile.c	/^6651 sys_pipe(void)$/;"	f
 sys_pipe	sysfile.c	/^sys_pipe(void)$/;"	f
+sys_ps	fmt/sysproc.c	/^3935 sys_ps(void)$/;"	f
+sys_read	fmt/sysfile.c	/^6232 sys_read(void)$/;"	f
 sys_read	sysfile.c	/^sys_read(void)$/;"	f
+sys_sbrk	fmt/sysproc.c	/^3851 sys_sbrk(void)$/;"	f
 sys_sbrk	sysproc.c	/^sys_sbrk(void)$/;"	f
+sys_setnice	fmt/sysproc.c	/^3916 sys_setnice(void)$/;"	f
+sys_sleep	fmt/sysproc.c	/^3865 sys_sleep(void)$/;"	f
 sys_sleep	sysproc.c	/^sys_sleep(void)$/;"	f
+sys_swapread	fmt/sysfile.c	/^6674 int sys_swapread(void)$/;"	f
 sys_swapread	sysfile.c	/^int sys_swapread(void)$/;"	f
+sys_swapwrite	fmt/sysfile.c	/^6686 int sys_swapwrite(void)$/;"	f
 sys_swapwrite	sysfile.c	/^int sys_swapwrite(void)$/;"	f
+sys_unlink	fmt/sysfile.c	/^6401 sys_unlink(void)$/;"	f
 sys_unlink	sysfile.c	/^sys_unlink(void)$/;"	f
+sys_uptime	fmt/sysproc.c	/^3889 sys_uptime(void)$/;"	f
 sys_uptime	sysproc.c	/^sys_uptime(void)$/;"	f
+sys_wait	fmt/sysproc.c	/^3823 sys_wait(void)$/;"	f
 sys_wait	sysproc.c	/^sys_wait(void)$/;"	f
+sys_write	fmt/sysfile.c	/^6251 sys_write(void)$/;"	f
 sys_write	sysfile.c	/^sys_write(void)$/;"	f
+syscall	fmt/syscall.c	/^3757 syscall(void)$/;"	f
 syscall	syscall.c	/^syscall(void)$/;"	f
+syscalls	fmt/syscall.c	/^3727 static int (*syscalls[])(void) = {$/;"	v	file:
 syscalls	syscall.c	/^static int (*syscalls[])(void) = {$/;"	v	file:
+sz	fmt/proc.h	/^2338   uint sz;                     \/\/ Size of process memory (bytes)$/;"	m	struct:proc
 sz	kernel.asm	/^  sz = 0;$/;"	d
 sz	kernel.asm	/^  sz = curproc->sz;$/;"	d
 sz	proc.h	/^  uint sz;                     \/\/ Size of process memory (bytes)$/;"	m	struct:proc
+t	fmt/mmu.h	/^0850   ushort t;          \/\/ Trap on task switch$/;"	m	struct:taskstate
 t	mmu.h	/^  ushort t;          \/\/ Trap on task switch$/;"	m	struct:taskstate
 target	kernel.asm	/^  target = n;$/;"	d
+taskstate	fmt/mmu.h	/^0814 struct taskstate {$/;"	s
 taskstate	mmu.h	/^struct taskstate {$/;"	s
+tf	fmt/proc.h	/^2344   struct trapframe *tf;        \/\/ Trap frame for current syscall$/;"	m	struct:proc	typeref:struct:proc::trapframe
 tf	proc.h	/^  struct trapframe *tf;        \/\/ Trap frame for current syscall$/;"	m	struct:proc	typeref:struct:proc::trapframe
+ticks	fmt/trap.c	/^3414 uint ticks;$/;"	v
 ticks	trap.c	/^uint ticks;$/;"	v
 ticks0	kernel.asm	/^  ticks0 = ticks;$/;"	d
+tickslock	fmt/trap.c	/^3413 struct spinlock tickslock;$/;"	v	typeref:struct:spinlock
 tickslock	trap.c	/^struct spinlock tickslock;$/;"	v	typeref:struct:spinlock
+togglecode	fmt/kbd.h	/^7843 static uchar togglecode[256] =$/;"	v
 togglecode	kbd.h	/^static uchar togglecode[256] =$/;"	v
 tok	sh.asm	/^    tok = gettoken(ps, es, 0, 0);$/;"	d
 total	usertests.asm	/^    total = 0;$/;"	d
 total	usertests.asm	/^  total = 0;$/;"	d
+trap	fmt/trap.c	/^3451 trap(struct trapframe *tf)$/;"	f
 trap	trap.c	/^trap(struct trapframe *tf)$/;"	f
+trapframe	fmt/x86.h	/^0602 struct trapframe {$/;"	s
 trapframe	x86.h	/^struct trapframe {$/;"	s
+trapno	fmt/x86.h	/^0622   uint trapno;$/;"	m	struct:trapframe
 trapno	x86.h	/^  uint trapno;$/;"	m	struct:trapframe
 trapret	kernel.asm	/^trapret:$/;"	l
 trapret	trapasm.S	/^trapret:$/;"	l
+ts	fmt/proc.h	/^2304   struct taskstate ts;         \/\/ Used by x86 to find stack for interrupt$/;"	m	struct:cpu	typeref:struct:cpu::taskstate
 ts	proc.h	/^  struct taskstate ts;         \/\/ Used by x86 to find stack for interrupt$/;"	m	struct:cpu	typeref:struct:cpu::taskstate
+tvinit	fmt/trap.c	/^3417 tvinit(void)$/;"	f
 tvinit	trap.c	/^tvinit(void)$/;"	f
 type	elf.h	/^  uint type;$/;"	m	struct:proghdr
 type	elf.h	/^  ushort type;$/;"	m	struct:elfhdr
 type	file.h	/^  enum { FD_NONE, FD_PIPE, FD_INODE } type;$/;"	m	struct:file	typeref:enum:file::__anon8
 type	file.h	/^  short type;         \/\/ copy of disk inode$/;"	m	struct:inode
+type	fmt/elf.h	/^0908   ushort type;$/;"	m	struct:elfhdr
+type	fmt/elf.h	/^0925   uint type;$/;"	m	struct:proghdr
+type	fmt/file.h	/^4251   enum { FD_NONE, FD_PIPE, FD_INODE } type;$/;"	m	struct:file	typeref:enum:file::__anon16
+type	fmt/file.h	/^4269   short type;         \/\/ copy of disk inode$/;"	m	struct:inode
+type	fmt/fs.h	/^4179   short type;           \/\/ File type$/;"	m	struct:dinode
+type	fmt/mmu.h	/^0729   uint type : 4;       \/\/ Segment type (see STS_ constants)$/;"	m	struct:segdesc
+type	fmt/mmu.h	/^0860   uint type : 4;        \/\/ type(STS_{IG32,TG32})$/;"	m	struct:gatedesc
+type	fmt/mp.h	/^7158   uchar type;                   \/\/ MP system config type$/;"	m	struct:mp
+type	fmt/mp.h	/^7179   uchar type;                   \/\/ entry type (0)$/;"	m	struct:mpproc
+type	fmt/mp.h	/^7190   uchar type;                   \/\/ entry type (2)$/;"	m	struct:mpioapic
+type	fmt/sh.c	/^8766   int type;$/;"	m	struct:cmd	file:
+type	fmt/sh.c	/^8770   int type;$/;"	m	struct:execcmd	file:
+type	fmt/sh.c	/^8776   int type;$/;"	m	struct:redircmd	file:
+type	fmt/sh.c	/^8785   int type;$/;"	m	struct:pipecmd	file:
+type	fmt/sh.c	/^8791   int type;$/;"	m	struct:listcmd	file:
+type	fmt/sh.c	/^8797   int type;$/;"	m	struct:backcmd	file:
+type	fmt/stat.h	/^4105   short type;  \/\/ Type of file$/;"	m	struct:stat
 type	fs.h	/^  short type;           \/\/ File type$/;"	m	struct:dinode
 type	mmu.h	/^  uint type : 4;        \/\/ type(STS_{IG32,TG32})$/;"	m	struct:gatedesc
 type	mmu.h	/^  uint type : 4;       \/\/ Segment type (see STS_ constants)$/;"	m	struct:segdesc
@@ -3489,15 +4085,22 @@ type	sh.c	/^  int type;$/;"	m	struct:listcmd	file:
 type	sh.c	/^  int type;$/;"	m	struct:pipecmd	file:
 type	sh.c	/^  int type;$/;"	m	struct:redircmd	file:
 type	stat.h	/^  short type;  \/\/ Type of file$/;"	m	struct:stat
+uart	fmt/uart.c	/^8416 static int uart;    \/\/ is there a uart?$/;"	v	file:
 uart	kernel.asm	/^  uart = 1;$/;"	d
 uart	uart.c	/^static int uart;    \/\/ is there a uart?$/;"	v	file:
+uartgetc	fmt/uart.c	/^8463 uartgetc(void)$/;"	f	file:
 uartgetc	uart.c	/^uartgetc(void)$/;"	f	file:
+uartinit	fmt/uart.c	/^8419 uartinit(void)$/;"	f
 uartinit	uart.c	/^uartinit(void)$/;"	f
+uartintr	fmt/uart.c	/^8473 uartintr(void)$/;"	f
 uartintr	uart.c	/^uartintr(void)$/;"	f
+uartputc	fmt/uart.c	/^8451 uartputc(int c)$/;"	f
 uartputc	uart.c	/^uartputc(int c)$/;"	f
+uchar	fmt/types.h	/^0102 typedef unsigned char  uchar;$/;"	t
 uchar	types.h	/^typedef unsigned char  uchar;$/;"	t
 uint	cat.asm	/^uint$/;"	l
 uint	echo.asm	/^uint$/;"	l
+uint	fmt/types.h	/^0100 typedef unsigned int   uint;$/;"	t
 uint	forktest.asm	/^uint$/;"	l
 uint	grep.asm	/^uint$/;"	l
 uint	init.asm	/^uint$/;"	l
@@ -3517,14 +4120,21 @@ uint	zombie.asm	/^uint$/;"	l
 uio	usertests.c	/^uio()$/;"	f
 uninit	usertests.c	/^char uninit[10000];$/;"	v
 unlinkread	usertests.c	/^unlinkread(void)$/;"	f
+use_lock	fmt/kalloc.c	/^3171   int use_lock;$/;"	m	struct:__anon11	file:
 use_lock	kalloc.c	/^  int use_lock;$/;"	m	struct:__anon2	file:
+userinit	fmt/proc.c	/^2552 userinit(void)$/;"	f
 userinit	proc.c	/^userinit(void)$/;"	f
+ushort	fmt/types.h	/^0101 typedef unsigned short ushort;$/;"	t
 ushort	types.h	/^typedef unsigned short ushort;$/;"	t
+uva2ka	fmt/vm.c	/^2102 uva2ka(pde_t *pgdir, char *uva)$/;"	f
 uva2ka	vm.c	/^uva2ka(pde_t *pgdir, char *uva)$/;"	f
 va	kernel.asm	/^    va = va0 + PGSIZE;$/;"	d
 va0	kernel.asm	/^    va0 = (uint)PGROUNDDOWN(va);$/;"	d
 vaddr	elf.h	/^  uint vaddr;$/;"	m	struct:proghdr
+vaddr	fmt/elf.h	/^0927   uint vaddr;$/;"	m	struct:proghdr
+vaddr	mmu.h	/^	char *vaddr;$/;"	m	struct:page
 valid	file.h	/^  int valid;          \/\/ inode has been read from disk?$/;"	m	struct:inode
+valid	fmt/file.h	/^4267   int valid;          \/\/ inode has been read from disk?$/;"	m	struct:inode
 validateint	usertests.c	/^validateint(int *p)$/;"	f
 validatetest	usertests.c	/^validatetest(void)$/;"	f
 vector0	kernel.asm	/^vector0:$/;"	l
@@ -4041,9 +4651,14 @@ vector99	kernel.asm	/^vector99:$/;"	l
 vector99	vectors.S	/^vector99:$/;"	l
 vectors	vectors.S	/^vectors:$/;"	l
 version	elf.h	/^  uint version;$/;"	m	struct:elfhdr
+version	fmt/elf.h	/^0910   uint version;$/;"	m	struct:elfhdr
+version	fmt/mp.h	/^7166   uchar version;                \/\/ [14]$/;"	m	struct:mpconf
+version	fmt/mp.h	/^7181   uchar version;                \/\/ local APIC verison$/;"	m	struct:mpproc
+version	fmt/mp.h	/^7192   uchar version;                \/\/ I\/O APIC version$/;"	m	struct:mpioapic
 version	mp.h	/^  uchar version;                \/\/ I\/O APIC version$/;"	m	struct:mpioapic
 version	mp.h	/^  uchar version;                \/\/ [14]$/;"	m	struct:mpconf
 version	mp.h	/^  uchar version;                \/\/ local APIC verison$/;"	m	struct:mpproc
+virt	fmt/vm.c	/^1805   void *virt;$/;"	m	struct:kmap	file:
 virt	vm.c	/^  void *virt;$/;"	m	struct:kmap	file:
 void	bootblock.asm	/^void$/;"	l
 void	cat.asm	/^void$/;"	l
@@ -4065,20 +4680,33 @@ void	usertests.asm	/^void$/;"	l
 void	wc.asm	/^void$/;"	l
 void	zombie.asm	/^void$/;"	l
 w	console.c	/^  uint w;  \/\/ Write index$/;"	m	struct:__anon5	file:
+w	fmt/console.c	/^8270   uint w;  \/\/ Write index$/;"	m	struct:__anon14	file:
+wait	fmt/proc.c	/^2718 wait(void)$/;"	f
 wait	proc.c	/^wait(void)$/;"	f
 waitdisk	bootmain.c	/^waitdisk(void)$/;"	f
+waitdisk	fmt/bootmain.c	/^9451 waitdisk(void)$/;"	f
+wakeup	fmt/proc.c	/^3014 wakeup(void *chan)$/;"	f
 wakeup	proc.c	/^wakeup(void *chan)$/;"	f
+wakeup1	fmt/proc.c	/^3003 wakeup1(void *chan)$/;"	f	file:
 wakeup1	proc.c	/^wakeup1(void *chan)$/;"	f	file:
+walkpgdir	fmt/vm.c	/^1735 walkpgdir(pde_t *pgdir, const void *va, int alloc)$/;"	f	file:
 walkpgdir	vm.c	/^walkpgdir(pde_t *pgdir, const void *va, int alloc)$/;"	f	file:
 wc	wc.c	/^wc(int fd, char *name)$/;"	f
+whitespace	fmt/sh.c	/^9052 char whitespace[] = " \\t\\r\\n\\v";$/;"	v
 whitespace	sh.c	/^char whitespace[] = " \\t\\r\\n\\v";$/;"	v
 winode	mkfs.c	/^winode(uint inum, struct dinode *ip)$/;"	f
 writable	file.h	/^  char writable;$/;"	m	struct:file
+writable	fmt/file.h	/^4254   char writable;$/;"	m	struct:file
 write	file.h	/^  int (*write)(struct inode*, char*, int);$/;"	m	struct:devsw
+write	fmt/file.h	/^4281   int (*write)(struct inode*, char*, int);$/;"	m	struct:devsw
+write_head	fmt/log.c	/^4904 write_head(void)$/;"	f	file:
 write_head	log.c	/^write_head(void)$/;"	f	file:
+write_log	fmt/log.c	/^4985 write_log(void)$/;"	f	file:
 write_log	log.c	/^write_log(void)$/;"	f	file:
 writefile	cuth	/^sub writefile($@){$/;"	s
+writei	fmt/fs.c	/^5653 writei(struct inode *ip, char *src, uint off, uint n)$/;"	f
 writei	fs.c	/^writei(struct inode *ip, char *src, uint off, uint n)$/;"	f
+writeopen	fmt/pipe.c	/^6868   int writeopen;  \/\/ write fd is still open$/;"	m	struct:pipe	file:
 writeopen	pipe.c	/^  int writeopen;  \/\/ write fd is still open$/;"	m	struct:pipe	file:
 writetest	usertests.c	/^writetest(void)$/;"	f
 writetest1	usertests.c	/^writetest1(void)$/;"	f
@@ -4118,12 +4746,18 @@ x	wc.asm	/^    x = -xx;$/;"	d
 x	wc.asm	/^    x = xx;$/;"	d
 x	zombie.asm	/^    x = -xx;$/;"	d
 x	zombie.asm	/^    x = xx;$/;"	d
+xchecksum	fmt/mp.h	/^7174   uchar xchecksum;              \/\/ extended table checksum$/;"	m	struct:mpconf
 xchecksum	mp.h	/^  uchar xchecksum;              \/\/ extended table checksum$/;"	m	struct:mpconf
+xchg	fmt/x86.h	/^0569 xchg(volatile uint *addr, uint newval)$/;"	f
 xchg	x86.h	/^xchg(volatile uint *addr, uint newval)$/;"	f
+xffff	fmt/asm.h	/^0661         .word (((lim) >> 12) & 0xffff), ((base) & 0xffff);      \\$/;"	v
 xint	mkfs.c	/^xint(uint x)$/;"	f
+xlength	fmt/mp.h	/^7173   ushort xlength;               \/\/ extended table length$/;"	m	struct:mpconf
 xlength	mp.h	/^  ushort xlength;               \/\/ extended table length$/;"	m	struct:mpconf
 xshort	mkfs.c	/^xshort(ushort x)$/;"	f
 xticks	kernel.asm	/^  xticks = ticks;$/;"	d
 year	date.h	/^  uint year;$/;"	m	struct:rtcdate
+year	fmt/date.h	/^0956   uint year;$/;"	m	struct:rtcdate
+yield	fmt/proc.c	/^2878 yield(void)$/;"	f
 yield	proc.c	/^yield(void)$/;"	f
 zeroes	mkfs.c	/^char zeroes[BSIZE];$/;"	v

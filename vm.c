@@ -10,6 +10,7 @@
 extern char data[];  // defined by kernel.ld
 pde_t *kpgdir;  // for use in scheduler()
 
+extern struct page pages[PHYSTOP/PGSIZE];
 // Set up CPU's kernel segment descriptors.
 // Run once on entry on each CPU.
 void
@@ -39,9 +40,12 @@ walkpgdir(pde_t *pgdir, const void *va, int alloc)
   pte_t *pgtab;
 
   pde = &pgdir[PDX(va)];
+  //page table is exist
   if(*pde & PTE_P){
     pgtab = (pte_t*)P2V(PTE_ADDR(*pde));
-  } else {
+  } else { 
+	// page table is not exist
+	// alloc memory for page table
     if(!alloc || (pgtab = (pte_t*)kalloc()) == 0)
       return 0;
     // Make sure all those PTE_P bits are zero.
@@ -238,6 +242,23 @@ allocuvm(pde_t *pgdir, uint oldsz, uint newsz)
       return 0;
     }
     memset(mem, 0, PGSIZE);
+	
+	// must be put in kalloc & where not kalloc pagetable
+	//insert struct page into lru list
+	
+	for(int i = 0; i < PHYSTOP / PGSIZE; i++){
+		if(pages[i].next == 0){
+		
+//cprintf("page vaddr %p oldsz %d newsw %d pid %d a %d\n",pages[i].vaddr, oldsz, newsz, myproc()->pid, a);
+//cprintf("-------------- i = %d, pgdir %p, vaddr %p \n",i, pgdir, (char*)a);
+			pages[i].pgdir = pgdir;
+			pages[i].vaddr = (char *)a;	
+			insert_lru(&pages[i]);
+			
+			break;
+			
+		}
+	}
     if(mappages(pgdir, (char*)a, PGSIZE, V2P(mem), PTE_W|PTE_U) < 0){
       cprintf("allocuvm out of memory (2)\n");
       deallocuvm(pgdir, newsz, oldsz);

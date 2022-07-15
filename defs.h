@@ -9,7 +9,7 @@ struct spinlock;
 struct sleeplock;
 struct stat;
 struct superblock;
-
+struct page;
 // bio.c
 void            binit(void);
 struct buf*     bread(uint, uint);
@@ -68,7 +68,10 @@ char*           kalloc(void);
 void            kfree(char*);
 void            kinit1(void*, void*);
 void            kinit2(void*, void*);
-
+void            kinit3(void*, void*);
+int 			check_PTE_A(struct page*);
+int				reclaim(void);
+void			insert_lru(struct page*);
 // kbd.c
 void            kbdintr(void);
 

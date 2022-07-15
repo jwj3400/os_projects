@@ -25,9 +25,6 @@ int sleep(int);
 int uptime(void);
 int swapread(const char*, int);
 int swapwrite(const char*, int);
-int getnice(int pid);
-int setnice(int pid, int value);
-void ps(int pid);
 
 
 // ulib.c
