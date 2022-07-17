@@ -119,11 +119,11 @@ try_again:
 
 
 
-//newPg to insert in lru list
+//struct page newPG to insert in lru list
 //tail insertion
 void insert_lru(struct page* newPG){
-	cprintf("insert_lru newPG addr %p\n", newPG);
-	cprintf("head->next %p head->prev %p, head->pgdir %p, head->vaddr %p\n",page_lru_head->next, page_lru_head->prev, page_lru_head->pgdir, page_lru_head->vaddr);
+	cprintf("insert_lru newPG addr %p newPG->pgdir: %p, newPG->vaddr %p\n", newPG, newPG->pgdir, newPG->vaddr);
+//	cprintf("head->next %p head->prev %p, head->pgdir %p, head->vaddr %p\n",page_lru_head->next, page_lru_head->prev, page_lru_head->pgdir, page_lru_head->vaddr);
 	if(page_lru_head->next == 0){
 		cprintf("first head\n");
 		page_lru_head = newPG;
@@ -138,8 +138,8 @@ void insert_lru(struct page* newPG){
 	curhead->prev = newPG;
 	newPG->prev->next = newPG;
 
-	cprintf("circulate lru list\n");
-	struct page* cur = page_lru_head->next;
+//	cprintf("circulate lru list\n");
+//	struct page* cur = page_lru_head->next;
 /*
 	while(cur != page_lru_head){
 		cprintf("head->next %p head->prev %p, head->pgdir %p, head->vaddr %p\n",page_lru_head->next, page_lru_head->prev, page_lru_head->pgdir, page_lru_head->vaddr);
@@ -150,6 +150,39 @@ void insert_lru(struct page* newPG){
 	return ;
 }
 
+// evict from lru list
+//
+int delete_lru(pde_t* pgdir, uint va){
+	struct page* cur = page_lru_head;
+	struct page* prev;
+	//if only 1 left in lru list
+	if(cur->next == cur){
+		memset(cur, 0, sizeof(struct page));
+	} 
+	else{
+		cur = cur->next;
+		cprintf("del pgdir %p, va %p\n", pgdir, va);
+		for(;;){
+			cprintf("cur pgdir %p, vaddr %p\n", cur->pgdir, cur->vaddr);
+			if(cur->pgdir == pgdir && (uint)cur->vaddr == va){
+				prev = cur->prev;
+				break;
+			}
+			if(cur == page_lru_head){
+				return -1;
+			}
+			cur = cur->next;
+		}
+		if(cur == page_lru_head)
+			page_lru_head = cur->next;
+		prev->next = cur->next;
+		cur->next->prev = prev;
+		memset(cur, 0, sizeof(struct page));
+	}
+	return 1;
+}
+
+
 
 //evict page with clock algorithm
 int reclaim(){
@@ -157,7 +190,7 @@ int reclaim(){
 	while(1){
 		if(!check_PTE_A(cur)){
 			//find offset of swap sapce & set bitmap
-			int offset = SWAPMAX-SWAPBASE; 	//bitmap offset
+			uint offset = SWAPMAX-SWAPBASE; 	//bitmap offset
 			for(int i = 0; i < (SWAPMAX - SWAPBASE) / 8; i++){
 				if(!(bitmap[i / 8] & (1 << (i % 8)))){
 					offset = i;
@@ -221,4 +254,6 @@ int check_PTE_A(struct page* curPG){
 		return 0;
 }
 
-
+void clearbitmap(uint offset){
+	return;
+}

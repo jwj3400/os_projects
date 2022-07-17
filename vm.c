@@ -40,6 +40,7 @@ walkpgdir(pde_t *pgdir, const void *va, int alloc)
   pte_t *pgtab;
 
   pde = &pgdir[PDX(va)];
+
   //page table is exist
   if(*pde & PTE_P){
     pgtab = (pte_t*)P2V(PTE_ADDR(*pde));
@@ -66,7 +67,7 @@ mappages(pde_t *pgdir, void *va, uint size, uint pa, int perm)
 {
   char *a, *last;
   pte_t *pte;
-
+	cprintf("pgdir %p =============================va: %p\n", pgdir, va);
   a = (char*)PGROUNDDOWN((uint)va);
   last = (char*)PGROUNDDOWN(((uint)va) + size - 1);
   for(;;){
@@ -77,8 +78,9 @@ mappages(pde_t *pgdir, void *va, uint size, uint pa, int perm)
     *pte = pa | perm | PTE_P;
     if(a == last)
       break;
-    a += PGSIZE;
+	a += PGSIZE;
     pa += PGSIZE;
+
   }
   return 0;
 }
@@ -130,12 +132,14 @@ setupkvm(void)
   memset(pgdir, 0, PGSIZE);
   if (P2V(PHYSTOP) > (void*)DEVSPACE)
     panic("PHYSTOP too high");
-  for(k = kmap; k < &kmap[NELEM(kmap)]; k++)
-    if(mappages(pgdir, k->virt, k->phys_end - k->phys_start,
+  for(k = kmap; k < &kmap[NELEM(kmap)]; k++){
+    cprintf("setupkvm mmap pgdir: %p, va: %p\n",pgdir, k->virt);
+  	if(mappages(pgdir, k->virt, k->phys_end - k->phys_start,
                 (uint)k->phys_start, k->perm) < 0) {
       freevm(pgdir);
       return 0;
     }
+  }
   return pgdir;
 }
 
@@ -192,6 +196,7 @@ inituvm(pde_t *pgdir, char *init, uint sz)
     panic("inituvm: more than a page");
   mem = kalloc();
   memset(mem, 0, PGSIZE);
+  cprintf("inituvm mmap pgdir: %p, va: %p\n",pgdir, 0); 
   mappages(pgdir, 0, PGSIZE, V2P(mem), PTE_W|PTE_U);
   memmove(mem, init, sz);
 }
@@ -248,9 +253,6 @@ allocuvm(pde_t *pgdir, uint oldsz, uint newsz)
 	
 	for(int i = 0; i < PHYSTOP / PGSIZE; i++){
 		if(pages[i].next == 0){
-		
-//cprintf("page vaddr %p oldsz %d newsw %d pid %d a %d\n",pages[i].vaddr, oldsz, newsz, myproc()->pid, a);
-//cprintf("-------------- i = %d, pgdir %p, vaddr %p \n",i, pgdir, (char*)a);
 			pages[i].pgdir = pgdir;
 			pages[i].vaddr = (char *)a;	
 			insert_lru(&pages[i]);
@@ -259,6 +261,7 @@ allocuvm(pde_t *pgdir, uint oldsz, uint newsz)
 			
 		}
 	}
+	cprintf("allocuvm mmap pgdir: %p, va: %p\n",pgdir, (char*)a);
     if(mappages(pgdir, (char*)a, PGSIZE, V2P(mem), PTE_W|PTE_U) < 0){
       cprintf("allocuvm out of memory (2)\n");
       deallocuvm(pgdir, newsz, oldsz);
@@ -283,11 +286,14 @@ deallocuvm(pde_t *pgdir, uint oldsz, uint newsz)
     return oldsz;
 
   a = PGROUNDUP(newsz);
-  for(; a  < oldsz; a += PGSIZE){
+  for(; a  < oldsz; a += PGSIZE){	
     pte = walkpgdir(pgdir, (char*)a, 0);
     if(!pte)
       a = PGADDR(PDX(a) + 1, 0, 0) - PGSIZE;
     else if((*pte & PTE_P) != 0){
+	  if(delete_lru(pgdir, a) < 0){
+	  	cprintf("err: delete page is not in lru list\n");
+	  }
       pa = PTE_ADDR(*pte);
       if(pa == 0)
         panic("kfree");
@@ -295,6 +301,11 @@ deallocuvm(pde_t *pgdir, uint oldsz, uint newsz)
       kfree(v);
       *pte = 0;
     }
+	else if(((*pte&PTE_P) == 0) && (*pte)){
+		uint offset = *pte >> 12;
+		clearbitmap(offset);	
+		*pte = 0;
+	}
   }
   return newsz;
 }
@@ -308,6 +319,7 @@ freevm(pde_t *pgdir)
 
   if(pgdir == 0)
     panic("freevm: no pgdir");
+  cprintf("this is freevm\n");
   deallocuvm(pgdir, KERNBASE, 0);
   for(i = 0; i < NPDENTRIES; i++){
     if(pgdir[i] & PTE_P){
@@ -353,7 +365,18 @@ copyuvm(pde_t *pgdir, uint sz)
     if((mem = kalloc()) == 0)
       goto bad;
     memmove(mem, (char*)P2V(pa), PGSIZE);
-    if(mappages(d, (void*)i, PGSIZE, V2P(mem), flags) < 0) {
+    cprintf("copyuvm mmap pgdir: %p, va: %p\n",pgdir, i);
+
+ 	for(int j = 0; j < PHYSTOP / PGSIZE; j++){
+		if(pages[j].next == 0){
+			pages[j].pgdir = d;
+			pages[j].vaddr = (char *)i;	
+			insert_lru(&pages[j]);
+			break;
+		}
+	}
+
+	if(mappages(d, (void*)i, PGSIZE, V2P(mem), flags) < 0) {
       kfree(mem);
       goto bad;
     }

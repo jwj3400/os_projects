@@ -72,6 +72,9 @@ void            kinit3(void*, void*);
 int 			check_PTE_A(struct page*);
 int				reclaim(void);
 void			insert_lru(struct page*);
+int 			delete_lru(pde_t*, uint);
+void 			clearbitmap(uint);
+
 // kbd.c
 void            kbdintr(void);
 

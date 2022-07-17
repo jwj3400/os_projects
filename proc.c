@@ -130,7 +130,7 @@ userinit(void)
   initproc = p;
   if((p->pgdir = setupkvm()) == 0)
     panic("userinit: out of memory?");
-  cprintf("%p %p\n", _binary_initcode_start, _binary_initcode_size);
+  cprintf("%p %p\n",_binary_initcode_start, _binary_initcode_size);
   inituvm(p->pgdir, _binary_initcode_start, (int)_binary_initcode_size);
   p->sz = PGSIZE;
   memset(p->tf, 0, sizeof(*p->tf));
@@ -199,6 +199,7 @@ fork(void)
     np->state = UNUSED;
     return -1;
   }
+  cprintf("forked process pgdir %p original process pgdir %p\n", np->pgdir, curproc->pgdir);
   np->sz = curproc->sz;
   np->parent = curproc;
   *np->tf = *curproc->tf;
