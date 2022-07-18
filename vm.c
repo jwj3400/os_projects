@@ -6,11 +6,30 @@
 #include "mmu.h"
 #include "proc.h"
 #include "elf.h"
-
+#include "fs.h"
+////////////////////////
+#include "spinlock.h"
+#include "sleeplock.h"
+////////////////////////
 extern char data[];  // defined by kernel.ld
 pde_t *kpgdir;  // for use in scheduler()
 
+
+///////////////////////
+extern char* bitmap; 
 extern struct page pages[PHYSTOP/PGSIZE];
+struct buf {
+  int flags;
+  uint dev;
+  uint blockno;
+  struct sleeplock lock;
+  uint refcnt;
+  struct buf *prev; // LRU cache list
+  struct buf *next;
+  struct buf *qnext; // disk queue
+  uchar data[BSIZE];
+};
+//////////////////////
 // Set up CPU's kernel segment descriptors.
 // Run once on entry on each CPU.
 void
@@ -354,32 +373,68 @@ copyuvm(pde_t *pgdir, uint sz)
   char *mem;
 
   if((d = setupkvm()) == 0)
-    return 0;
+		  return 0;
   for(i = 0; i < sz; i += PGSIZE){
-    if((pte = walkpgdir(pgdir, (void *) i, 0)) == 0)
-      panic("copyuvm: pte should exist");
-    if(!(*pte & PTE_P))
-      panic("copyuvm: page not present");
-    pa = PTE_ADDR(*pte);
-    flags = PTE_FLAGS(*pte);
-    if((mem = kalloc()) == 0)
-      goto bad;
-    memmove(mem, (char*)P2V(pa), PGSIZE);
-    cprintf("copyuvm mmap pgdir: %p, va: %p\n",pgdir, i);
+	  if((pte = walkpgdir(pgdir, (void *) i, 0)) == 0)
+		  panic("copyuvm: pte should exist");
+	  if(!(*pte))
+		  panic("copyuvm: page not present");
+	  //page is in memory
+	  if(*pte & PTE_P){
+		  pa = PTE_ADDR(*pte);
+		  flags = PTE_FLAGS(*pte);
+		  if((mem = kalloc()) == 0)
+			  goto bad;
+		  memmove(mem, (char*)P2V(pa), PGSIZE);
+		  cprintf("copyuvm mmap pgdir: %p, va: %p\n",pgdir, i);
 
- 	for(int j = 0; j < PHYSTOP / PGSIZE; j++){
-		if(pages[j].next == 0){
-			pages[j].pgdir = d;
-			pages[j].vaddr = (char *)i;	
-			insert_lru(&pages[j]);
-			break;
+		  for(int j = 0; j < PHYSTOP / PGSIZE; j++){
+			  if(pages[j].next == 0){
+				  pages[j].pgdir = d;
+				  pages[j].vaddr = (char *)i;	
+				  insert_lru(&pages[j]);
+				  break;
+			  }
+		  }
+
+		  if(mappages(d, (void*)i, PGSIZE, V2P(mem), flags) < 0) {
+			  kfree(mem);
+			  goto bad;
+		  }
+	  }
+	  //page which is in swapspace
+	  else if(!(*pte & PTE_P) && (*pte)){
+	  	uint offset = *pte >> 12;
+		//find offset of swap sapce & set bitmap
+		uint newOffset = SWAPMAX-SWAPBASE + 1; 	
+		//find bitmap offset which is not written yet
+		for(int i = 1; i < (SWAPMAX - SWAPBASE + 1) / 8; i++){
+			if(!(bitmap[i / 8] & (1 << (i % 8)))){
+				newOffset = i;
+				bitmap[i / 8] |= (1 << (i % 8));
+				break;
+			}
 		}
-	}
+		if(newOffset == SWAPMAX-SWAPBASE + 1){
+			cprintf("err: out of memory\n");
+		}
+		//copy the original swap page to new swap page
+		for(int j = 0; j < 8; j++){
+			struct buf* bpSrc;
+			struct buf* bpDst;
+			
+			bpSrc = bread(0, offset * 8 + SWAPBASE + i);
+			bpDst = bread(0, newOffset * 8 + SWAPBASE + i);
+			memmove(bpDst->data, bpSrc->data, BSIZE);
 
-	if(mappages(d, (void*)i, PGSIZE, V2P(mem), flags) < 0) {
-      kfree(mem);
-      goto bad;
-    }
+			bwrite(bpDst);
+			brelse(bpSrc);
+			brelse(bpDst);
+		}
+		//recode new offset to the pgdir of new process
+		pte_t* newPte = walkpgdir(d, (void*)i, 1);
+		*newPte &= ~(~newOffset << 12);
+	  } 
   }
   return d;
 

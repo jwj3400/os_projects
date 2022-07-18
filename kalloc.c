@@ -190,15 +190,16 @@ int reclaim(){
 	while(1){
 		if(!check_PTE_A(cur)){
 			//find offset of swap sapce & set bitmap
-			uint offset = SWAPMAX-SWAPBASE; 	//bitmap offset
-			for(int i = 0; i < (SWAPMAX - SWAPBASE) / 8; i++){
+			uint offset = SWAPMAX-SWAPBASE + 1; 	
+			//find bitmap offset which is 0
+			for(int i = 1; i < (SWAPMAX - SWAPBASE + 1) / 8; i++){
 				if(!(bitmap[i / 8] & (1 << (i % 8)))){
 					offset = i;
 					bitmap[i / 8] |= (1 << (i % 8));
 					break;
 				}
 			}
-			if(offset == SWAPMAX-SWAPBASE){
+			if(offset == SWAPMAX-SWAPBASE + 1){
 				cprintf("err: out of memory\n");
 			}
 			//swap out	
@@ -255,5 +256,6 @@ int check_PTE_A(struct page* curPG){
 }
 
 void clearbitmap(uint offset){
+	bitmap[offset / 8] &= ~(1 << (offset % 8)); 
 	return;
 }
