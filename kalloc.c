@@ -26,11 +26,14 @@ struct {
   struct run *freelist;
 } kmem;
 
+////////////////////////////////////
 struct page pages[PHYSTOP/PGSIZE];
 struct page *page_lru_head;
 int num_free_pages;
 int num_lru_pages;
 char* bitmap;
+struct spinlock swaplock;
+////////////////////////////////////
 
 // Initialization happens in two phases.
 // 1. main() calls kinit1() while still using entrypgdir to place just
@@ -59,9 +62,12 @@ kinit2(void *vstart, void *vend)
   kmem.use_lock = 1;
   
   bitmap = kalloc();
-  memset(bitmap,0,sizeof(char) * PGSIZE);
+  memset(bitmap, 0, sizeof(char) * PGSIZE);
   page_lru_head = (struct page*)kalloc();
+  num_free_pages = (vend - vstart) / PGSIZE;
+  num_lru_pages = 0;
   memset(page_lru_head, 0, sizeof(struct page));
+  initlock(&swaplock, "swap");
   cprintf("%p", bitmap);
 }
 
@@ -103,7 +109,6 @@ char*
 kalloc(void)
 {
   struct run *r;
-
 try_again:
   if(kmem.use_lock)
     acquire(&kmem.lock);
@@ -123,7 +128,7 @@ try_again:
 //tail insertion
 void insert_lru(struct page* newPG){
 	cprintf("insert_lru newPG addr %p newPG->pgdir: %p, newPG->vaddr %p\n", newPG, newPG->pgdir, newPG->vaddr);
-//	cprintf("head->next %p head->prev %p, head->pgdir %p, head->vaddr %p\n",page_lru_head->next, page_lru_head->prev, page_lru_head->pgdir, page_lru_head->vaddr);
+	//	cprintf("head->next %p head->prev %p, head->pgdir %p, head->vaddr %p\n",page_lru_head->next, page_lru_head->prev, page_lru_head->pgdir, page_lru_head->vaddr);
 	if(page_lru_head->next == 0){
 		cprintf("first head\n");
 		page_lru_head = newPG;
@@ -138,15 +143,25 @@ void insert_lru(struct page* newPG){
 	curhead->prev = newPG;
 	newPG->prev->next = newPG;
 
-//	cprintf("circulate lru list\n");
-//	struct page* cur = page_lru_head->next;
-/*
-	while(cur != page_lru_head){
-		cprintf("head->next %p head->prev %p, head->pgdir %p, head->vaddr %p\n",page_lru_head->next, page_lru_head->prev, page_lru_head->pgdir, page_lru_head->vaddr);
-		cprintf("head %p, cur %p, cur->next %p, cur->prev %p, cur->pgdir %p, cur->vaddr %p\n",page_lru_head, cur, cur->next, cur->prev, cur->pgdir, cur->vaddr);
-		cur = cur->next;
-	}
+//			cprintf("circulate lru list\n");
+//			struct page* cur = page_lru_head->next;
+/*		
+		   while(cur != page_lru_head){
+		   //cprintf("head->next %p head->prev %p, head->pgdir %p, head->vaddr %p\n",page_lru_head->next, page_lru_head->prev, page_lru_head->pgdir, page_lru_head->vaddr);
+		   cprintf("head %p, cur %p, cur->next %p, cur->prev %p, cur->pgdir %p, cur->vaddr %p\n",page_lru_head, cur, cur->next, cur->prev, cur->pgdir, cur->vaddr);
+		   cur = cur->next;
+		   }
 */
+		//check bitmap
+		/* 
+		for(int i = 0; i < 4096; i++)
+		{
+		cprintf("%d : %x \n",i, bitmap[i]);
+		}
+		cprintf("\n");
+		*/
+	num_free_pages--;
+	num_lru_pages++;	
 	return ;
 }
 
@@ -179,6 +194,8 @@ int delete_lru(pde_t* pgdir, uint va){
 		cur->next->prev = prev;
 		memset(cur, 0, sizeof(struct page));
 	}
+	num_free_pages++;
+	num_lru_pages--;
 	return 1;
 }
 
@@ -186,9 +203,22 @@ int delete_lru(pde_t* pgdir, uint va){
 
 //evict page with clock algorithm
 int reclaim(){
+	cprintf("================ evict page with clock algorithm %d\n", num_lru_pages);
 	struct page* cur = page_lru_head;
 	while(1){
 		if(!check_PTE_A(cur)){
+			cprintf("reclaim start\n");
+
+
+			struct page* cur1 = page_lru_head->next;
+		
+		   while(cur1 != page_lru_head){
+		   //cprintf("head->next %p head->prev %p, head->pgdir %p, head->vaddr %p\n",page_lru_head->next, page_lru_head->prev, page_lru_head->pgdir, page_lru_head->vaddr);
+		   cprintf("head %p, cur %p, cur->next %p, cur->prev %p, cur->pgdir %p, cur->vaddr %p\n",page_lru_head, cur1, cur1->next, cur1->prev, cur1->pgdir, cur1->vaddr);
+		   cur1 = cur1->next;
+		   }
+
+
 			//find offset of swap sapce & set bitmap
 			uint offset = SWAPMAX-SWAPBASE + 1; 	
 			//find bitmap offset which is 0
@@ -199,6 +229,7 @@ int reclaim(){
 					break;
 				}
 			}
+			cprintf("check point 1\n");
 			if(offset == SWAPMAX-SWAPBASE + 1){
 				cprintf("err: out of memory\n");
 			}
@@ -214,7 +245,14 @@ int reclaim(){
 
 			uint phyAddr2 = (*pte) & 0xfffff000;
 			char* phyAddr = (char*)phyAddr2;  
-			swapwrite(phyAddr,offset);
+			
+			cprintf("phyAddr: %p offset: %d\n", P2V(phyAddr), offset);
+			
+			release(&kmem.lock);
+			swapwrite(P2V(phyAddr),offset);
+			//acquire(&kmem.lock);
+			
+			cprintf("check point 3\n");
 			cprintf("swap out pte: %p\n", *pte);
 
 			//modify pte to have offset number & clear PTE_P
@@ -222,9 +260,11 @@ int reclaim(){
 			*pte &= ~PTE_P;
 			
 			//free the page
-			kfree(phyAddr);
+			kfree(P2V(phyAddr));
 			
 			//evict from lru list
+			if(cur == page_lru_head)
+				page_lru_head = cur->next;
 			cur->prev->next = cur->next;
 			cur->next->prev = cur->prev;
 			memset(cur, 0, sizeof(struct page));
@@ -232,6 +272,7 @@ int reclaim(){
 		}
 		cur = cur->next;
 	}
+	cprintf("=============reclaim end\n");
 	return 1;
 }
 

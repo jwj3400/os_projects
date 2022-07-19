@@ -191,6 +191,7 @@ void            switchuvm(struct proc*);
 void            switchkvm(void);
 int             copyout(pde_t*, uint, void*, uint);
 void            clearpteu(pde_t *pgdir, char *uva);
+int 			page_fault_handler(uint);
 
 // swap.c
 void swapread(char* ptr, int blkno);

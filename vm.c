@@ -86,7 +86,7 @@ mappages(pde_t *pgdir, void *va, uint size, uint pa, int perm)
 {
   char *a, *last;
   pte_t *pte;
-	cprintf("pgdir %p =============================va: %p\n", pgdir, va);
+//	cprintf("pgdir %p =============================va: %p\n", pgdir, va);
   a = (char*)PGROUNDDOWN((uint)va);
   last = (char*)PGROUNDDOWN(((uint)va) + size - 1);
   for(;;){
@@ -152,7 +152,7 @@ setupkvm(void)
   if (P2V(PHYSTOP) > (void*)DEVSPACE)
     panic("PHYSTOP too high");
   for(k = kmap; k < &kmap[NELEM(kmap)]; k++){
-    cprintf("setupkvm mmap pgdir: %p, va: %p\n",pgdir, k->virt);
+    //cprintf("setupkvm mmap pgdir: %p, va: %p\n",pgdir, k->virt);
   	if(mappages(pgdir, k->virt, k->phys_end - k->phys_start,
                 (uint)k->phys_start, k->perm) < 0) {
       freevm(pgdir);
@@ -215,7 +215,7 @@ inituvm(pde_t *pgdir, char *init, uint sz)
     panic("inituvm: more than a page");
   mem = kalloc();
   memset(mem, 0, PGSIZE);
-  cprintf("inituvm mmap pgdir: %p, va: %p\n",pgdir, 0); 
+  //cprintf("inituvm mmap pgdir: %p, va: %p\n",pgdir, 0); 
   mappages(pgdir, 0, PGSIZE, V2P(mem), PTE_W|PTE_U);
   memmove(mem, init, sz);
 }
@@ -280,7 +280,7 @@ allocuvm(pde_t *pgdir, uint oldsz, uint newsz)
 			
 		}
 	}
-	cprintf("allocuvm mmap pgdir: %p, va: %p\n",pgdir, (char*)a);
+	//cprintf("allocuvm mmap pgdir: %p, va: %p\n",pgdir, (char*)a);
     if(mappages(pgdir, (char*)a, PGSIZE, V2P(mem), PTE_W|PTE_U) < 0){
       cprintf("allocuvm out of memory (2)\n");
       deallocuvm(pgdir, newsz, oldsz);
@@ -386,7 +386,7 @@ copyuvm(pde_t *pgdir, uint sz)
 		  if((mem = kalloc()) == 0)
 			  goto bad;
 		  memmove(mem, (char*)P2V(pa), PGSIZE);
-		  cprintf("copyuvm mmap pgdir: %p, va: %p\n",pgdir, i);
+		  //cprintf("copyuvm mmap pgdir: %p, va: %p\n",pgdir, i);
 
 		  for(int j = 0; j < PHYSTOP / PGSIZE; j++){
 			  if(pages[j].next == 0){
@@ -490,4 +490,45 @@ copyout(pde_t *pgdir, uint va, void *p, uint len)
 // Blank page.
 //PAGEBREAK!
 // Blank page.
+
+int page_fault_handler(uint faultAddr){
+	cprintf("in page_fault_handler\n");
+	//find offset of swapspace
+	pde_t* pgdir= myproc()->pgdir;
+	pde_t* pde = &pgdir[PDX(faultAddr)];
+	pte_t* pgtab = (pte_t*)P2V(PTE_ADDR(*pde));
+	pte_t* pte = &pgtab[PTX(faultAddr)];
+	uint offset = *pte >> 12; 
+
+	if(offset == 0)
+		return 0;
+	//alloc page for swap in
+	char* mem = kalloc();
+	/*	
+	for(int i = 0; i < PGSIZE; i++){
+		cprintf("%d : %x\n", i, bitmap[i]);
+	}*/
+	swapread(mem, offset);
+	//push page into lru list
+	struct page* newPG;
+	for(int i = 0; i < PHYSTOP / PGSIZE; i++){
+		if(pages[i].next)
+			continue;
+
+		
+		newPG = &pages[i];
+		newPG->pgdir = pgdir;
+		newPG->vaddr = (char*)faultAddr;
+		insert_lru(newPG);	
+		//set PTE_P in pte & front of pte is physical addr
+		*pte = V2P((uint)mem) | PTE_P | PTE_U;
+		//clear bitmap
+		clearbitmap(offset);
+		return 1;
+		
+	}
+	return 0;
+}
+
+
 

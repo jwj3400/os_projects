@@ -693,6 +693,7 @@ void swapwrite(char* ptr, int blkno)
 		nr_sectors_write++;
 		bp = bread(0, blkno * 8 + SWAPBASE + i);
 		memmove(bp->data, ptr + i * BSIZE, BSIZE);
+
 		bwrite(bp);
 		brelse(bp);
 	}

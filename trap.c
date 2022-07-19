@@ -47,6 +47,14 @@ trap(struct trapframe *tf)
   }
 
   switch(tf->trapno){
+  case T_PGFLT:
+	;
+	uint faultAddr = rcr2();
+	if(page_fault_handler(faultAddr) == 0){
+		myproc()->killed = 1;
+	}
+
+	break;
   case T_IRQ0 + IRQ_TIMER:
     if(cpuid() == 0){
       acquire(&tickslock);
